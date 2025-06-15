@@ -35,6 +35,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 const markerGroup = L.layerGroup().addTo(map);
 
+// Custom icons for different event types
 const redIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -92,6 +93,7 @@ function getIconByType(type) {
 }
 const legend = L.control({ position: 'bottomleft' });
 
+// Create a custom legend control
 legend.onAdd = function (map) {
   const div = L.DomUtil.create('div', 'info legend');
   const types = ['Music', 'Volunteering', 'Technology', 'Market', 'Art'];
