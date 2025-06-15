@@ -207,3 +207,13 @@ footer a:hover {
     min-width: 200px;
   }
 }
+/* hover interaction */
+  #yes-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
+  }
+
+  #no-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(76, 0, 229, 0.5), 0 0 12px rgba(37, 2, 48, 0.6);
+  }
