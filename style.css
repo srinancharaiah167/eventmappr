@@ -120,7 +120,7 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
 
 /* HERO SECTION - Improved & Consistent */
 .hero-section {
-  background: #e6efe6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -270,8 +270,8 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
   grid-template-rows: 1fr;
   gap: 0;
   position: relative;
-  width: 270px;
-  height: 270px;
+  width: 400px;
+  height: 400px;
   margin: 0 auto;
 }
 
@@ -303,26 +303,26 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
 .hero-float-icon {
   position: absolute;
   font-size: 2rem;
-  opacity: 0.7;
+  opacity: 2;
   pointer-events: none;
 }
 
 .icon-star {
   color: #f7c948;
-  top: -25px;
+  top: -10px;
   left: 60px;
 }
 
 .icon-pin {
   color: #4b0082;
-  bottom: -20px;
-  right: 30px;
+  bottom: 20px;
+  right: 200px;
 }
 
 .icon-share {
   color: #8a2be2;
-  top: 60px;
-  right: -30px;
+  top: 100px;
+  right: 10px;
 }
 
 @keyframes fadeInUp {
@@ -344,17 +344,17 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
 
 @media (max-width: 1100px) {
   .hero-card { padding: 2rem 1.5rem; }
-  .hero-img-grid { width: 210px; height: 210px; }
+  .hero-img-grid { width: 400px; height: 400px; }
 }
 @media (max-width: 900px) {
   .hero-content { flex-direction: column; gap: 2.5rem; }
   .hero-left, .hero-right { max-width: 100%; text-align: center; }
-  .hero-stats { justify-content: center; }
+  .hero-stats , .hero-btn-group { justify-content: center; }
 }
 @media (max-width: 600px) {
   .hero-card { padding: 1.2rem 0.2rem; border-radius: 1.2rem; }
   .hero-title { font-size: 1.5rem; }
-  .hero-img-grid { width: 140px; height: 140px; gap: 0.5rem; }
+  .hero-img-grid { width: 300px; height: 300px; gap: 0.5rem; }
   .hero-img-box { border-radius: 0.7rem; }
   .hero-btn { padding: 0.7rem 1.2rem; font-size: 1rem; }
 }
