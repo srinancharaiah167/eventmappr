@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-   <!-- GSAP Core -->
+  <!-- GSAP Core -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <!-- GSAP Plugins -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -166,8 +166,12 @@
   <script src="script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Register GSAP plugins
+      gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+      
       // Navbar animation
       gsap.from('.navbar', {opacity: 0, y: -40, duration: 1, ease: 'power3.out'});
+      
       // Hero section
       gsap.from('.hero-title', {opacity: 0, y: 40, duration: 1, ease: 'power3.out'});
       gsap.from('.hero-subtitle', {opacity: 0, y: 40, duration: 1, delay: 0.2, ease: 'power3.out'});
@@ -181,6 +185,7 @@
         ease: 'power3.out'
       });
       gsap.from('.hero-img-box', {opacity: 0, scale: 0.85, duration: 1, delay: 0.7, ease: 'power3.out'});
+      
       // Floating icons GSAP animation
       gsap.utils.toArray('.hero-float-icon').forEach((icon, i) => {
         gsap.to(icon, {
@@ -192,6 +197,7 @@
           delay: i * 0.3
         });
       });
+      
       // Features section animation
       gsap.utils.toArray('.feature-card').forEach((card, i) => {
         gsap.from(card, {
@@ -207,6 +213,7 @@
           ease: 'power3.out'
         });
       });
+      
       // How it works section animation
       gsap.utils.toArray('.step-card').forEach((card, i) => {
         gsap.from(card, {
