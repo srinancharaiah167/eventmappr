@@ -187,6 +187,12 @@ footer a:hover {
   text-decoration: underline;
 }
 
+.footer-links>a{
+  color: white;
+}
+.social-links>a{
+  color: white;
+}
 /* Custom popup styles */
 .custom-popup .leaflet-popup-content-wrapper {
   background: white;
