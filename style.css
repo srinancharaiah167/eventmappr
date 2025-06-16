@@ -1,10 +1,9 @@
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
   height: 100vh;
-
 }
 
 header {
@@ -20,12 +19,10 @@ header {
   z-index: 1000;
 }
 
-
 .tagline {
   text-align: center;
   color: whitesmoke;
 }
-
 
 header h1 {
   margin: 0.2rem 0;
@@ -38,8 +35,7 @@ header h1 {
   padding: 0.5rem 1rem;
   align-items: center;
   justify-content: space-between;
- background-color: white;
-
+  background-color: white;
 }
 
 .input {
@@ -47,7 +43,6 @@ header h1 {
   background-color: #e9ecef;
   color: #8a2be2;
 }
-
 
 form,
 .filter-group {
@@ -71,7 +66,6 @@ button {
   align-items: center;
   justify-content: center;
 }
-
 
 button:hover {
   background-color: #36006a;
@@ -198,20 +192,20 @@ footer a:hover {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   form {
     flex-direction: column;
   }
-  
+
   .custom-popup .leaflet-popup-content {
     min-width: 200px;
   }
 }
 /* hover interaction */
-  #yes-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
-  }
+#yes-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
+}
 
   #no-btn:hover {
     transform: scale(1.05);
@@ -228,4 +222,4 @@ footer a:hover {
   color: white;
   font-size: 0.8rem;
   padding-right: 50px;
-}
+
