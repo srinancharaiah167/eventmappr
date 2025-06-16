@@ -41,7 +41,7 @@ header {
 header h1 {
   margin: 0.2rem 0;
 }
-
+/* 
 .controls {
     display: flex;
     align-items: center;
@@ -59,7 +59,29 @@ header h1 {
     flex-wrap: wrap;
     gap: 10px;
     flex: 1;
+} */
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* From main branch */
+    flex-wrap: wrap;
+    gap: 10px; /* Use 10px instead of 0.5rem for consistency with feature/button */
+    background-color: white;
+    padding: 15px; /* From feature/button (more padding) */
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    max-width: 100%;
 }
+
+#eventForm {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1;
+}
+
 
 .input {
    height: 45px;
