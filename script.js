@@ -1,4 +1,4 @@
-// ✅ Working version of the script.js with functioning Suggest Event feature
+// ✅ Working version of the script.js with functioning Suggest Event feature (with Pune events added and all nearby events included)
 
 const events = [
   {
@@ -11,6 +11,11 @@ const events = [
   { name: "Tech Meetup", type: "Technology", lat: 28.613999, lng: 77.226603 },
   { name: "Farmers Market", type: "Market", lat: 28.616373, lng: 77.204582 },
   { name: "Art & Craft Fair", type: "Art", lat: 28.601078, lng: 77.208121 },
+  // ✅ Pune-based events for testing Suggest Events feature
+  { name: "Startup Showcase Pune", type: "Technology", lat: 18.5204, lng: 73.8567 },
+  { name: "Pune Food Carnival", type: "Food", lat: 18.5293, lng: 73.8560 },
+  { name: "Live Music Pune", type: "Music", lat: 18.5246, lng: 73.8553 },
+  { name: "Volunteer Day Pune", type: "Volunteering", lat: 18.5167, lng: 73.8562 },
 ];
 
 function loadDynamicEvents() {
@@ -85,7 +90,7 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
-function showSuggestedPopup(eventsList, type) {
+function showSuggestedPopup(eventsList) {
   const wrapper = document.createElement("div");
   wrapper.style.position = "fixed";
   wrapper.style.top = "120px";
@@ -105,10 +110,10 @@ function showSuggestedPopup(eventsList, type) {
               `<li style="margin-bottom: 10px;"><strong>${e.name}</strong><br><small>${e.type}</small></li>`
           )
           .join("")
-      : "<li>No nearby events found for your preferences.</li>";
+      : "<li>No nearby events found.</li>";
 
   wrapper.innerHTML = `
-    <h3 style="margin-top: 0; font-family: Poppins; font-size: 18px;">🎯 Suggested ${type} Events</h3>
+    <h3 style="margin-top: 0; font-family: Poppins; font-size: 18px;">🎯 Suggested Nearby Events</h3>
     <ul style="list-style: none; padding-left: 0;">${listItems}</ul>
     <button id="closeSuggestion" style="margin-top: 10px; padding: 6px 12px; background: #764ba2; color: white; border: none; border-radius: 6px;">Close</button>
   `;
@@ -128,25 +133,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
 
-        const preferenceCounts = JSON.parse(
-          localStorage.getItem("eventPreferences") || "{}"
-        );
+        console.log("📍 Your Location:", userLat, userLng);
 
-        let preferredType;
-        if (Object.keys(preferenceCounts).length > 0) {
-          preferredType = Object.keys(preferenceCounts).reduce((a, b) =>
-            preferenceCounts[a] > preferenceCounts[b] ? a : b
-          );
-        } else {
-          preferredType = "Music";
-        }
+        const nearbyEvents = events
+          .filter((e) => getDistance(userLat, userLng, e.lat, e.lng) <= 15)
+          .slice(0, 5); // optional limit
 
-        const nearbyMatching = events
-          .filter((e) => e.type === preferredType)
-          .filter((e) => getDistance(userLat, userLng, e.lat, e.lng) <= 5)
-          .slice(0, 3);
+        console.log(`🎯 Found ${nearbyEvents.length} events near you`);
 
-        showSuggestedPopup(nearbyMatching, preferredType);
+        showSuggestedPopup(nearbyEvents);
       },
       () => {
         alert("Unable to get your location.");
