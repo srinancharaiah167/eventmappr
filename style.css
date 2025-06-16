@@ -11,11 +11,10 @@
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
   height: 100vh;
-
 }
 
 header {
@@ -31,12 +30,10 @@ header {
   z-index: 1000;
 }
 
-
 .tagline {
   text-align: center;
   color: whitesmoke;
 }
-
 
 header h1 {
   margin: 0.2rem 0;
@@ -130,6 +127,7 @@ select.input {
     color: var(--midnight-blue);
     box-shadow: 0 4px 10px rgba(250, 204, 21, 0.3);
 }
+
 
 .btn-primary:hover {
     transform: translateY(-2px);
@@ -297,8 +295,17 @@ footer a:hover {
     .input, .btn {
         width: 100%;
     }
-  
   .custom-popup .leaflet-popup-content {
     min-width: 200px;
   }
+}
+/* hover interaction */
+#yes-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
+}
+
+#no-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(76, 0, 229, 0.5), 0 0 12px rgba(37, 2, 48, 0.6);
 }
