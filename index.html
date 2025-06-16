@@ -18,8 +18,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+   <script src="config.js"></script>
+  <script>
+  (function() {
+    emailjs.init(window.CONFIG.EMAILJS_PUBLIC_KEY); // Replace with your actual EmailJS public key
+  })();
+</script>
 </head>
 
 <body>
@@ -88,69 +93,85 @@
         </div>
     </footer>
 
+
+  <!-- Feedback Form Modal -->
+  <div id="feedbackModal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2 style="color: #667eea; margin-bottom: 20px;">📝 Send Feedback</h2>
+      <form id="feedbackForm">
+  <!-- Name Field -->
+  <label for="feedbackName" style="font-weight: 600; color: #333; margin-bottom: 8px; display: block;">
+    Name: <span style="color: #e74c3c;">*</span>
+  </label>
+  <input 
+    type="text" 
+    id="feedbackName" 
+    name="name" 
+    placeholder="Enter your full name" 
+    required
+  />
+
+  <!-- Email Field -->
+  <label for="feedbackEmail" style="font-weight: 600; color: #333; margin-bottom: 8px; display: block;">
+    Email: <span style="color: #e74c3c;">*</span>
+  </label>
+  <input 
+    type="email" 
+    id="feedbackEmail" 
+    name="email" 
+    placeholder="Enter your email address" 
+    required
+  />
+
+  <!-- Feedback Type Dropdown -->
+  <label for="feedbackType" style="font-weight: 600; color: #333; margin-bottom: 8px; display: block;">
+    Type of Feedback: <span style="color: #e74c3c;">*</span>
+  </label>
+  <select 
+    id="feedbackType" 
+    name="type" 
+    required
+  >
+    <option value="">Select feedback type</option>
+    <option value="Bug Report">🐛 Bug Report</option>
+    <option value="Feature Request">💡 Feature Request</option>
+    <option value="General Feedback">💬 General Feedback</option>
+    <option value="UI/UX Improvement">🎨 UI/UX Improvement</option>
+    <option value="Performance Issue">⚡ Performance Issue</option>
+    <option value="Compliment">👏 Compliment</option>
+    <option value="Other">📝 Other</option>
+  </select>
+
+  <!-- Feedback Text Area -->
+  <label for="feedbackText" style="font-weight: 600; color: #333; margin-bottom: 8px; display: block;">
+    Your Feedback: <span style="color: #e74c3c;">*</span>
+  </label>
+  <textarea 
+    id="feedbackText" 
+    name="message" 
+    rows="5" 
+    placeholder="Tell us what you think about EventMappr..." 
+    required
+  ></textarea>
+
+  <!-- Hidden Field for Time -->
+  <input type="hidden" name="time" id="feedbackTime" />
+
+  <!-- Submit Button -->
+  <button 
+    type="submit" 
+    class="submit-btn"
+  >
+    Submit Feedback
+  </button>
+</form>
+
+    </div>
+  </div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ 
   <script src="script.js"></script>
-  <script>
-    // Initialize GSAP animations
-    gsap.registerPlugin(ScrollTrigger);
-    
-    // Header animation
-    gsap.from(".header-title", {
-      duration: 1,
-      y: -50,
-      opacity: 0,
-      ease: "power3.out"
-    });
-
-    // Controls animation
-    gsap.from(".controls", {
-      duration: 1,
-      y: 30,
-      opacity: 0,
-      delay: 0.3,
-      ease: "power3.out"
-    });
-
-    // Map container animation
-    gsap.from("#map", {
-      duration: 1.2,
-      scale: 0.95,
-      opacity: 0,
-      delay: 0.5,
-      ease: "power3.out"
-    });
-
-    // Footer animation
-    gsap.from("footer", {
-      duration: 1,
-      y: 30,
-      opacity: 0,
-      delay: 0.7,
-      ease: "power3.out"
-    });
-
-    // Button hover animations
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(button => {
-      button.addEventListener('mouseenter', () => {
-        gsap.to(button, {
-          duration: 0.3,
-          scale: 1.05,
-          boxShadow: "0 8px 25px rgba(0, 0, 0, 0.15)",
-          ease: "power2.out"
-        });
-      });
-      
-      button.addEventListener('mouseleave', () => {
-        gsap.to(button, {
-          duration: 0.3,
-          scale: 1,
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
-          ease: "power2.out"
-        });
-      });
-    });
-  </script>
 </body>
 
 </html>

@@ -1,3 +1,5 @@
+
+console.log("script.js loaded");
 const events = [
   {
     name: "Community Cleanup",
@@ -9,15 +11,16 @@ const events = [
   { name: "Tech Meetup", type: "Technology", lat: 28.613999, lng: 77.226603 },
   { name: "Farmers Market", type: "Market", lat: 28.616373, lng: 77.204582 },
   { name: "Art & Craft Fair", type: "Art", lat: 28.601078, lng: 77.208121 },
+  // ✅ Pune-based events for testing Suggest Events feature
+  { name: "Startup Showcase Pune", type: "Technology", lat: 18.5204, lng: 73.8567 },
+  { name: "Pune Food Carnival", type: "Food", lat: 18.5293, lng: 73.8560 },
+  { name: "Live Music Pune", type: "Music", lat: 18.5246, lng: 73.8553 },
+  { name: "Volunteer Day Pune", type: "Volunteering", lat: 18.5167, lng: 73.8562 },
 ];
 
-// Load dynamic events from localStorage
 function loadDynamicEvents() {
-  const dynamicEvents = JSON.parse(
-    localStorage.getItem("dynamicEvents") || "{}"
-  );
+  const dynamicEvents = JSON.parse(localStorage.getItem("dynamicEvents") || "{}");
   Object.values(dynamicEvents).forEach((event) => {
-    // Check if event already exists to avoid duplicates
     const exists = events.find((e) => e.name === event.name);
     if (!exists) {
       events.push(event);
@@ -25,13 +28,40 @@ function loadDynamicEvents() {
   });
 }
 
-// Load dynamic events when page loads
 loadDynamicEvents();
 
-let map = L.map("map").setView([28.6139, 77.209], 13);
+// Function to save map position
+function saveMapPosition() {
+  const position = {
+    lat: map.getCenter().lat,
+    lng: map.getCenter().lng,
+    zoom: map.getZoom()
+  };
+  localStorage.setItem('mapPosition', JSON.stringify(position));
+}
+
+// Function to get saved map position
+function getSavedMapPosition() {
+  const saved = localStorage.getItem('mapPosition');
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  // Default position (Delhi)
+  return { lat: 28.6139, lng: 77.209, zoom: 13 };
+}
+
+// Get saved position or use default
+const savedPosition = getSavedMapPosition();
+
+// Initialize map with saved position
+let map = L.map("map").setView([savedPosition.lat, savedPosition.lng], savedPosition.zoom);
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "&copy; OpenStreetMap contributors",
 }).addTo(map);
+
+// Save position when map moves
+map.on('moveend', saveMapPosition);
 
 const markerGroup = L.layerGroup().addTo(map);
 
@@ -40,59 +70,18 @@ function renderMarkers(filteredEvents) {
   filteredEvents.forEach((event) => {
     const marker = L.marker([event.lat, event.lng]).addTo(markerGroup);
 
-    // Create enhanced popup content with better styling
     const popupContent = `
-      <div style="
-        text-align: center; 
-        min-width: 250px; 
-        padding: 5px;
-        font-family: 'Poppins', sans-serif;
-      ">
-        <div style="
-          background: linear-gradient(135deg, #667eea, #764ba2);
-          color: white;
-          padding: 15px;
-          border-radius: 15px 15px 0 0;
-          margin: -5px -5px 10px -5px;
-        ">
-          <strong style="font-size: 18px; font-weight: 600;">${
-            event.name
-          }</strong>
+      <div style="text-align: center; min-width: 250px; padding: 5px; font-family: 'Poppins', sans-serif;">
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; border-radius: 15px 15px 0 0; margin: -5px -5px 10px -5px;">
+          <strong style="font-size: 18px; font-weight: 600;">${event.name}</strong>
         </div>
         <div style="padding: 0 10px;">
-          <div style="
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 15px;
-          ">
+          <div style="display: inline-block; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; margin-bottom: 15px;">
             ${event.type}
-          </div>
-          <br>
-          <a href="event-details.html?event=${encodeURIComponent(event.name)}" 
-             style="
-               background: linear-gradient(135deg, #667eea, #764ba2);
-               color: white; 
-               padding: 10px 20px; 
-               text-decoration: none; 
-               border-radius: 25px; 
-               font-size: 14px; 
-               font-weight: 500;
-               display: inline-block; 
-               margin-top: 5px; 
-               transition: all 0.3s ease;
-               box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-             "
-             onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';"
-             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';"
-          >
-            <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
-            View Details
-          </a
+          </div><br>
+          <a href="event-details.html?event=${encodeURIComponent(event.name)}" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-size: 14px; font-weight: 500; display: inline-block; margin-top: 5px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+            <i class="fas fa-info-circle" style="margin-right: 5px;"></i> View Details
+          </a>
         </div>
       </div>
     `;
@@ -102,12 +91,15 @@ function renderMarkers(filteredEvents) {
       className: "custom-popup",
     });
 
-    // Remove the automatic redirect - only popup will show
+    if (event.type) {
+      const prefs = JSON.parse(localStorage.getItem("eventPreferences") || "{}");
+      prefs[event.type] = (prefs[event.type] || 0) + 1;
+      localStorage.setItem("eventPreferences", JSON.stringify(prefs));
+    }
   });
 }
 
 renderMarkers(events);
-
 document.getElementById("eventForm").addEventListener("submit", function (e) {
   e.preventDefault();
   const controls = document.querySelector(".controls");
@@ -259,7 +251,7 @@ document.getElementById("eventForm").addEventListener("submit", function (e) {
   });
 });
 
-document.getElementById("filterType").addEventListener("change", function () {
+/*document.getElementById("filterType").addEventListener("change", function () {
   const selected = this.value;
   if (selected === "All") {
     renderMarkers(events);
@@ -268,7 +260,7 @@ document.getElementById("filterType").addEventListener("change", function () {
     renderMarkers(filtered);
   }
 });
-
+*/
 document.getElementById("locateBtn").addEventListener("click", function () {
   if (!navigator.geolocation) {
     alert("Geolocation is not supported.");
@@ -295,14 +287,15 @@ document.getElementById("locateBtn").addEventListener("click", function () {
     }
   );
 });
-
 function getDistance(lat1, lng1, lat2, lng2) {
   const R = 6371;
   const dLat = deg2rad(lat2 - lat1);
   const dLng = deg2rad(lng2 - lng1);
   const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLng / 2) ** 2;
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLng / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
@@ -310,3 +303,187 @@ function getDistance(lat1, lng1, lat2, lng2) {
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
+function showSuggestedPopup(eventsList) {
+  const wrapper = document.createElement("div");
+  wrapper.style.position = "fixed";
+  wrapper.style.top = "120px";
+  wrapper.style.right = "20px";
+  wrapper.style.background = "white";
+  wrapper.style.padding = "16px";
+  wrapper.style.borderRadius = "12px";
+  wrapper.style.boxShadow = "0 8px 30px rgba(229, 97, 241, 0.2)";
+  wrapper.style.zIndex = 10000;
+  wrapper.style.maxWidth = "280px";
+
+  const listItems =
+    eventsList.length > 0
+      ? eventsList
+          .map(
+            (e) =>
+              `<li style="margin-bottom: 10px;"><strong>${e.name}</strong><br><small>${e.type}</small></li>`
+          )
+          .join("")
+      : "<li>No nearby events found.</li>";
+
+  wrapper.innerHTML = `
+    <h3 style="margin-top: 0; font-family: Poppins; font-size: 18px;">🎯 Suggested Nearby Events</h3>
+    <ul style="list-style: none; padding-left: 0;">${listItems}</ul>
+    <button id="closeSuggestion" style="margin-top: 10px; padding: 6px 12px; background: #764ba2; color: white; border: none; border-radius: 6px;">Close</button>
+  `;
+  document.body.appendChild(wrapper);
+  document.getElementById("closeSuggestion").onclick = () => wrapper.remove();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("suggestBtn").addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation not supported.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+
+        console.log("📍 Your Location:", userLat, userLng);
+
+        const nearbyEvents = events
+          .filter((e) => getDistance(userLat, userLng, e.lat, e.lng) <= 15)
+          .slice(0, 5); // optional limit
+
+        console.log(`🎯 Found ${nearbyEvents.length} events near you`);
+
+        showSuggestedPopup(nearbyEvents);
+      },
+      () => {
+        alert("Unable to get your location.");
+      }
+    );
+  });
+});
+// Helper function for toast notifications
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.textContent = message;
+  toast.style.position = "fixed";
+  toast.style.bottom = "40px";
+  toast.style.left = "50%";
+  toast.style.transform = "translateX(-50%)";
+  toast.style.padding = "12px 24px";
+  toast.style.background = "linear-gradient(135deg, #5b2be0, #ae31d9)";
+  toast.style.color = "#fff";
+  toast.style.fontWeight = "600";
+  toast.style.borderRadius = "8px";
+  toast.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.3)";
+  toast.style.zIndex = "9999";
+  toast.style.opacity = "0";
+  toast.style.transition = "opacity 0.5s ease";
+  
+  document.body.appendChild(toast);
+  
+  // Show toast
+  requestAnimationFrame(() => {
+    toast.style.opacity = "1";
+  });
+  
+  // Hide and remove toast
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+}
+
+// FEEDBACK FUNCTIONALITY - FIXED VERSION
+document.addEventListener("DOMContentLoaded", function () {
+  const feedbackBtn = document.getElementById('feedbackBtn');
+  const feedbackModal = document.getElementById('feedbackModal');
+  const closeBtn = document.querySelector('.close-btn');
+
+  if (feedbackBtn && feedbackModal && closeBtn) {
+    // Open feedback modal
+    feedbackBtn.addEventListener('click', function () {
+      feedbackModal.style.display = 'block';
+      feedbackModal.style.animation = 'slideIn 0.3s ease';
+    });
+
+    // Close feedback modal
+    function closeFeedbackModal() {
+      feedbackModal.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        feedbackModal.style.display = 'none';
+      }, 300);
+    }
+
+    closeBtn.addEventListener('click', closeFeedbackModal);
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function (e) {
+      if (e.target === feedbackModal) {
+        closeFeedbackModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && feedbackModal.style.display === 'block') {
+        closeFeedbackModal();
+      }
+    });
+  }
+
+  // SINGLE feedback form handler with proper duplicate prevention
+  const feedbackForm = document.getElementById('feedbackForm');
+  if (feedbackForm) {
+    const submitButton = feedbackForm.querySelector("button[type='submit']");
+    let isSending = false;
+
+    feedbackForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      if (isSending) return; // Prevent duplicate sends
+      isSending = true;
+
+      // Validate feedback text
+      const feedbackText = document.getElementById("feedbackText").value.trim();
+      if (!feedbackText) {
+        showToast("❌ Please enter your feedback before submitting");
+        isSending = false; // Reset flag
+        return;
+      }
+
+      // Set timestamp value
+      const timeField = document.getElementById("feedbackTime");
+      if (timeField) {
+        timeField.value = new Date().toLocaleString();
+      }
+
+      // Disable button while sending
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending...";
+      }
+
+      emailjs.sendForm(window.CONFIG.EMAILJS_SERVICE_ID,   window.CONFIG.EMAILJS_TEMPLATE_ID, feedbackForm)
+        .then(() => {
+          showToast("✅ Feedback sent successfully!");
+          feedbackForm.reset();
+          // Close modal after successful submission
+          if (feedbackModal) {
+            feedbackModal.style.display = 'none';
+          }
+        })
+        .catch((error) => {
+          showToast("❌ Failed to send feedback. Please try again.");
+          console.error("EmailJS error:", error);
+        })
+        .finally(() => {
+          isSending = false;
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit";
+          }
+        });
+    });
+  }
+});
