@@ -30,10 +30,38 @@ function loadDynamicEvents() {
 
 loadDynamicEvents();
 
-let map = L.map("map").setView([28.6139, 77.209], 13);
+// Function to save map position
+function saveMapPosition() {
+  const position = {
+    lat: map.getCenter().lat,
+    lng: map.getCenter().lng,
+    zoom: map.getZoom()
+  };
+  localStorage.setItem('mapPosition', JSON.stringify(position));
+}
+
+// Function to get saved map position
+function getSavedMapPosition() {
+  const saved = localStorage.getItem('mapPosition');
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  // Default position (Delhi)
+  return { lat: 28.6139, lng: 77.209, zoom: 13 };
+}
+
+// Get saved position or use default
+const savedPosition = getSavedMapPosition();
+
+// Initialize map with saved position
+let map = L.map("map").setView([savedPosition.lat, savedPosition.lng], savedPosition.zoom);
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "&copy; OpenStreetMap contributors",
 }).addTo(map);
+
+// Save position when map moves
+map.on('moveend', saveMapPosition);
 
 const markerGroup = L.layerGroup().addTo(map);
 
