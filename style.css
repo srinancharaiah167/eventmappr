@@ -210,7 +210,7 @@ footer a:hover {
 }
 
 /* Enhanced button styles */
-.btn {
+.btna {
   transition: all 0.3s ease;
   border-radius: 25px;
   font-weight: 500;
@@ -220,7 +220,7 @@ footer a:hover {
   gap: 8px;
 }
 
-.btn:hover {
+.btna:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
