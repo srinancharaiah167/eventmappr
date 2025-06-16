@@ -881,3 +881,78 @@ footer a:hover {
 html {
   scroll-behavior: smooth;
 }
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #0d1117;
+  color: #e2e8f0;
+}
+
+.dark-mode header {
+  background: linear-gradient(135deg, #1f1f3a, #2c2c54);
+  color: #ffffff;
+}
+
+.dark-mode .controls {
+  background-color: #161b22;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.dark-mode input,
+.dark-mode select {
+  background: #21262d;
+  color: #f8fafc;
+  outline: 1px solid #2f3542;
+}
+
+.dark-mode input::placeholder {
+  color: #7a8494;
+}
+
+.dark-mode select option {
+  background: #21262d;
+}
+
+.dark-mode button,
+.dark-mode .btn {
+  background-color: #2e2e3e;
+  color: #f1f1f1;
+}
+
+.dark-mode #map {
+  border: 1.5px solid #2a2f3a;
+}
+
+.dark-mode footer {
+  background: #10151c;
+  color: #d1d5db;
+}
+
+.dark-mode footer a {
+  color: #4f9bf1;
+}
+
+#themeToggleBtn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  color: #f4f4f5;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+/* Smooth transition for theme toggle */
+body,
+header,
+.controls,
+input,
+select,
+button,
+footer,
+#map {
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+}
