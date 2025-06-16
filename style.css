@@ -1,9 +1,11 @@
+/* ---------- GLOBAL STYLES ---------- */
 body {
   margin: 0;
   font-family: 'Poppins', 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-card h3 {
@@ -537,7 +539,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Custom popup styles */
+/* ---------- LEAFLET CUSTOM POPUP ---------- */
 .custom-popup .leaflet-popup-content-wrapper {
   background: white;
   border-radius: 15px;
@@ -582,7 +584,7 @@ footer a:hover {
   transform: scale(1.1);
 }
 
-/* Enhanced button styles */
+/* ---------- BUTTON STYLES ---------- */
 .btn {
   transition: all 0.3s ease;
   border-radius: 25px;
@@ -598,7 +600,6 @@ footer a:hover {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Loading animation for map */
 .leaflet-control-zoom {
   border-radius: 10px;
   overflow: hidden;
@@ -615,7 +616,6 @@ footer a:hover {
   color: #667eea !important;
 }
 
-/* Marker cluster styles */
 .marker-cluster {
   background: linear-gradient(135deg, #667eea, #764ba2);
   border-radius: 50%;
@@ -626,6 +626,7 @@ footer a:hover {
   justify-content: center;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
+
 
 /* Animations */
 @keyframes fadeInDown {
@@ -694,6 +695,141 @@ html {
 }
 
 /* hover interaction */
+=======
+/* ---------- FEEDBACK BUTTON ---------- */
+#feedbackBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  padding: 15px;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+#feedbackBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* ---------- FEEDBACK MODAL ---------- */
+#feedbackModal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #ffffff, #f8f9ff);
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 1001;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #667eea;
+}
+
+
+/* ---------- FEEDBACK FORM ---------- */
+#feedbackForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#feedbackForm label {
+  margin-bottom: 4px;
+  font-weight: 500;
+  text-align: left;
+}
+
+#feedbackForm input,
+#feedbackForm select,
+#feedbackForm textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#feedbackForm .submit-btn {
+  background: #d3bfff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  align-self: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+#feedbackForm .submit-btn:hover {
+  background: white;
+  color: #a855f7;
+  border: 1px solid #a855f7;
+}
+
+/* ---------- DESKTOP FORM LAYOUT ---------- */
+@media (min-width: 900px) {
+  #feedbackForm {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 15px 10px;
+    align-items: center;
+  }
+
+  #feedbackForm label {
+    text-align: right;
+  }
+
+  #feedbackForm .submit-btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: fit-content;
+    max-width: none;
+  }
+}
+
+/* ---------- YES/NO HOVER ---------- */
 #yes-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
@@ -703,8 +839,6 @@ html {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(76, 0, 229, 0.5), 0 0 12px rgba(37, 2, 48, 0.6);
 }
-<<<<<<< HEAD
-
 #suggestBtn {
   background: linear-gradient(135deg, #00b894, #00cec9);
   color: white;
@@ -718,5 +852,3 @@ html {
   background: linear-gradient(135deg, #00cec9, #00b894);
   box-shadow: 0 6px 20px rgba(0, 206, 201, 0.5);
 }
-=======
->>>>>>> 52825f69334a156c7f5e9d73c7abdd67d1454923
