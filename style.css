@@ -173,7 +173,6 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
   letter-spacing: -1px;
 }
 
-
 .hero-subtitle {
   font-size: 1.15rem;
   color: #5f6c7b;
@@ -198,7 +197,6 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
   position: relative;
   overflow: hidden;
 }
-
 
 .hero-btn:hover, .hero-btn:focus {
   box-shadow: 0 8px 32px rgba(138,43,226,0.18), 0 1.5px 6px rgba(44,62,80,0.10);
@@ -456,7 +454,6 @@ h1, h2, h3, h4, h5, h6, .stat-value, .section-title, .feature-card h3, .step-car
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-
 header {
   display: flex;
   align-items: center;
@@ -627,6 +624,184 @@ footer a:hover {
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+/* ---------- FEEDBACK BUTTON ---------- */
+#feedbackBtn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #4b0082, #8a2be2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 4px 20px rgba(139, 43, 226, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#feedbackBtn:hover {
+  transform: scale(1.15) translateY(-2px);
+  background: linear-gradient(135deg, #8a2be2, #4b0082);
+  box-shadow: 0 8px 30px rgba(139, 43, 226, 0.6);
+}
+
+#feedbackBtn:active {
+  transform: scale(1.05);
+}
+
+/* ---------- FEEDBACK MODAL ---------- */
+#feedbackModal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #ffffff, #f8f9ff);
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(75, 0, 130, 0.15);
+  border: 1px solid rgba(139, 43, 226, 0.1);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 1001;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #8a2be2;
+}
+
+/* ---------- FEEDBACK FORM ---------- */
+#feedbackForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#feedbackForm label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #232946;
+  text-align: left;
+}
+
+#feedbackForm input,
+#feedbackForm select,
+#feedbackForm textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#feedbackForm input:focus,
+#feedbackForm select:focus,
+#feedbackForm textarea:focus {
+  outline: none;
+  border-color: #8a2be2;
+  box-shadow: 0 0 0 3px rgba(139, 43, 226, 0.1);
+}
+
+#feedbackForm .submit-btn {
+  background: linear-gradient(135deg, #4b0082, #8a2be2);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  align-self: center;
+  width: 100%;
+  max-width: 200px;
+  box-shadow: 0 4px 15px rgba(139, 43, 226, 0.3);
+}
+
+#feedbackForm .submit-btn:hover {
+  background: linear-gradient(135deg, #8a2be2, #4b0082);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 43, 226, 0.4);
+}
+
+/* ---------- DESKTOP FORM LAYOUT ---------- */
+@media (min-width: 900px) {
+  #feedbackForm {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 20px 15px;
+    align-items: center;
+  }
+
+  #feedbackForm label {
+    text-align: right;
+  }
+
+  #feedbackForm .submit-btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: fit-content;
+    max-width: none;
+  }
+}
+
+/* ---------- YES/NO HOVER ---------- */
+#yes-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
+}
+
+#no-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(76, 0, 229, 0.5), 0 0 12px rgba(37, 2, 48, 0.6);
+}
+
+#suggestBtn {
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 206, 201, 0.3);
+}
+
+#suggestBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #00cec9, #00b894);
+  box-shadow: 0 6px 20px rgba(0, 206, 201, 0.5);
+}
 
 /* Animations */
 @keyframes fadeInDown {
@@ -651,8 +826,7 @@ footer a:hover {
   }
 }
 
-
-/* Responsive improvements */
+/* ---------- MOBILE RESPONSIVENESS ---------- */
 @media (max-width: 768px) {
   .hero-section {
     padding: 6rem 0;
@@ -687,168 +861,23 @@ footer a:hover {
   .custom-popup .leaflet-popup-content {
     min-width: 200px;
   }
+  
+  #feedbackBtn {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .modal-content {
+    margin: 10% auto;
+    padding: 20px;
+    width: 95%;
+  }
 }
 
 /* Smooth Scroll */
 html {
   scroll-behavior: smooth;
-}
-
-/* hover interaction */
-=======
-/* ---------- FEEDBACK BUTTON ---------- */
-#feedbackBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 24px;
-  padding: 15px;
-  cursor: pointer;
-  z-index: 999;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-  transition: all 0.3s ease;
-}
-
-#feedbackBtn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-/* ---------- FEEDBACK MODAL ---------- */
-#feedbackModal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
-  backdrop-filter: blur(5px);
-}
-
-.modal-content {
-  background: linear-gradient(135deg, #ffffff, #f8f9ff);
-  margin: 5% auto;
-  padding: 30px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-sizing: border-box;
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  background: none;
-  border: none;
-  z-index: 1001;
-  transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-  color: #667eea;
-}
-
-
-/* ---------- FEEDBACK FORM ---------- */
-#feedbackForm {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-#feedbackForm label {
-  margin-bottom: 4px;
-  font-weight: 500;
-  text-align: left;
-}
-
-#feedbackForm input,
-#feedbackForm select,
-#feedbackForm textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-#feedbackForm .submit-btn {
-  background: #d3bfff;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  align-self: center;
-  width: 100%;
-  max-width: 300px;
-}
-
-#feedbackForm .submit-btn:hover {
-  background: white;
-  color: #a855f7;
-  border: 1px solid #a855f7;
-}
-
-/* ---------- DESKTOP FORM LAYOUT ---------- */
-@media (min-width: 900px) {
-  #feedbackForm {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 15px 10px;
-    align-items: center;
-  }
-
-  #feedbackForm label {
-    text-align: right;
-  }
-
-  #feedbackForm .submit-btn {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: fit-content;
-    max-width: none;
-  }
-}
-
-/* ---------- YES/NO HOVER ---------- */
-#yes-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(241, 79, 253, 0.6), 0 0 12px rgba(97, 0, 166, 0.7);
-}
-
-#no-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(76, 0, 229, 0.5), 0 0 12px rgba(37, 2, 48, 0.6);
-}
-#suggestBtn {
-  background: linear-gradient(135deg, #00b894, #00cec9);
-  color: white;
-  font-weight: 600;
-  border: none;
-  box-shadow: 0 4px 10px rgba(0, 206, 201, 0.3);
-}
-
-#suggestBtn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #00cec9, #00b894);
-  box-shadow: 0 6px 20px rgba(0, 206, 201, 0.5);
 }
