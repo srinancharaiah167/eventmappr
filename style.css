@@ -64,11 +64,11 @@ header h1 {
 .controls {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* From main branch */
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px; /* Use 10px instead of 0.5rem for consistency with feature/button */
+    gap: 10px;
     background-color: white;
-    padding: 15px; /* From feature/button (more padding) */
+    padding: 15px;
     border-radius: 12px;
     box-shadow: var(--shadow);
     max-width: 100%;
@@ -81,6 +81,7 @@ header h1 {
     gap: 10px;
     flex: 1;
 }
+
 
 
 .input {
