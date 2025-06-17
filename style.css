@@ -493,6 +493,9 @@ header {
     z-index: 1000;
 }
 
+
+/* 🧾 Tagline just under logo */
+
 .tagline {
     text-align: center;
     color: whitesmoke;
