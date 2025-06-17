@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EventMappr – Community Events</title>
   <link rel="stylesheet" href="style.css" />
-<link rel="icon" href="favICON1.png" type="image/png">
-  <link
+  <link rel ="stylesheet" href="Home.css">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- <link
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
   rel="stylesheet"
-/>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+/> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -21,29 +25,29 @@
   })();
 </script>
 </head>
+
 <body>
-  
-<header class="glass-header">
   <nav class="navbar">
-    <div class="logo" >
-  <span class="event-text">🗺️Event</span><span class="mappr-text">Mappr</span>
-  <p class="tagline">Discover & Share Local Events</p>
-</div>
-
-    <ul class="nav-links">
- <li><a href="#" class="active">Home</a></li>
-
-  <li><a href="#about">About</a></li>
-</ul>
-
+    <div class="logo">
+      <i class="fas fa-map-marker-alt"></i>
+      <span>EventMappr</span>
+    </div>
+    <div class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#">About Us</a>
+      <a href="index.html" class="add-event-btn">Add Event</a>
+    </div>
+    <div class="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
   </nav>
-</header>
+
 
 
 
   <div class="controls">
     <form id="eventForm">
-      <input  class="input" type="text" id="eventName" placeholder="Event name" required />
+      <input class="input" type="text" id="eventName" placeholder="Event name" required />
       <select class="input" id="eventType" required>
         <option value="">Type</option>
         <option value="Music">Music</option>
@@ -53,32 +57,24 @@
         <option value="Art">Art</option>
         <option value="input">Other</option> <!--updated part-->
       </select>
-    
-      <input
-      class="input"
-      type="text"
-      id="customEventType"
-      placeholder="Enter custom type"
-      style="display: none; margin-top: 8px;"
-    />
-
-     <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
-  Add Event  <span>➕</span> 
-</button>
+      <button type="submit" class="btna btn-primary d-flex align-items-center gap-2">
+        Add Event <span>➕</span>
+      </button>
 
     </form>
-      </select>
-   <button id="locateBtn" class="btn btn-danger d-flex align-items-center gap-2">
-   Find Nearby <span>📍</span> 
-</button>
-    </div>
+    </select>
+    <button id="locateBtn" class="btna btn-danger d-flex align-items-center gap-2">
+      Find Nearby <span>📍</span>
+    </button>
+  </div>
   </div>
 
   <div id="map"></div>
 
   <footer>
     <p>Built with ❤️ using <a href="https://leafletjs.com/" target="_blank">Leaflet.js</a></p>
-    <p>&copy; 2025 EventMappr | <a href="https://github.com/Bhavya1352/eventmappr" target="_blank">GitHub</a> | <a href="#privacy-policy">Privacy Policy</a> | <a href="#contact">Contact Us</a></p>
+    <p>&copy; 2025 EventMappr | <a href="https://github.com/Bhavya1352/eventmappr" target="_blank">GitHub</a> | <a
+        href="#privacy-policy">Privacy Policy</a> | <a href="#contact">Contact Us</a></p>
   </footer>
  <!-- Floating Feedback Button -->
   <button id="feedbackBtn" title="Send Feedback">💬</button>
@@ -190,4 +186,5 @@
 <script src="script.js"></script>
 
 </body>
+
 </html>
