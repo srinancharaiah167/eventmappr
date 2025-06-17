@@ -18,13 +18,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script src="config.js"></script>
-  <script>
-    (function() {
-      emailjs.init(window.CONFIG.EMAILJS_PUBLIC_KEY);
-    })();
-  </script>
+  <script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="auth.js"></script>
+
 </head>
 <body>
   <header>
@@ -40,17 +38,21 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">🗺️ EventMappr</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-          <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
-          <li class="nav-item"><a class="nav-link" href="#map-section">Map</a></li>
-        </ul>
-      </div>
+      <ul class="navbar-nav ms-auto d-flex flex-row">
+        <li class="nav-item mx-2"><a class="nav-link" href="#hero">Home</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#map-section">Map</a></li>
+        <li class="nav-item mx-2" id="authLinks">
+          <a class="nav-link" href="auth.html">Sign In</a>
+        </li>
+        <li class="nav-item mx-2 d-none" id="userProfile">
+          <div class="d-flex align-items-center">
+            <span class="nav-link me-2" id="userName"></span>
+            <button class="btn btn-link nav-link p-0" id="logoutBtn">Logout</button>
+          </div>
+        </li>
+      </ul>
     </div>
   </nav>
 
@@ -143,6 +145,9 @@
   <section id="map-section">
     <div class="container">
       <h2 class="section-title text-center">Explore Events</h2>
+      <div id="authStatus" class="text-center mb-3" style="display: none;">
+        <p class="text-muted">Please sign in to add events</p>
+      </div>
       <div class="controls">
         <form id="eventForm" class="d-flex flex-wrap align-items-center gap-2 mb-2">
           <input class="input" type="text" id="eventName" placeholder="Event name" required />
@@ -160,6 +165,7 @@
           </select>
           <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">Add Event <span>➕</span></button>
         </form>
+       
         <button id="locateBtn" class="btn btn-danger d-flex align-items-center gap-2">Find Nearby <span>📍</span></button>
         <button id="suggestBtn" class="btn btn-success d-flex align-items-center gap-2">Suggest Events <span>🎯</span></button>
         <a href="event.html" class="btn btn-outline-secondary">View All Events 📅</a>
@@ -319,6 +325,49 @@
         });
       });
     });
+  </script>
+
+  <!-- Firebase SDK -->
+  <script>
+    // Initialize Firebase
+    firebase.initializeApp({
+      apiKey: "AIzaSyDOhPO50_bSDoNJ1lKOV7NRN672dq_1Ldg",
+      authDomain: "eventmappr23.firebaseapp.com",
+      projectId: "eventmappr23",
+      storageBucket: "eventmappr23.firebasestorage.app",
+      messagingSenderId: "767568582880",
+      appId: "1:767568582880:web:c5438cf3a3d371a47d1885",
+      measurementId: "G-VG4E8PJ29S"
+    });
+
+    // Auth state observer
+    firebase.auth().onAuthStateChanged((user) => {
+      const authLinks = document.getElementById('authLinks');
+      const userProfile = document.getElementById('userProfile');
+      const userName = document.getElementById('userName');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (user) {
+        // User is signed in
+        if (authLinks) authLinks.classList.add('d-none');
+        if (userProfile) {
+          userProfile.classList.remove('d-none');
+          if (userName) userName.textContent = user.displayName || user.email;
+        }
+      } else {
+        // User is signed out
+        if (authLinks) authLinks.classList.remove('d-none');
+        if (userProfile) userProfile.classList.add('d-none');
+      }
+    });
+
+    // Logout handler
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        firebase.auth().signOut();
+      });
+    }
   </script>
 </body>
 </html>

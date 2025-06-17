@@ -1,4 +1,9 @@
 /* ---------- GLOBAL STYLES ---------- */
+:root {
+    --primary-color: #731DBE;
+    --primary-hover: #5a17a0;
+    --primary-light: #f3eaff;
+}
 
 body {
     margin: 0;
@@ -913,73 +918,8 @@ footer a:hover {
 }
 
 
-/* Smooth Scroll */
-
 html {
   scroll-behavior: smooth;
-}
-
-
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #0d1117;
-  color: #e2e8f0;
-}
-
-.dark-mode header {
-  background: linear-gradient(135deg, #1f1f3a, #2c2c54);
-  color: #ffffff;
-}
-
-.dark-mode .controls {
-  background-color: #161b22;
-  padding: 0.5rem;
-  border-radius: 6px;
-}
-
-.dark-mode input,
-.dark-mode select {
-  background: #21262d;
-  color: #f8fafc;
-  outline: 1px solid #2f3542;
-}
-
-.dark-mode input::placeholder {
-  color: #7a8494;
-}
-
-.dark-mode select option {
-  background: #21262d;
-}
-
-.dark-mode button,
-.dark-mode .btn {
-  background-color: #2e2e3e;
-  color: #f1f1f1;
-}
-
-.dark-mode #map {
-  border: 1.5px solid #2a2f3a;
-}
-
-.dark-mode footer {
-  background: #10151c;
-  color: #d1d5db;
-}
-
-.dark-mode footer a {
-  color: #4f9bf1;
-}
-
-#themeToggleBtn {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  color: #f4f4f5;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
 }
 
 /* Smooth transition for theme toggle */
@@ -999,8 +939,6 @@ footer,
 /* ---------- EVENT FORM - REFINED ---------- */
 
 
-/* Use Bootstrap controls for consistency */
-
 form .form-control,
 form .form-select {
     border-radius: 8px;
@@ -1010,7 +948,6 @@ form .form-select {
 }
 
 
-/* Purple theme on focus */
 
 form .form-control:focus,
 form .form-select:focus {
@@ -1019,7 +956,6 @@ form .form-select:focus {
 }
 
 
-/* Refine the controls container */
 
 .controls {
     display: flex;
@@ -1052,7 +988,6 @@ form .form-select:focus {
 }
 
 
-/* Responsive: form grid will stack naturally */
 
 @media (max-width: 768px) {
     .controls {
@@ -1062,8 +997,6 @@ form .form-select:focus {
 }
 
 
-/* ---------- PAGE WRAPPER for sticky footer ---------- */
-
 .page-wrapper {
     display: flex;
     flex-direction: column;
@@ -1072,4 +1005,7 @@ form .form-select:focus {
 
 .page-wrapper main {
     flex: 1;
+}
+#googleLogin{
+    color: #731DBE;
 }

@@ -9,7 +9,6 @@ const events = [{
     { name: "Tech Meetup", type: "Technology", lat: 28.613999, lng: 77.226603 },
     { name: "Farmers Market", type: "Market", lat: 28.616373, lng: 77.204582 },
     { name: "Art & Craft Fair", type: "Art", lat: 28.601078, lng: 77.208121 },
-    // ✅ Pune-based events for testing Suggest Events feature
     { name: "Startup Showcase Pune", type: "Technology", lat: 18.5204, lng: 73.8567 },
     { name: "Pune Food Carnival", type: "Food", lat: 18.5293, lng: 73.8560 },
     { name: "Live Music Pune", type: "Music", lat: 18.5246, lng: 73.8553 },
@@ -98,8 +97,53 @@ function renderMarkers(filteredEvents) {
 }
 
 renderMarkers(events);
-document.getElementById("eventForm").addEventListener("submit", function(e) {
+
+function checkAuth() {
+    return new Promise((resolve) => {
+        firebase.auth().onAuthStateChanged((user) => {
+            resolve(user);
+        });
+    });
+}
+
+document.getElementById("eventForm").addEventListener("submit", async function(e) {
     e.preventDefault();
+    
+    const user = await checkAuth();
+    if (!user) {
+        const loginPrompt = document.createElement("div");
+        loginPrompt.style.padding = "18px 25px";
+        loginPrompt.style.zIndex = "1000";
+        loginPrompt.style.position = "fixed";
+        loginPrompt.style.top = "50%";
+        loginPrompt.style.left = "50%";
+        loginPrompt.style.transform = "translate(-50%, -50%)";
+        loginPrompt.style.backdropFilter = "blur(10px)";
+        loginPrompt.style.backgroundColor = "hsla(271,73%,44%,1)";
+        loginPrompt.style.backgroundImage = `
+            radial-gradient(at 40% 40%, hsla(277, 80%, 50%, 0.5) 0px, transparent 60%),
+            radial-gradient(at 10% 20%, hsla(268, 100%, 45%, 0.5) 0px, transparent 55%),
+            radial-gradient(at 90% 85%, hsla(222, 100%, 50%, 0.5) 0px, transparent 60%)
+        `;
+        loginPrompt.style.border = "1px solid rgba(255, 255, 255, 0.3)";
+        loginPrompt.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.3)";
+        loginPrompt.style.color = "#fff";
+        loginPrompt.style.fontWeight = "500";
+        loginPrompt.style.borderRadius = "10px";
+        loginPrompt.style.maxWidth = "90%";
+        loginPrompt.style.minWidth = "280px";
+        loginPrompt.style.textAlign = "center";
+        loginPrompt.innerHTML = `
+            <p style="margin-bottom:12px">Please sign in to add events</p>
+            <div style="display:flex;justify-content:center;gap:12px">
+                <a href="auth.html" style="padding:8px 16px;background:linear-gradient(135deg,rgb(241, 79, 253),rgb(97, 0, 166));border:none;border-radius:6px;color:white;cursor:pointer;font-weight:600;text-decoration:none;box-shadow: 0 4px 10px rgba(241, 79, 253, 0.35), 0 0 10px rgba(97, 0, 166, 0.4);transition: transform 0.2s ease, box-shadow 0.3s ease;">Sign In</a>
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="padding:8px 16px;background: linear-gradient(135deg,rgb(76, 0, 229),rgb(37, 2, 48)); border:none;border-radius:6px;color:white;cursor:pointer;font-weight:600;box-shadow: 0 4px 10px rgba(76, 0, 229, 0.35), 0 0 10px rgba(37, 2, 48, 0.5);transition: transform 0.2s ease, box-shadow 0.3s ease;">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(loginPrompt);
+        return;
+    }
+
     const controls = document.querySelector(".controls");
     const name = document.getElementById("eventName").value;
     const type = document.getElementById("eventType").value;
@@ -123,7 +167,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
     locationmsg.style.transition = "opacity 1s ease-in-out all";
     locationmsg.style.borderRadius = "8px";
     locationmsg.style.overflow = "hidden";
-    // progeress bar
     const progeressBar = document.createElement("div");
     progeressBar.style.position = "absolute";
     progeressBar.style.bottom = "0";
@@ -132,7 +175,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
     progeressBar.style.background = "linear-gradient(90deg, #a64eff, #da5cff)";
     progeressBar.style.width = "100%";
     progeressBar.style.animation = "shrink 4s linear backwards";
-    //adding key frames
     const style = document.createElement("style");
     style.innerHTML = `
     @keyframes shrink{
@@ -155,7 +197,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
             type,
             lat,
             lng,
-            // Add additional details for new events
             description: `A ${type.toLowerCase()} event. More details coming soon!`,
             address: "Location details to be announced",
             dateTime: "Date and time to be announced",
@@ -165,7 +206,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
         };
         events.push(newEvent);
 
-        // Save to localStorage for persistence
         const dynamicEvents = JSON.parse(
             localStorage.getItem("dynamicEvents") || "{}"
         );
@@ -174,7 +214,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
 
         renderMarkers(events);
 
-        //popup for confirmation of event added successfully
         const toast = document.createElement("div");
         toast.textContent = "🎉 Event added successfully!";
         toast.style.position = "fixed";
@@ -203,7 +242,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
             setTimeout(() => toast.remove(), 1000);
         }, 4000);
 
-        // Show success message with option to view details
         const viewDetails = document.createElement("div");
         viewDetails.style.padding = "18px 25px";
         viewDetails.style.zIndex = "1000";
@@ -249,7 +287,6 @@ document.getElementById("eventForm").addEventListener("submit", function(e) {
     });
 });
 
-// ✅ Locate Button
 const locateBtn = document.getElementById('locateBtn');
 locateBtn.addEventListener('click', () => {
     if (!navigator.geolocation) return alert('Not supported.');
@@ -270,7 +307,6 @@ locateBtn.addEventListener('click', () => {
     );
 });
 
-// ✅ Load valid events on map
 window.addEventListener('load', () => {
     const events = JSON.parse(localStorage.getItem('events')) || [];
     const now = new Date();
@@ -281,17 +317,15 @@ window.addEventListener('load', () => {
         L.marker([ev.lat, ev.lng]).addTo(map)
             .bindPopup(`<strong>${ev.name}</strong><br>Type: ${ev.type}<br>Date: ${ev.date} ${ev.time}<br>Location: ${ev.address}`);
     });
+});
 
-// Dark mode toggle using button and localStorage
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-// Apply saved theme on load
 if (localStorage.getItem('theme') === 'dark') {
   document.body.classList.add('dark-mode');
   themeToggleBtn.textContent = '☀️';
 }
 
-// Toggle handler
 themeToggleBtn.addEventListener('click', () => {
   const isDark = document.body.classList.toggle('dark-mode');
   if (isDark) {
@@ -301,4 +335,17 @@ themeToggleBtn.addEventListener('click', () => {
     localStorage.setItem('theme', 'light');
     themeToggleBtn.textContent = '🌙';
   }
+});
+
+firebase.auth().onAuthStateChanged((user) => {
+    const eventForm = document.getElementById("eventForm");
+    const authStatus = document.getElementById("authStatus");
+    
+    if (user) {
+        if (eventForm) eventForm.style.display = "flex";
+        if (authStatus) authStatus.style.display = "none";
+    } else {
+        if (eventForm) eventForm.style.display = "none";
+        if (authStatus) authStatus.style.display = "block";
+    }
 });
