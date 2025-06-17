@@ -27,7 +27,6 @@
 </head>
 
 <body>
-
   <nav class="navbar">
     <div class="logo">
       <i class="fas fa-map-marker-alt"></i>
@@ -44,6 +43,8 @@
   </nav>
 
 
+
+
   <div class="controls">
     <form id="eventForm">
       <input class="input" type="text" id="eventName" placeholder="Event name" required />
@@ -54,6 +55,7 @@
         <option value="Technology">Technology</option>
         <option value="Market">Market</option>
         <option value="Art">Art</option>
+        <option value="input">Other</option> <!--updated part-->
       </select>
       <button type="submit" class="btna btn-primary d-flex align-items-center gap-2">
         Add Event <span>➕</span>
@@ -141,20 +143,48 @@
   <!-- Hidden Field for Time -->
   <input type="hidden" name="time" id="feedbackTime" />
 
-  <!-- Submit Button -->
-  <button 
-    type="submit" 
-    class="submit-btn"
-  >
-    Submit Feedback
-  </button>
+<!-- Submit Button -->
+<button 
+  type="submit" 
+  class="submit-btn"
+>
+  Submit Feedback
+</button>
 </form>
 
-    </div>
-  </div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- 
-  <script src="script.js"></script>
+</div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- GSAP Hover Animation -->
+<script>
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach(button => {
+    button.addEventListener('mouseenter', () => {
+      gsap.to(button, {
+        duration: 0.3,
+        scale: 1.05,
+        boxShadow: "0 8px 25px rgba(0, 0, 0, 0.15)",
+        ease: "power2.out"
+      });
+    });
+
+    button.addEventListener('mouseleave', () => {
+      gsap.to(button, {
+        duration: 0.3,
+        scale: 1,
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+        ease: "power2.out"
+      });
+    });
+  });
+</script>
+
+<!-- Your Script File -->
+<script src="script.js"></script>
+
 </body>
 
 </html>
