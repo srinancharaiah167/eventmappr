@@ -1,5 +1,8 @@
 
 console.log("script.js loaded");
+
+
+
 const events = [
   {
     name: "Community Cleanup",
@@ -17,6 +20,18 @@ const events = [
   { name: "Live Music Pune", type: "Music", lat: 18.5246, lng: 73.8553 },
   { name: "Volunteer Day Pune", type: "Volunteering", lat: 18.5167, lng: 73.8562 },
 ];
+
+// Show custom type input if "Other" is selected
+document.getElementById("eventType").addEventListener("change", function () {
+  const customInput = document.getElementById("customEventType");
+  if (this.value === "input") {
+    customInput.style.display = "block";
+    customInput.required = true;
+  } else {
+    customInput.style.display = "none";
+    customInput.required = false;
+  }
+});
 
 function loadDynamicEvents() {
   const dynamicEvents = JSON.parse(localStorage.getItem("dynamicEvents") || "{}");
@@ -104,7 +119,12 @@ document.getElementById("eventForm").addEventListener("submit", function (e) {
   e.preventDefault();
   const controls = document.querySelector(".controls");
   const name = document.getElementById("eventName").value;
-  const type = document.getElementById("eventType").value;
+  //const type = document.getElementById("eventType").value;
+    let type = document.getElementById("eventType").value;
+  if (type === "input") {
+    type = document.getElementById("customEventType").value.trim();
+  }
+
   const locationmsg = document.createElement("div");
   locationmsg.style.padding = "12px 24px";
   locationmsg.textContent =
