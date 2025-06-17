@@ -49,6 +49,7 @@
           <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
           <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
           <li class="nav-item"><a class="nav-link" href="#map-section">Map</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq-section">FAQs</a></li>
         </ul>
       </div>
     </div>
@@ -200,7 +201,50 @@
       </form>
     </div>
   </div>
-
+<div class="faqsdiv">
+   <link rel="stylesheet" href="faq.css" />
+   <section class="faq-section" id="faq-section">
+    <h2 class="section-title text-center">Frequently Asked Questions</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">What is EventMappr?</div>
+      <div class="faq-answer">
+        EventMappr is a lightweight, open-source web app that lets you discover, add, and explore local community events pinned on an interactive map.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Is EventMappr free to use?</div>
+      <div class="faq-answer">
+        It's completely free and open-source under the MIT license.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">How do I add a new event?</div>
+      <div class="faq-answer">
+        Click anywhere on the map to drop a pin, then fill in the event details like title, category, date/time, and organizer.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Does EventMappr store my events permanently?</div>
+      <div class="faq-answer">
+        EventMappr uses localStorage, so events stay saved in your browser unless you clear your data.
+      </div>
+    </div> 
+    <div class="faq-item">
+      <div class="faq-question">Can I filter events by category?</div>
+      <div class="faq-answer">
+        You can filter by Music, Tech, Volunteering, Market, and Art.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Is there a mobile version?</div>
+      <div class="faq-answer">
+        Yes, the UI is fully responsive and optimized for mobile and desktop.
+      </div>
+    </div>
+     </div>
+   </section>
+</div>
   <footer>
     <div class="footer-content">
       <div class="footer-logo">
@@ -314,6 +358,15 @@
               });
           }
         });
+      });
+    });
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const item = question.parentElement;
+        document.querySelectorAll('.faq-item').forEach(i => {
+          if (i !== item) i.classList.remove('active');
+        });
+        item.classList.toggle('active');
       });
     });
   </script>
