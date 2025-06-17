@@ -1,5 +1,8 @@
 
 console.log("script.js loaded");
+
+
+
 const events = [
   {
     name: "Community Cleanup",
@@ -17,6 +20,18 @@ const events = [
   { name: "Live Music Pune", type: "Music", lat: 18.5246, lng: 73.8553 },
   { name: "Volunteer Day Pune", type: "Volunteering", lat: 18.5167, lng: 73.8562 },
 ];
+
+// Show custom type input if "Other" is selected
+document.getElementById("eventType").addEventListener("change", function () {
+  const customInput = document.getElementById("customEventType");
+  if (this.value === "input") {
+    customInput.style.display = "block";
+    customInput.required = true;
+  } else {
+    customInput.style.display = "none";
+    customInput.required = false;
+  }
+});
 
 function loadDynamicEvents() {
   const dynamicEvents = JSON.parse(localStorage.getItem("dynamicEvents") || "{}");
@@ -65,10 +80,97 @@ map.on('moveend', saveMapPosition);
 
 const markerGroup = L.layerGroup().addTo(map);
 
+// Custom icons for different event types
+const redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const blueIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const greenIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const violetIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const orangeIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+function getIconByType(type) {
+  const icons = {
+    Music: violetIcon,
+    Volunteering: orangeIcon,
+    Technology: blueIcon,
+    Market: greenIcon,
+    Art: redIcon,
+  };
+  return icons[type] || blueIcon; // Default if unknown
+}
+const legend = L.control({ position: 'bottomleft' });
+
+// Create a custom legend control
+legend.onAdd = function (map) {
+  const div = L.DomUtil.create('div', 'info legend');
+  const types = ['Music', 'Volunteering', 'Technology', 'Market', 'Art'];
+  const labels = [];
+
+  const iconUrls = {
+    Music: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+    Volunteering: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+    Technology: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    Market: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    Art: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  };
+
+  types.forEach((type) => {
+    labels.push(
+      `<div style="display: flex; align-items: center; margin-bottom: 4px;">
+         <img src="${iconUrls[type]}" height="25" style="margin-right: 8px;"> ${type}
+       </div>`
+    );
+  });
+
+  div.innerHTML = labels.join('');
+  return div;
+};
+
+legend.addTo(map);
+
 function renderMarkers(filteredEvents) {
   markerGroup.clearLayers();
   filteredEvents.forEach((event) => {
-    const marker = L.marker([event.lat, event.lng]).addTo(markerGroup);
+    const icon = getIconByType(event.type);
+    const marker = L.marker([event.lat, event.lng], { icon }).addTo(markerGroup);
 
     const popupContent = `
       <div style="text-align: center; min-width: 250px; padding: 5px; font-family: 'Poppins', sans-serif;">
@@ -104,7 +206,12 @@ document.getElementById("eventForm").addEventListener("submit", function (e) {
   e.preventDefault();
   const controls = document.querySelector(".controls");
   const name = document.getElementById("eventName").value;
-  const type = document.getElementById("eventType").value;
+  //const type = document.getElementById("eventType").value;
+    let type = document.getElementById("eventType").value;
+  if (type === "input") {
+    type = document.getElementById("customEventType").value.trim();
+  }
+
   const locationmsg = document.createElement("div");
   locationmsg.style.padding = "12px 24px";
   locationmsg.textContent =
