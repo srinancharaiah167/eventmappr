@@ -510,6 +510,10 @@ footer {
     .hero-content {
         max-width: 100%;
     }
+
+    .hero-image{
+        width : 100%;
+    }
 }
 
 @media (max-width: 768px) {
