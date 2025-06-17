@@ -516,25 +516,16 @@ header h1 {
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(44, 62, 80, 0.06);
 }
+#eventForm {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1;
+} */
 
-.controls .form-control,
-.controls .form-select {
-    min-width: 160px;
-}
 
-@media (max-width: 768px) {
-    .controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .controls>div {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-form,
-.filter-group {
+.controls {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
@@ -666,27 +657,21 @@ footer a:hover {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+.footer-links>a{
+  color: white;
+}
+.social-links>a{
+  color: white;
+}
+/* Custom popup styles */
 
-/* ---------- FEEDBACK BUTTON ---------- */
-
-#feedbackBtn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: linear-gradient(135deg, #4b0082, #8a2be2);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 999;
-    box-shadow: 0 4px 20px rgba(139, 43, 226, 0.4);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.custom-popup .leaflet-popup-content-wrapper {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: none;
+  padding: 0;
+  overflow: hidden;
 }
 
 #feedbackBtn:hover {
@@ -824,6 +809,10 @@ footer a:hover {
         width: fit-content;
         max-width: none;
     }
+  
+  .custom-popup .leaflet-popup-content {
+    min-width: 200px;
+  }
 }
 
 
@@ -927,8 +916,84 @@ footer a:hover {
 /* Smooth Scroll */
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #0d1117;
+  color: #e2e8f0;
+}
+
+.dark-mode header {
+  background: linear-gradient(135deg, #1f1f3a, #2c2c54);
+  color: #ffffff;
+}
+
+.dark-mode .controls {
+  background-color: #161b22;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.dark-mode input,
+.dark-mode select {
+  background: #21262d;
+  color: #f8fafc;
+  outline: 1px solid #2f3542;
+}
+
+.dark-mode input::placeholder {
+  color: #7a8494;
+}
+
+.dark-mode select option {
+  background: #21262d;
+}
+
+.dark-mode button,
+.dark-mode .btn {
+  background-color: #2e2e3e;
+  color: #f1f1f1;
+}
+
+.dark-mode #map {
+  border: 1.5px solid #2a2f3a;
+}
+
+.dark-mode footer {
+  background: #10151c;
+  color: #d1d5db;
+}
+
+.dark-mode footer a {
+  color: #4f9bf1;
+}
+
+#themeToggleBtn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  color: #f4f4f5;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+/* Smooth transition for theme toggle */
+body,
+header,
+.controls,
+input,
+select,
+button,
+footer,
+#map {
+  transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+}
+
 
 
 /* ---------- EVENT FORM - REFINED ---------- */
