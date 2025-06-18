@@ -9,6 +9,177 @@ firebase.initializeApp({
   measurementId: "G-VG4E8PJ29S"
 });
 
+// Global authentication state
+let currentUser = null;
+
+// Authentication state observer
+firebase.auth().onAuthStateChanged((user) => {
+    currentUser = user;
+    updateUIForAuthState(user);
+    updateNavigationForAuthState(user);
+    updatePageSpecificAuthState(user);
+});
+
+// Update general UI elements based on auth state
+function updateUIForAuthState(user) {
+    const authLinks = document.getElementById('authLinks');
+    const userProfile = document.getElementById('userProfile');
+    const userName = document.getElementById('userName');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const eventForm = document.getElementById('eventForm');
+    const authStatus = document.getElementById('authStatus');
+    const authSection = document.querySelector('.auth-section');
+
+    if (user) {
+        console.log('User is signed in:', user.displayName);
+        
+        // Update navigation
+        if (authLinks) authLinks.classList.add('d-none');
+        if (userProfile) {
+            userProfile.classList.remove('d-none');
+            if (userName) userName.textContent = user.displayName || user.email;
+        }
+
+        // Update event form visibility
+        if (eventForm) eventForm.style.display = 'flex';
+        if (authStatus) authStatus.style.display = 'none';
+        if (authSection) authSection.style.display = 'none';
+
+        // Store user info in localStorage
+        localStorage.setItem('currentUser', JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL
+        }));
+
+    } else {
+        console.log('User is signed out');
+        
+        // Update navigation
+        if (authLinks) authLinks.classList.remove('d-none');
+        if (userProfile) userProfile.classList.add('d-none');
+
+        // Update event form visibility
+        if (eventForm) eventForm.style.display = 'none';
+        if (authStatus) authStatus.style.display = 'block';
+        if (authSection) authSection.style.display = 'block';
+
+        // Clear user info from localStorage
+        localStorage.removeItem('currentUser');
+    }
+}
+
+// Update navigation elements
+function updateNavigationForAuthState(user) {
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Logout error:', error);
+            });
+        });
+    }
+}
+
+// Update page-specific authentication state
+function updatePageSpecificAuthState(user) {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    switch (currentPage) {
+        case 'explore.html':
+            updateExplorePageAuth(user);
+            break;
+        case 'event.html':
+            updateEventPageAuth(user);
+            break;
+        case 'index.html':
+            updateHomePageAuth(user);
+            break;
+        case 'auth.html':
+            updateAuthPageAuth(user);
+            break;
+    }
+}
+
+// Page-specific auth updates
+function updateExplorePageAuth(user) {
+    const eventForm = document.getElementById('eventForm');
+    const authStatus = document.getElementById('authStatus');
+    const authSection = document.querySelector('.auth-section');
+    
+    if (user) {
+        if (eventForm) eventForm.style.display = 'flex';
+        if (authStatus) authStatus.style.display = 'none';
+        if (authSection) authSection.style.display = 'none';
+    } else {
+        if (eventForm) eventForm.style.display = 'none';
+        if (authStatus) authStatus.style.display = 'block';
+        if (authSection) authSection.style.display = 'block';
+    }
+}
+
+function updateEventPageAuth(user) {
+    // Add event page specific auth logic here
+    const addEventBtn = document.getElementById('addEventBtn');
+    if (addEventBtn) {
+        addEventBtn.style.display = user ? 'block' : 'none';
+    }
+}
+
+function updateHomePageAuth(user) {
+    // Add home page specific auth logic here
+    const heroBtn = document.querySelector('.hero-btn');
+    if (heroBtn && user) {
+        heroBtn.href = 'explore.html';
+        heroBtn.textContent = 'Start Exploring';
+    }
+}
+
+function updateAuthPageAuth(user) {
+    // Redirect if already logged in
+    if (user) {
+        window.location.href = 'index.html';
+    }
+}
+
+// Authentication functions
+function signInWithEmail(email, password) {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+}
+
+function signUpWithEmail(email, password, displayName) {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            return userCredential.user.updateProfile({
+                displayName: displayName
+            });
+        });
+}
+
+function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return firebase.auth().signInWithPopup(provider);
+}
+
+function signOut() {
+    return firebase.auth().signOut();
+}
+
+// Get current user
+function getCurrentUser() {
+    return currentUser;
+}
+
+// Check if user is authenticated
+function isAuthenticated() {
+    return currentUser !== null;
+}
+
+// Auth form handlers
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
@@ -18,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authTabs = document.querySelectorAll('.auth-tab');
     const authForms = document.querySelectorAll('.auth-form');
 
+    // Login form handler
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -25,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('loginPassword').value;
 
             try {
-                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                await signInWithEmail(email, password);
                 window.location.href = 'index.html';
             } catch (error) {
                 if (loginError) {
@@ -36,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Signup form handler
     if (signupForm) {
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -44,10 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('signupPassword').value;
 
             try {
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                await userCredential.user.updateProfile({
-                    displayName: name
-                });
+                await signUpWithEmail(email, password, name);
                 window.location.href = 'index.html';
             } catch (error) {
                 if (signupError) {
@@ -58,11 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Google login handler
     if (googleLoginBtn) {
         googleLoginBtn.addEventListener('click', async () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
             try {
-                const result = await firebase.auth().signInWithPopup(provider);
+                await signInWithGoogle();
                 window.location.href = 'index.html';
             } catch (error) {
                 console.error('Google sign-in error:', error);
@@ -75,11 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             const tabName = tab.dataset.tab;
             
-            // Update active tab
             authTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             
-            // Show corresponding form
             authForms.forEach(form => {
                 form.classList.remove('active');
                 if (form.id === `${tabName}Form`) {
@@ -90,25 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-    
-        console.log('User is signed in:', user.displayName);
-        const authLinks = document.getElementById('authLinks');
-        const userProfile = document.getElementById('userProfile');
-        const userName = document.getElementById('userName');
-        
-        if (authLinks) authLinks.classList.add('d-none');
-        if (userProfile) {
-            userProfile.classList.remove('d-none');
-            if (userName) userName.textContent = user.displayName || user.email;
-        }
-    } else {
-        console.log('User is signed out');
-        const authLinks = document.getElementById('authLinks');
-        const userProfile = document.getElementById('userProfile');
-        
-        if (authLinks) authLinks.classList.remove('d-none');
-        if (userProfile) userProfile.classList.add('d-none');
-    }
-}); 
+// Export functions for use in other scripts
+window.authManager = {
+    getCurrentUser,
+    isAuthenticated,
+    signInWithEmail,
+    signUpWithEmail,
+    signInWithGoogle,
+    signOut
+}; 
