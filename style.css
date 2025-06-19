@@ -1326,3 +1326,75 @@ form .form-select:focus {
 #googleLogin{
     color: #731DBE;
 }
+
+/*Scroll to top Button */
+
+.content {
+  padding: 2rem;
+  text-align: center;
+}
+
+.scroll-to-top-container {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-to-top-container.show {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+#scrollToTopBtn {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#scrollToTopBtn:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); 
+}
+
+/* Animated rotating border */
+.animated-border {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 3px solid transparent;
+  border-top: 3px solid #a11fc1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  top: -5px;
+  left: -5px;
+  z-index: 1;
+  transition: animation-duration 0.2s ease;
+}
+
+/* Speed up spin on hover */
+.scroll-to-top-container:hover .animated-border {
+  animation-duration: 0.4s;
+}
+
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
