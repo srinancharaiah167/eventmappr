@@ -218,6 +218,22 @@ create-contact-us
       </form>
     </div>
   </div>
+
+  <!-- Scroll to top button -->
+  
+  <div class="content">
+    <div style="height: 2500px;"></div>
+  </div>
+
+  <div class="scroll-to-top-container">
+    <div class="animated-border"></div>
+    <button id="scrollToTopBtn" title="Go to top">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 4L6 10M12 4L18 10M12 4V20" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
 <div class="faqsdiv">
    <link rel="stylesheet" href="faq.css" />
    <section class="faq-section" id="faq-section">
@@ -293,6 +309,7 @@ create-contact-us
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
+  <script src="scroll-to-top.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
