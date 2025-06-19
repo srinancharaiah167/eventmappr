@@ -260,3 +260,25 @@ window.authManager = {
     signInWithGoogle,
     signOut
 }; 
+// === Dark Mode Toggle ===
+const toggleButton = document.getElementById('darkModeToggle');
+if (toggleButton) {
+    const icon = toggleButton.querySelector('i');
+
+    // On load, apply stored theme
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        icon.classList.replace('fa-moon', 'fa-sun');
+    }
+
+    toggleButton.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('dark-mode');
+
+        // Update icon
+        icon.classList.toggle('fa-moon', !isDark);
+        icon.classList.toggle('fa-sun', isDark);
+
+        // Store preference
+        localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    });
+}
