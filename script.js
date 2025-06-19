@@ -93,10 +93,15 @@ function renderMarkers(filteredEvents) {
         <div style="padding: 0 10px;">
           <div style="display: inline-block; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; margin-bottom: 15px;">
             ${event.type}
-          </div><br>
-          <a href="event-details.html?event=${encodeURIComponent(event.name)}" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-size: 14px; font-weight: 500; display: inline-block; margin-top: 5px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-            <i class="fas fa-info-circle" style="margin-right: 5px;"></i> View Details
-          </a>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px;">
+            <a href="event-details.html?event=${encodeURIComponent(event.name)}" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-size: 14px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); flex-grow: 1;">
+              <i class="fas fa-info-circle" style="margin-right: 5px;"></i> View Details
+            </a>
+            <button onclick="window.deleteEvent('${event.name.replace(/'/g, "\\'")}')" style="background: #ff4757; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); transition: all 0.3s ease;">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -105,14 +110,55 @@ function renderMarkers(filteredEvents) {
             maxWidth: 300,
             className: "custom-popup",
         });
-
-        if (event.type) {
-            const prefs = JSON.parse(localStorage.getItem("eventPreferences") || "{}");
-            prefs[event.type] = (prefs[event.type] || 0) + 1;
-            localStorage.setItem("eventPreferences", JSON.stringify(prefs));
-        }
     });
 }
+async function deleteEvent(eventName) {
+    // Check authentication
+    const user = await checkAuth();
+    if (!user) {
+        showLoginPrompt();
+        return;
+    }
+
+    // Confirmation dialog
+    if (!confirm(`Delete "${eventName}" permanently?`)) return;
+
+    // Remove from hardcoded events (if present)
+    const eventIndex = events.findIndex(e => e.name === eventName);
+    if (eventIndex !== -1) {
+        events.splice(eventIndex, 1);
+    }
+
+    // Remove from dynamicEvents (if present)
+    const dynamicEvents = JSON.parse(localStorage.getItem("dynamicEvents") || "{}");
+    if (dynamicEvents[eventName]) {
+        delete dynamicEvents[eventName];
+        localStorage.setItem("dynamicEvents", JSON.stringify(dynamicEvents));
+    }
+
+    // Refresh the map
+    renderMarkers(events);
+
+    // Show success message
+    const toast = document.createElement("div");
+    toast.textContent = `🗑️ Deleted "${eventName}"`;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        background: #ff4757;
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
 
 function checkAuth() {
     return new Promise((resolve) => {
