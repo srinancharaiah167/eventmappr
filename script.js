@@ -1,5 +1,83 @@
 console.log("script.js loaded");
 
+// Theme toggle functionality
+function initTheme() {
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    if (!themeToggleBtn) return;
+
+    // Function to set theme
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeToggleBtn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        
+        // Update map style if it exists
+        if (window.map) {
+            const mapContainer = document.querySelector('.leaflet-container');
+            if (mapContainer) {
+                if (theme === 'dark') {
+                    mapContainer.style.background = '#13131a';
+                    document.querySelectorAll('.leaflet-tile').forEach(tile => {
+                        tile.style.filter = 'brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7)';
+                    });
+                } else {
+                    mapContainer.style.background = '#ffffff';
+                    document.querySelectorAll('.leaflet-tile').forEach(tile => {
+                        tile.style.filter = 'none';
+                    });
+                }
+            }
+
+            // Update existing popups
+            document.querySelectorAll('.leaflet-popup').forEach(popup => {
+                popup.classList.toggle('dark-theme', theme === 'dark');
+            });
+
+            // Re-render markers to update popup styles
+            if (events && events.length > 0) {
+                renderMarkers(events);
+            }
+        }
+
+        // Update navbar if it exists (for index.html)
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            if (theme === 'dark') {
+                navbar.classList.remove('navbar-light', 'bg-light');
+                navbar.classList.add('navbar-dark', 'bg-dark');
+            } else {
+                navbar.classList.remove('navbar-dark', 'bg-dark');
+                navbar.classList.add('navbar-light', 'bg-light');
+            }
+        }
+    }
+
+    // Check system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Get saved theme or use system preference
+    const savedTheme = localStorage.getItem('theme');
+    const initialTheme = savedTheme || (prefersDark.matches ? 'dark' : 'light');
+    
+    // Set initial theme
+    setTheme(initialTheme);
+
+    // Listen for system theme changes
+    prefersDark.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            setTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+
+    // Toggle theme on button click
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    });
+}
+
 // Page detection
 const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
@@ -85,17 +163,18 @@ function renderMarkers(filteredEvents) {
     filteredEvents.forEach((event) => {
         const marker = L.marker([event.lat, event.lng]).addTo(markerGroup);
 
+        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
         const popupContent = `
       <div style="text-align: center; min-width: 250px; padding: 5px; font-family: 'Poppins', sans-serif;">
-        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; border-radius: 15px 15px 0 0; margin: -5px -5px 10px -5px;">
+        <div style="background: var(--btn-primary-bg); color: white; padding: 15px; border-radius: 15px 15px 0 0; margin: -5px -5px 10px -5px;">
           <strong style="font-size: 18px; font-weight: 600;">${event.name}</strong>
         </div>
-        <div style="padding: 0 10px;">
-          <div style="display: inline-block; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; margin-bottom: 15px;">
+        <div style="padding: 0 10px; background: var(--card-bg); color: var(--text-color);">
+          <div style="display: inline-block; background: ${isDarkTheme ? 'rgba(129, 140, 248, 0.1)' : 'rgba(102, 126, 234, 0.1)'}; color: var(--text-color); padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; margin-bottom: 15px;">
             ${event.type}
           </div>
           <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px;">
-            <a href="event-details.html?event=${encodeURIComponent(event.name)}" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-size: 14px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); flex-grow: 1;">
+            <a href="event-details.html?event=${encodeURIComponent(event.name)}" style="background: var(--btn-primary-bg); color: white; padding: 10px 20px; text-decoration: none; border-radius: 25px; font-size: 14px; font-weight: 500; transition: all 0.3s ease; box-shadow: var(--card-shadow); flex-grow: 1;">
               <i class="fas fa-info-circle" style="margin-right: 5px;"></i> View Details
             </a>
             <button onclick="window.deleteEvent('${event.name.replace(/'/g, "\\'")}')" style="background: #ff4757; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); transition: all 0.3s ease;">
@@ -108,7 +187,7 @@ function renderMarkers(filteredEvents) {
 
         marker.bindPopup(popupContent, {
             maxWidth: 300,
-            className: "custom-popup",
+            className: `custom-popup ${isDarkTheme ? 'dark-theme' : ''}`,
         });
     });
 }
@@ -211,6 +290,9 @@ function showLoginPrompt() {
 // Page-specific initialization
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Current page:', currentPage);
+
+    // Initialize theme
+    initTheme();
 
     // Initialize map if on explore page
     if (currentPage === 'explore.html') {
