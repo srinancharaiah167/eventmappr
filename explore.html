@@ -13,15 +13,16 @@
     
     <style>
         .auth-section {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            background: var(--card-bg);
             border-radius: 20px;
             padding: 2rem;
             margin: 2rem 0;
-            border: 1px solid rgba(102, 126, 234, 0.1);
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .auth-section::before {
@@ -31,7 +32,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #4b0082);
+            background: var(--btn-primary-bg);
             border-radius: 20px 20px 0 0;
         }
 
@@ -39,14 +40,18 @@
             font-family: 'Inter', sans-serif;
             font-size: 1.2rem;
             font-weight: 500;
-            color: #4a5568;
+            color: var(--text-color);
             margin-bottom: 1.5rem;
             text-align: center;
             line-height: 1.6;
         }
 
+        [data-theme="dark"] .auth-message {
+            color: #ffffff;
+        }
+
         .auth-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--btn-primary-bg);
             border: none;
             color: white;
             font-family: 'Poppins', sans-serif;
@@ -54,7 +59,7 @@
             font-size: 1rem;
             padding: 1rem 2rem;
             border-radius: 50px;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: var(--card-shadow);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             display: inline-flex;
@@ -80,8 +85,9 @@
         }
 
         .auth-button:hover {
-            transform: translateY(-3px) scale(1.02);
+            transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+            background: var(--btn-primary-hover);
             color: white;
             text-decoration: none;
         }
@@ -101,7 +107,7 @@
 
         .auth-icon {
             font-size: 3rem;
-            color: #667eea;
+            color: var(--text-color);
             margin-bottom: 1rem;
             opacity: 0.8;
             animation: float 3s ease-in-out infinite;
@@ -113,11 +119,19 @@
         }
 
         .section-title {
+            color: var(--text-color);
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
             position: relative;
+            transition: color 0.3s ease;
+        }
+
+        [data-theme="dark"] .section-title {
+            color: #9d4edd;
+            text-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
         }
 
         .section-title::after {
@@ -128,8 +142,13 @@
             transform: translateX(-50%);
             width: 60px;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: var(--btn-primary-bg);
             border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        [data-theme="dark"] .section-title::after {
+            background: linear-gradient(90deg, #9d4edd, #c77dff);
         }
 
         /* Logo Link Styling */
@@ -185,6 +204,202 @@
                 font-size: 2rem;
             }
         }
+
+        #authStatus {
+            color: var(--text-color);
+        }
+
+        [data-theme="dark"] #authStatus {
+            color: #ffffff;
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="dark"] .text-muted {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        .controls {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: var(--card-bg);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .controls form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0;
+        }
+
+        .controls .form-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .controls input,
+        .controls select {
+            height: 38px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .controls .buttons-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
+        .controls .btn {
+            white-space: nowrap;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .controls form {
+                flex-wrap: wrap;
+            }
+            
+            .controls input,
+            .controls select {
+                min-width: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls form {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .controls .form-group {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+
+            .controls .buttons-group {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .controls input,
+            .controls select {
+                width: 100%;
+            }
+        }
+
+        [data-theme="dark"] .controls {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .controls input,
+        .controls select {
+            color: var(--text-color);
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .controls input,
+        [data-theme="dark"] .controls select {
+            color: #ffffff;
+            background: var(--input-bg);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .controls input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="dark"] .controls select option {
+            background: var(--card-bg);
+            color: #ffffff;
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(157, 78, 221, 0.2);
+            outline: none;
+        }
+
+        [data-theme="dark"] .controls input:focus,
+        [data-theme="dark"] .controls select:focus {
+            border-color: #9d4edd;
+            box-shadow: 0 0 0 2px rgba(157, 78, 221, 0.3);
+        }
+
+        .controls .btn {
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .controls .btn-outline-secondary {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] .controls .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        #map-section {
+            padding: 2rem 0;
+            background: var(--section-bg);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] #map-section {
+            background: #0a0a0f;
+        }
+
+        [data-theme="dark"] #map-section .container {
+            background: #13131a;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #map {
+            height: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] #map {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Ensure container background in light theme */
+        #map-section .container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -192,6 +407,9 @@
     <div class="header-title">
       <h1><a href="index.html">🗺️ EventMappr</a></h1>
       <p class="tagline">Discover & Share Local Events</p>
+      <button id="themeToggleBtn" title="Toggle Dark Mode" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+        🌙
+      </button>
     </div>
   </header>
 
@@ -214,30 +432,31 @@
         <p class="text-muted">Please sign in to add events</p>
       </div>
       <div class="controls">
-        <form id="eventForm" class="d-flex align-items-center gap-2">
-            <input class="input" type="text" id="eventName" placeholder="Event name" required />
-            <input type="date" class="input" id="eventDate" required />
-            <input type="time" class="input" id="eventTime" required />
-            <select class="input" id="eventType" required>
-                <option value="">Type</option>
-                <option value="Music">Music</option>
-                <option value="Volunteering">Volunteering</option>
-                <option value="Technology">Technology</option>
-                <option value="Market">Market</option>
-                <option value="Art">Art</option>
-                <option value="Sport">Sport</option>
-                <option value="Other">Other</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Add Event ➕</button>
+        <form id="eventForm">
+            <div class="form-group">
+                <input class="input" type="text" id="eventName" placeholder="Event name" required />
+                <input type="date" class="input" id="eventDate" required />
+                <input type="time" class="input" id="eventTime" required />
+                <select class="input" id="eventType" required>
+                    <option value="">Type</option>
+                    <option value="Music">Music</option>
+                    <option value="Volunteering">Volunteering</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Market">Market</option>
+                    <option value="Art">Art</option>
+                    <option value="Sport">Sport</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="buttons-group">
+                <button type="submit" class="btn btn-primary">Add Event ➕</button>
+                <button id="locateBtn" class="btn btn-danger">Find Nearby 📍</button>
+                <button id="suggestBtn" class="btn btn-success">Suggest Events 🎯</button>
+                <a href="event.html" class="btn btn-outline-secondary">View All Events 📅</a>
+            </div>
         </form>
-        
-        <div class="d-flex gap-2">
-            <button id="locateBtn" class="btn btn-danger">Find Nearby 📍</button>
-            <button id="suggestBtn" class="btn btn-success">Suggest Events 🎯</button>
-            <a href="event.html" class="btn btn-outline-secondary">View All Events 📅</a>
-        </div>
       </div>
-      <div id="map"></div>
+      <div id="map" class="mt-4"></div>
     </div>
   </section>
 
@@ -248,42 +467,35 @@
         <span>EventMappr</span>
       </div>
       <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Contact</a>
+        <a href="index.html">Home</a>
+        <a href="Community-forum.html">Community</a>
+        <a href="contact.html">Contact</a>
       </div>
       <div class="social-links">
-        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="https://github.com/Bhavya1352/eventmappr" target="_blank"><i class="fab fa-github"></i></a>
         <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-discord"></i></a>
       </div>
+      <p class="copyright">© 2025 EventMappr. All rights reserved.</p>
     </div>
-    <div class="copyright">
-      <p>&copy; 2025 EventMappr. All rights reserved.</p>
-    </div>
-    <p>Built with ❤️ using <a href="https://leafletjs.com/" target="_blank">Leaflet.js</a></p>
-    <p>&copy; 2025 EventMappr | <a href="https://github.com/Bhavya1352/eventmappr" target="_blank">GitHub</a> | <a href="#privacy-policy">Privacy Policy</a> | <a href="#contact">Contact Us</a></p>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
-
-  <!-- Firebase SDK -->
   <script>
-    // Initialize Firebase
-    firebase.initializeApp({
-      apiKey: "AIzaSyDOhPO50_bSDoNJ1lKOV7NRN672dq_1Ldg",
-      authDomain: "eventmappr23.firebaseapp.com",
-      projectId: "eventmappr23",
-      storageBucket: "eventmappr23.firebasestorage.app",
-      messagingSenderId: "767568582880",
-      appId: "1:767568582880:web:c5438cf3a3d371a47d1885",
-      measurementId: "G-VG4E8PJ29S"
+    // Initialize theme based on localStorage
+    document.body.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    themeToggleBtn.textContent = document.body.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+
+    // Theme toggle functionality
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
     });
   </script>
 </body>
