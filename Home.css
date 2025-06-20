@@ -303,6 +303,7 @@ section {
     justify-content: center;
     align-items: center;
     max-width: 600px;
+    position: relative;
 }
 
 #preview-map {
@@ -580,6 +581,10 @@ footer {
     .hero-content {
         max-width: 100%;
     }
+
+    .hero-image{
+        width : 100%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -669,4 +674,25 @@ footer {
 .leaflet-popup-content {
     margin: 10px 14px;
     font-family: 'Inter', sans-serif;
+}
+
+.center-button-css{
+    z-index: 1000;
+    height: 42px;
+    width: 42px;
+    padding: 5px;
+    position: absolute;
+    right: 20px;
+    bottom: 35px;
+    border-radius: 10px;
+    background-color: white;
+    border-color: rgb(204, 204, 204);
+    border-style: solid;
+    color: black;
+    cursor: pointer;
+    display: flex;
+}
+
+.gps-icon{
+    width: 30px;
 }
