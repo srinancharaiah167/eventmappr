@@ -14,6 +14,8 @@
 - 📄 **NEW: Detailed event pages** - Click on any marker to view comprehensive event information
 - 💾 **NEW: Persistent storage** - Events are saved locally and persist across sessions
 - 🗺️ **NEW: Mini maps** - Each event page includes a map showing the exact location
+- ☁️ **NEW: Weather Planner** - Users can check 5-day weather forecasts for any city to help plan suitable dates for events
+- 📸 **NEW: Event Gallery** - A dedicated page displaying user-shared images from past events, fostering community engagement
 
 ---
 
