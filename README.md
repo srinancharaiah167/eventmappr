@@ -36,14 +36,31 @@ Live demo: **https://eventmappr.vercel.app/**
 - 🎛️ **Filter events** – Narrow down events by category (🎵 Music, 💻 Tech, 🤝 Volunteering, 🛍️ Market, 🎨 Art)  
 - 💾 **Persistent storage** – Uses `localStorage` so your events remain across browser sessions  
 - 📱 **Interactive UI** – Responsive layout with popups, animations, and dynamic filtering  
-- 📄 **Detailed event pages** – Click a marker to view full event info, a mini-map, and organizer/contact details  
+- 📄 **NEW: Detailed event pages** - Click on any marker to view comprehensive event information
+- 💾 **NEW: Persistent storage** - Events are saved locally and persist across sessions
+- 🗺️ **NEW: Mini maps** - Each event page includes a map showing the exact location
+- ☁️ **NEW: Weather Planner** - Users can check 5-day weather forecasts for any city to help plan suitable dates for events
+- 📸 **NEW: Event Gallery** - A dedicated page displaying user-shared images from past events, fostering community engagement
 
+---
+
+## 📱 How to Use
+
+1. **View Events**: Open the app to see events marked on the map
+2. **Click Markers**: Click on any event marker to view detailed information
+3. **Add Events**: Fill out the form and click on the map to add new events
+4. **Find Nearby**: Use the "Find Nearby" button to locate events close to you
+5. **View Details**: Each event has a dedicated page with:
+   - Event description and details
+   - Location information with coordinates
+   - Mini map showing exact location
+   - Organizer and contact information
+   - Date and time details
 
 ---
 
 ## 🛠️ Tech Stack
-
-- **HTML5 & CSS3** – semantic markup and responsive design  
+ **HTML5 & CSS3** – semantic markup and responsive design  
 - **Vanilla JavaScript** – app logic, map interactivity, and data handling  
 - **[Leaflet.js](https://leafletjs.com/)** – open-source mapping library  
 - **OpenStreetMap** – free map tile provider  
