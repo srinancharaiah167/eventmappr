@@ -196,6 +196,28 @@ section {
     width: auto;
 }
 
+/* Gallery link styling */
+.gallery-link {
+    display: flex;
+    align-items: center;
+}
+
+.gallery-link i {
+    margin-right: 0.5rem;
+    color: var(--sky-blue);
+}
+
+/* Weather link styling */
+.weather-link {
+    display: flex;
+    align-items: center;
+}
+
+.weather-link i {
+    margin-right: 0.5rem;
+    color: var(--yellow);
+}
+
 /*Generate Badge styling*/
 .badge-btn {
     background-color: var(--yellow);
@@ -221,6 +243,30 @@ section {
     display: none; /* Ensures no underline effect */
 }
 
+/* Add Event button styling */
+.add-event-btn {
+    background-color: var(--yellow);
+    color: var(--midnight-blue);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    opacity: 1;
+    margin-left: 0.5rem;
+    box-shadow: 0 4px 10px rgba(250, 204, 21, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.add-event-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(250, 204, 21, 0.4);
+    background-color: #f0c000;
+}
+
+.add-event-btn::after {
+    display: none;
+}
 
 /* Hero Section */
 .hero {
@@ -487,6 +533,7 @@ footer {
 .footer-links {
     display: flex;
     gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .footer-links a:hover {
@@ -521,8 +568,6 @@ footer {
     font-size: 0.9rem;
     opacity: 0.7;
 }
-
-
 
 /* Responsive Design */
 @media (max-width: 992px) {
@@ -573,11 +618,13 @@ footer {
         padding: 3rem 1rem;
     }
 }
+
 .navbar.scrolled {
     background-color: rgba(15, 23, 42, 0.98);
     padding: 0.6rem 2.5rem;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
+
 /* Leaflet Map Styling */
 .event-marker {
     display: flex;
