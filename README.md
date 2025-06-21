@@ -1,7 +1,7 @@
 # 🗺 EventMappr 
 
 **EventMappr** is a lightweight, open-source community event mapping web app. Users can discover, add, and explore local events pinned on an interactive map.
-Interactive, frontend‑only web app for discovering and cataloging community events on a map.
+Interactive, frontend web app for discovering and cataloging community events on a map.
 
 <p align="center">
   <a href="LICENSE">
@@ -41,6 +41,7 @@ Live demo: **https://eventmappr.vercel.app/**
 - 🗺️ **NEW: Mini maps** - Each event page includes a map showing the exact location
 - ☁️ **NEW: Weather Planner** - Users can check 5-day weather forecasts for any city to help plan suitable dates for events
 - 📸 **NEW: Event Gallery** - A dedicated page displaying user-shared images from past events, fostering community engagement
+- 🔄 **NEW: Modular Routing** - Enhanced navigation with react-router-dom for better user experience
 
 ---
 
@@ -60,57 +61,91 @@ Live demo: **https://eventmappr.vercel.app/**
 ---
 
 ## 🛠️ Tech Stack
- **HTML5 & CSS3** – semantic markup and responsive design  
-- **Vanilla JavaScript** – app logic, map interactivity, and data handling  
-- **[Leaflet.js](https://leafletjs.com/)** – open-source mapping library  
-- **OpenStreetMap** – free map tile provider  
-- **localStorage** – lightweight, in-browser persistence  
+- **Next.js** - React framework for production-grade applications
+- **React** - Modern UI library for component-based architecture
+- **React Router DOM** - Declarative routing for React applications
+- **React Leaflet** - React components for Leaflet maps
+- **HTML5 & CSS3** – Semantic markup and responsive design  
+- **Leaflet.js** – Open-source mapping library  
+- **OpenStreetMap** – Free map tile provider  
+- **localStorage** – Lightweight, in-browser persistence
 
 ---
-
-## 🧩 Getting Started
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### Prerequisites
 
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+### Installation
+
+1. Clone the repository
 ```bash
-git clone https://github.com/your-username/EventMappr.git
-cd EventMappr
+git clone https://github.com/yourusername/eventmappr.git
+cd eventmappr
 ```
 
-### 2. Run locally
-
-You can open the app directly in your browser:
-
-```bash
-open index.html
-```
-
-Or use a live server extension (e.g. in VS Code) for live reloading.
-
-Or use npm:
-
+2. Install dependencies
 ```bash
 npm install
+```
+
+### Development
+
+To start the development server:
+
+```bash
+npm run dev
+```
+
+The application will open in your default browser at `http://localhost:3000`.
+
+### Building for Production
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+To start the production server:
+
+```bash
 npm start
 ```
+
+## Available Scripts
+
+- `npm run dev` - Starts the development server on port 3000
+- `npm run build` - Creates a production build
+- `npm start` - Starts the production server
+- `npm run lint` - Runs ESLint to check code quality
+- `npm run clean` - Cleans build artifacts
+
 ---
 
-📁 Project Structure Overview
+## 📁 Project Structure Overview
 
 ```text
-Copy
-Edit
-├── index.html           # Main UI + map + add-event form  
-├── event-details.html   # Dedicated event details page  
-├── script.js            # Map setup, event logic, storage handlers  
-├── event-details.js     # Loads data & renders detail view  
-├── style.css            # Global and responsive CSS  
-├── package.json         # (Optional) npm meta + scripts  
-├── LICENSE.md           # MIT License  
-├── CONTRIBUTING.md      # Guidelines for contributing  
-└── CODE_OF_CONDUCT.md / SECURITY.md
+├── components/          # React components
+│   ├── layout/          # Layout components (Navbar, etc.)
+│   ├── sections/        # Page section components
+│   └── ui/              # Reusable UI components
+├── pages/               # Next.js pages
+│   ├── _app.js          # Custom App component
+│   ├── _document.js     # Custom Document component
+│   ├── index.js         # Home page
+│   ├── explore.js       # Explore page
+│   └── auth.js          # Authentication page
+├── public/              # Static assets
+│   └── images/          # Image assets
+├── styles/              # CSS files
+├── utils/               # Utility functions
+│   └── router.js        # React Router DOM integration utilities
+├── next.config.js       # Next.js configuration
+└── package.json         # Project dependencies and scripts
 ```
 
 ---
@@ -122,9 +157,9 @@ Edit
 
 1. **Filter** — Select categories via checkboxes to hide/show specific events
 
-1. **Find nearby** — Click “📍 Find Nearby” to center map at your current position
+1. **Find nearby** — Click "📍 Find Nearby" to center map at your current position
 
-1. **View details** — Click any marker → opens event-details.html with full info and mini-map
+1. **View details** — Click any marker to view full event information
 
 ---
 
@@ -166,6 +201,9 @@ We welcome contributions to improve EventMappr!
 - ✅ Local persistent storage
 - ✅ Event detail pages
 - ✅ Event time/date input
+- ✅ React component architecture
+- ✅ Next.js migration
+- ✅ React Router integration
 - 🔜 Map marker clustering
 - 🔜 Dark mode toggle
 - 🔜 Search bar for event titles/descriptions
@@ -176,8 +214,12 @@ We welcome contributions to improve EventMappr!
 ---
 ## 🙌 Acknowledgements
 
+- [Next.js](https://nextjs.org) - for the React framework
+- [React Router DOM](https://reactrouter.com) - for declarative routing
+- [React Leaflet](https://react-leaflet.js.org) - for React components for Leaflet maps
 - [Leaflet.js](https://leafletjs.com) – for the interactive mapping library  
 - [OpenStreetMap](https://www.openstreetmap.org) – for free and open map tiles  
+- [React](https://reactjs.org) - for the UI component library
 - Community inspiration from local engagement and open-source mapping initiatives
 ---
 
