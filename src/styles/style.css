@@ -1566,6 +1566,7 @@ form .form-select:focus {
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 [data-theme="dark"] .navbar-light .navbar-nav .nav-link {
