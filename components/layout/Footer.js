@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3 className="footer-title">EventMappr</h3>
+            <h3 className="footer-title"><img src="/loggd.svg" alt="EventMappr Logo" className="hidden dark:block h-8 w-auto" style={{ width: '200px' }}/></h3>
             <p className="footer-description">
               Discover and share local events happening in your community. EventMappr helps you find and connect with events near you.
             </p>

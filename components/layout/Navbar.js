@@ -106,11 +106,12 @@ const Navbar = () => {
       <div className="navbar-blur"></div>
       <div className="container navbar-container">
         <Link href={ROUTES.HOME} legacyBehavior>
-          <a className="logo">
-            <span className="logo-icon">📍</span>
-            <span className="logo-text">EventMappr</span>
+          <a href="/" className="logo flex items-center space-x-2">
+            {/* <img src="/logg.svg" alt="EventMappr Logo" className="block dark:hidden h-8 w-auto" /> */}
+            <img src="/loggd.svg" alt="EventMappr Logo" className="hidden dark:block h-8 w-auto" style={{ width: '200px' }}/>
           </a>
         </Link>
+
 
         <div className={`mobile-toggle ${isOpen ? 'active' : ''}`} onClick={toggleMenu}>
           <span></span>
