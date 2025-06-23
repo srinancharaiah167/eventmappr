@@ -592,6 +592,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         }
         
         .map-container {
+          z-index : 800;
           flex: 1;
           position: relative;
         }
