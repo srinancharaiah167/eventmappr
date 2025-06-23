@@ -1,6 +1,20 @@
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
 import React, { useState } from 'react';
+
+// Fix default icon issue for leaflet in React
+const markerIcon = new L.Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -85,7 +99,7 @@ const ContactSection = () => {
               <p>Come say hello at our office.</p>
               <address>123 Event St, San Francisco, CA 94101</address>
             </div>
-            
+            {/* Leaflet Map for Office Location */}
             <div className="social-links " style={{ display: "flex", gap: "36px" }} >
               <a href="https://facebook.com/eventmappr" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-link">
                  <FaFacebookF size={25} />
@@ -103,6 +117,7 @@ const ContactSection = () => {
               </a>
             </div>
           </div>
+          
           
           <div className="contact-form-container">
             <h2>Send Us a Message</h2>
@@ -178,6 +193,25 @@ const ContactSection = () => {
                 </div>
               )}
             </form>
+          </div>
+        </div>
+      </div>
+      {/* Office Location Map Section */}
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '48px 0 0 0' }}>
+        <div style={{ width: '100%', maxWidth: '1200px', padding: '0 1rem' }}>
+          <h2 style={{ textAlign: 'center', marginBottom: '18px', fontWeight: 700, fontSize: '2rem' }}>Office Location</h2>
+          <div className="map-container-full responsive-map">
+            <MapContainer center={[37.7825, -122.416389]} zoom={15} style={{ height: '350px', width: '100%' }} scrollWheelZoom={false}>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[37.7825, -122.416389]} icon={markerIcon}>
+                <Popup>
+                  123 Event St, San Francisco, CA 94101
+                </Popup>
+              </Marker>
+            </MapContainer>
           </div>
         </div>
       </div>
@@ -392,6 +426,21 @@ const ContactSection = () => {
         @media (max-width: 768px) {
           .form-row {
             grid-template-columns: 1fr;
+          }
+        }
+        
+        .map-container-full {
+          width: 100%;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+        }
+        @media (max-width: 768px) {
+          .map-container-full {
+            border-radius: 8px;
+          }
+          .responsive-map :global(.leaflet-container) {
+            height: 220px !important;
           }
         }
       `}</style>
