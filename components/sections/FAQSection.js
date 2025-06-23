@@ -75,7 +75,7 @@ const FAQSection = () => {
         <div className="faq-cta" data-aos="fade-up" data-aos-delay="400">
           <p>Still have questions?</p>
           <Link href="/contact" legacyBehavior>
-            <a className="bubble-btn secondary-bubble">
+            <a className="bubble-btn primary-bubble">
               <span className="btn-icon">📧</span>
               <span className="btn-text">Contact Us</span>
             </a>
@@ -217,25 +217,23 @@ const FAQSection = () => {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 0.8rem 1.8rem;
+          padding: 0.5rem 1.25rem;
           border-radius: 30px;
           font-weight: 600;
-          font-size: 1.1rem;
+          font-size: 0.95rem;
           cursor: pointer;
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
           z-index: 1;
           text-decoration: none;
+          border: none;
         }
         
-        .secondary-bubble {
-          background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          color: var(--text);
-          border: 1px solid rgba(var(--primary-rgb), 0.3);
+        .primary-bubble {
+          background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+          color: white;
+          box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
         }
         
         .bubble-btn::before {
@@ -252,9 +250,8 @@ const FAQSection = () => {
         }
         
         .bubble-btn:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 12px 30px rgba(var(--primary-rgb), 0.2);
-          border-color: rgba(var(--primary-rgb), 0.5);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(var(--primary-rgb), 0.4);
         }
         
         .bubble-btn:hover::before {
