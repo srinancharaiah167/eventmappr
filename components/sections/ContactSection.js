@@ -1,3 +1,5 @@
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+
 import React, { useState } from 'react';
 
 const ContactSection = () => {
@@ -84,18 +86,20 @@ const ContactSection = () => {
               <address>123 Event St, San Francisco, CA 94101</address>
             </div>
             
-            <div className="social-links">
+            <div className="social-links " style={{ display: "flex", gap: "36px" }} >
               <a href="https://facebook.com/eventmappr" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-link">
-                <span>Facebook</span>
+                 <FaFacebookF size={25} />
               </a>
               <a href="https://twitter.com/eventmappr" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="social-link">
-                <span>Twitter</span>
+                <FaTwitter  size={25}/>
+
               </a>
               <a href="https://instagram.com/eventmappr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-link">
-                <span>Instagram</span>
+                  <FaInstagram  size={25} />
+
               </a>
               <a href="https://linkedin.com/company/eventmappr" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="social-link">
-                <span>LinkedIn</span>
+                   <FaLinkedinIn size={25} />
               </a>
             </div>
           </div>
