@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import ChatBot from '../ChatBot';
 import Head from 'next/head';
+import ScrollToTop from '../ui/ScrollToTop';
 
 const Layout = ({ children }) => {
   const [navHeight, setNavHeight] = useState(0);
@@ -43,6 +44,7 @@ const Layout = ({ children }) => {
         <main className="main-content" style={{ paddingTop: `${navHeight}px` }}>
           {children}
         </main>
+        <ScrollToTop />
         <Footer />
         <ChatBot />
       </div>
