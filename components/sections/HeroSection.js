@@ -60,7 +60,7 @@ const HeroSection = () => {
             />
             <div className="floating-event">
               <div className="event-pin"></div>
-              <div className="event-card">
+              <div className="event-card event-card-primary">
                 <div className="event-title">Community Event</div>
                 <div className="event-details">Today • 6:00 PM</div>
               </div>
@@ -381,6 +381,32 @@ const HeroSection = () => {
         .event-details {
           font-size: 0.75rem;
           color: var(--text-light);
+        }
+        
+        .event-card-primary {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: #fff;
+          border-radius: 1.2rem;
+          font-weight: 700;
+          text-align: center;
+          padding: 1.1rem 1.7rem;
+          box-shadow: 0 4px 16px rgba(44, 62, 80, 0.10);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-width: 180px;
+        }
+        .event-card-primary .event-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #fff;
+          margin-bottom: 0.2rem;
+        }
+        .event-card-primary .event-details {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #fff;
         }
         
         @keyframes floatEvent {
