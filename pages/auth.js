@@ -12,30 +12,26 @@ export default function AuthPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [firebaseLoaded, setFirebaseLoaded] = useState(false);
-  
+  const [showPassword, setShowPassword] = useState(false); // 👈 added for toggle
+
   const router = useRouter();
 
   useEffect(() => {
-    // Check if Firebase is loaded
     const checkFirebase = () => {
       if (typeof window !== 'undefined' && window.firebase) {
         setFirebaseLoaded(true);
         return;
       }
-      
       setTimeout(checkFirebase, 500);
     };
-    
     checkFirebase();
-    
-    // Check if user is already logged in
+
     if (typeof window !== 'undefined' && window.firebase) {
       const unsubscribe = window.firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           router.push('/');
         }
       });
-      
       return () => unsubscribe();
     }
   }, [router]);
@@ -52,36 +48,30 @@ export default function AuthPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
+
     if (!firebaseLoaded) {
       setError('Authentication service not available. Please try again later.');
       setLoading(false);
       return;
     }
-    
+
     try {
       if (isLogin) {
-        // Login
         await window.firebase.auth().signInWithEmailAndPassword(
           formData.email,
           formData.password
         );
       } else {
-        // Register
         const userCredential = await window.firebase.auth().createUserWithEmailAndPassword(
           formData.email,
           formData.password
         );
-        
-        // Update profile with name
         if (userCredential.user) {
           await userCredential.user.updateProfile({
             displayName: formData.name
           });
         }
       }
-      
-      // Redirect to home page after successful auth
       router.push('/');
     } catch (error) {
       console.error('Authentication error:', error);
@@ -96,7 +86,7 @@ export default function AuthPage() {
     setError('');
   };
 
-  return (
+   return (
     <>
       <Head>
         <title>{isLogin ? 'Sign In' : 'Create Account'} | EventMappr</title>
@@ -173,23 +163,69 @@ export default function AuthPage() {
               
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <div className="input-wrapper">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 8V6C5 3.79086 6.79086 2 9 2C11.2091 2 13 3.79086 13 6V8M5 8H13M5 8H4C3.44772 8 3 8.44772 3 9V14C3 14.5523 3.44772 15 4 15H14C14.5523 15 15 14.5523 15 14V9C15 8.44772 14.5523 8 14 8H13M9 11V12" 
-                      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <div className="input-wrapper" style={{ position: 'relative' }}>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ position: 'absolute', left: '1rem', color: 'var(--text-light)' }}
+                  >
+                    <path
+                      d="M5 8V6C5 3.79086 6.79086 2 9 2C11.2091 2 13 3.79086 13 6V8M5 8H13M5 8H4C3.44772 8 3 8.44772 3 9V14C3 14.5523 3.44772 15 4 15H14C14.5523 15 15 14.5523 15 14V9C15 8.44772 14.5523 8 14 8H13M9 11V12"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="••••••••"
                     required
+                    style={{ paddingRight: '3rem' }}
                   />
+                  <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--text-light)',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                  {showPassword ? (
+                    // Eye Slash (Hide Password)
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" width="22" height="22">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.5 12c1.573 3.963 5.523 6.75 10.5 6.75 1.982 0 3.825-.528 5.386-1.446M6.32 6.317A10.477 10.477 0 0112 5.25c4.977 0 8.927 2.787 10.5 6.75a10.509 10.509 0 01-4.264 4.774M6.32 6.317L3 3m3.32 3.317l11.314 11.314" />
+                    </svg>
+                  ) : (
+                    // Eye (Show Password)
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" width="22" height="22">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  )}
+                </button>
+
                 </div>
               </div>
-              
+
+                            
               <button 
                 type="submit" 
                 className="auth-button"
