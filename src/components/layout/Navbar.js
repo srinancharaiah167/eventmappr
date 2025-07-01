@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`navbar navbar-light ${scrolled ? 'scrolled' : ''}`}>
       <div className="logo">
         <i className="fas fa-map-marker-alt"></i>
         <span>EventMappr</span>
