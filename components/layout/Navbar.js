@@ -131,6 +131,13 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
+          <li>
+            <Link href="/nearby" legacyBehavior>
+              <a className={router.pathname === '/nearby' ? 'active' : ''}>
+                Nearby
+              </a>
+            </Link>
+          </li>
           <li className="theme-toggle">
             <button onClick={toggleTheme} aria-label="Toggle theme" className="theme-btn">
               {isDarkMode ? '☀️' : '🌙'}

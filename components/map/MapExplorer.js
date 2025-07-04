@@ -4,6 +4,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { EVENT_CATEGORIES } from '../../utils/routes';
 import GpsButton from '../ui/GpsButton'
+import NearbyPlaces from './NearbyPlaces';
+import NearbyPlacesPanel from './NearbyPlacesPanel';
 
 const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticated }) => {
   const [newEvent, setNewEvent] = useState({
@@ -17,7 +19,6 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     lat: null,
     lng: null,
   });
-  
   const [filters, setFilters] = useState({
     Music: true,
     Tech: true,
@@ -27,11 +28,48 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Sports: true,
     Education: true,
   });
-  
   const [showForm, setShowForm] = useState(false);
   const [mapView, setMapView] = useState('standard');
   const [searchQuery, setSearchQuery] = useState('');
   const mapRef = useRef(null);
+  // --- Nearby Places Feature ---
+  const [showNearby, setShowNearby] = useState(false);
+  const [showNearbyPanel, setShowNearbyPanel] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [nearbyError, setNearbyError] = useState('');
+
+  const handleShowNearby = () => {
+    if (!showNearby) {
+      if (!navigator.geolocation) {
+        setNearbyError('Geolocation is not supported by your browser.');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+          setShowNearby(true);
+          setShowNearbyPanel(true);
+          setNearbyError('');
+          if (mapRef.current) {
+            mapRef.current.setView([position.coords.latitude, position.coords.longitude], 14);
+          }
+        },
+        () => {
+          setNearbyError('Unable to retrieve your location. Please check your browser permissions.');
+        }
+      );
+    } else {
+      setShowNearby(false);
+      setShowNearbyPanel(false);
+      setNearbyError('');
+    }
+  };
+
+  const handleCloseNearbyPanel = () => {
+    setShowNearbyPanel(false);
+  };
+
+// Duplicate state declarations removed (already declared above)
 
   // Fix Leaflet default icon issue
   useEffect(() => {
@@ -217,6 +255,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
             <span className="btn-icon">📍</span>
             <span className="btn-text">Find Nearby</span>
           </button>
+          <button className={"btn-nearby" + (showNearby ? ' active' : '')} style={{marginLeft:'0.5rem'}} onClick={handleShowNearby}>
+            <span className="btn-icon">🍽️🏨</span>
+            <span className="btn-text">{showNearby ? 'Hide' : 'Show'} Nearby Restaurants & Hotels</span>
+          </button>
+          {showNearbyPanel && (
+            <NearbyPlacesPanel userLocation={userLocation} onClose={handleCloseNearbyPanel} />
+          )}
+          {nearbyError && <span style={{ color: 'red', marginLeft: '1rem' }}>{nearbyError}</span>}
         </div>
         
         <div className="filter-controls">
@@ -331,6 +377,19 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           ))}
           
           <GpsButton/>
+
+          {/* Nearby Restaurants & Hotels Markers */}
+          {showNearby && userLocation && (
+            <NearbyPlaces userLocation={userLocation} />
+          )}
+
+          {/* Marker Legend */}
+          {showNearby && (
+            <div style={{position:'absolute',bottom:20,right:20,background:'#fff',padding:'8px 14px',borderRadius:8,boxShadow:'0 2px 8px rgba(0,0,0,0.08)',zIndex:1000,fontSize:'0.98rem'}}>
+              <span style={{marginRight:12}}><img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Restaurant" style={{width:22,verticalAlign:'middle',marginRight:4}}/>Restaurant</span>
+              <span><img src="https://cdn-icons-png.flaticon.com/512/139/139899.png" alt="Hotel" style={{width:22,verticalAlign:'middle',marginRight:4}}/>Hotel</span>
+            </div>
+          )}
 
         </MapContainer>
       </div>
