@@ -15,6 +15,8 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
     
+    if(!localStorage.getItem('theme')) localStorage.setItem('theme' , 'dark');
+
     // Check for saved theme preference
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');

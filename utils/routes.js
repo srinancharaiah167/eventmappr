@@ -9,6 +9,7 @@ export const ROUTES = {
   MAP: '/explore',
   CONTACT: '/contact',
   ABOUT: '/about',
+  TOURIST_PLACES: '/tourist-places',
   AUTH: '/auth',
   PROFILE: '/profile',
   EVENT: '/event/:id',
@@ -29,6 +30,7 @@ export const NAV_ITEMS = [
   { name: 'Map', path: ROUTES.MAP },
   { name: 'Contact', path: ROUTES.CONTACT },
   { name: 'About', path: ROUTES.ABOUT },
+  { name: 'Tourist Places', path: ROUTES.TOURIST_PLACES },
 ];
 
 // Footer navigation items
