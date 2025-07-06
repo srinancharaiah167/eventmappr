@@ -132,6 +132,13 @@ const Navbar = () => {
             </li>
           ))}
           <li>
+            <Link href="/currency-converter" legacyBehavior>
+              <a className={router.pathname === '/currency-converter' ? 'active' : ''}>
+                <i className="fas fa-coins" style={{ marginRight: '6px' }} /> Currency Converter
+              </a>
+            </Link>
+          </li>
+          <li>
             <Link href="/nearby" legacyBehavior>
               <a className={router.pathname === '/nearby' ? 'active' : ''}>
                 Nearby
