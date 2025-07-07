@@ -1,12 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import LoadingSpinner from '../components/LoadingSpinner';
 import HeroSection from '../components/sections/HeroSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
 import FAQSection from '../components/sections/FAQSection';
+import Navbar from '../components/layout/Navbar';
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading)
+    return (
+      <div style={{
+        minHeight: '100vh', 
+        width: '100vw', 
+        background: 'var(--background, #ffffff)',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999
+      }}>
+        <LoadingSpinner fullPage />
+      </div>
+    );
+
   return (
     <>
+      <Navbar />
       <Head>
         <title>EventMappr - Discover Local Events on the Map</title>
         <meta name="description" content="EventMappr helps you discover and share local events happening in your community. Explore events on an interactive map." />
