@@ -5,6 +5,8 @@ import HeroSection from '../components/sections/HeroSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
 import FAQSection from '../components/sections/FAQSection';
 import Navbar from '../components/layout/Navbar';
+import AOS from 'aos';
+import { initAOS } from '../utils/aos-config';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -12,6 +14,12 @@ export default function Home() {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      initAOS();
+    }
+  }, [loading]);
 
   if (loading)
     return (
@@ -38,16 +46,16 @@ export default function Home() {
         <meta name="description" content="EventMappr helps you discover and share local events happening in your community. Explore events on an interactive map." />
       </Head>
 
-      <HeroSection />
+      <HeroSection data-aos="fade-up" data-aos-delay="200" />
       
-      <FeaturesSection />
+      <FeaturesSection data-aos="fade-up" data-aos-delay="400" />
       
-      <section className="how-it-works">
+      <section className="how-it-works" data-aos="fade-up" data-aos-delay="600">
         <div className="container">
-          <h2 className="section-title">How It Works</h2>
-          <p className="section-subtitle">EventMappr makes it easy to discover and share local events in just a few steps</p>
+          <h2 className="section-title" data-aos="fade-up">How It Works</h2>
+          <p className="section-subtitle" data-aos="fade-up" data-aos-delay="200">EventMappr makes it easy to discover and share local events in just a few steps</p>
           
-          <div className="steps-container">
+          <div className="steps-container" data-aos="fade-up" data-aos-delay="400">
             <div className="step">
               <div className="step-number">
                 <span>1</span>

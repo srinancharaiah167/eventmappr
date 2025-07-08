@@ -240,6 +240,39 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Education: '#3F51B5'
   };
 
+  useEffect(() => {
+    // Animation on scroll for filter controls and other elements
+    const animateOnScroll = () => {
+      const elementsToAnimate = [
+        { selector: '.filter-controls', threshold: 1.3 },
+        { selector: '.map-view-controls', threshold: 1.3 },
+        { selector: '.search-bar', threshold: 1.3 },
+        { selector: '.search-input', threshold: 1.3 },
+        { selector: '.btn-nearby', threshold: 1.3 },
+        { selector: '.view-option', threshold: 1.3 }
+      ];
+
+      elementsToAnimate.forEach(element => {
+        const el = document.querySelector(element.selector);
+        if (el) {
+          const elementPosition = el.getBoundingClientRect().top;
+          const screenPosition = window.innerHeight / element.threshold;
+          
+          if (elementPosition < screenPosition) {
+            el.classList.add('animate');
+          }
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll(); // Run once on load
+    
+    return () => {
+      window.removeEventListener('scroll', animateOnScroll);
+    };
+  }, []);
+
   return (
     <div className="map-explorer">
       <div className="map-controls">
@@ -526,6 +559,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           display: flex;
           gap: 1rem;
           margin-bottom: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .search-bar.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .search-input {
@@ -537,6 +578,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           background-color: var(--background-alt);
           color: var(--text);
           transition: all 0.2s ease;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .search-input.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .search-input:focus {
@@ -557,6 +606,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           cursor: pointer;
           transition: all 0.2s ease;
           white-space: nowrap;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+        
+        .btn-nearby.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .btn-nearby:hover {
@@ -570,6 +627,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         
         .filter-controls {
           margin-bottom: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .filter-controls.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .filter-title {
@@ -621,8 +686,16 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           display: flex;
           align-items: center;
           gap: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
         }
-        
+
+        .map-view-controls.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
         .view-title {
           font-weight: 600;
           color: var(--text);
@@ -642,6 +715,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           background-color: var(--background-alt);
           color: var(--text);
           font-size: 0.9rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .view-option.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .view-option.active {

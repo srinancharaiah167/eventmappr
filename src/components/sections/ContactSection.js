@@ -58,11 +58,11 @@ const ContactSection = () => {
 
   return (
     <section className="contact" id="contact">
-      <h2>Contact Us</h2>
+      
       <div className="contact-container">
         <div className="contact-info">
-          <h3>Get In Touch</h3>
-          <p>Have questions or suggestions about EventMappr? We'd love to hear from you!</p>
+         
+         
           <div className="contact-details">
             <p><i className="fas fa-envelope"></i> info@eventmappr.com</p>
             <p><i className="fas fa-phone"></i> (555) 123-4567</p>

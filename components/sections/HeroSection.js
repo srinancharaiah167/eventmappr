@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ROUTES } from '../../utils/routes';
+import AOS from 'aos';
+import { initAOS } from '../../utils/aos-config';
 
 const HeroSection = () => {
+  useEffect(() => {
+    initAOS();
+  }, []);
   return (
     <section className="hero-section">
       <div className="hero-background">
@@ -14,25 +19,25 @@ const HeroSection = () => {
       
       <div className="container hero-container">
         <div className="hero-content">
-          <h1 className="hero-title">Discover Local Events on the Map</h1>
-          <p className="hero-subtitle">
+          <h1 className="hero-title" data-aos="fade-up" data-aos-delay="200">Discover Local Events on the Map</h1>
+          <p className="hero-subtitle" data-aos="fade-up" data-aos-delay="400">
             Find and share community events happening around you. 
             Connect with people who share your interests and never miss out on what's happening nearby.
           </p>
-          <div className="hero-buttons">
-            <Link href={ROUTES.MAP} legacyBehavior>
-              <a className="glass-btn primary-glass">
+          <div className="hero-buttons" data-aos="fade-up" data-aos-delay="600">
+            <Link href={ROUTES.MAP}>
+              <span className="glass-btn primary-glass">
                 <span className="btn-text">Explore Map</span>
-              </a>
+              </span>
             </Link>
-            <Link href={ROUTES.ABOUT} legacyBehavior>
-              <a className="glass-btn secondary-glass">
+            <Link href={ROUTES.ABOUT}>
+              <span className="glass-btn secondary-glass">
                 <span className="btn-text">Learn More</span>
-              </a>
+              </span>
             </Link>
           </div>
           
-          <div className="hero-stats">
+          <div className="hero-stats" data-aos="fade-up" data-aos-delay="800">
             <div className="stat-item">
               <span className="stat-value" data-target="500">500+</span>
               <span className="stat-label">Events</span>

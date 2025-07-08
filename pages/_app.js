@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+import 'aos/dist/aos.css';
 import { useEffect, useState } from 'react';
 import { initializeFirebase } from '../utils/firebase';
 import Layout from '../components/layout/Layout';
