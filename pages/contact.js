@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
 import ContactSection from '../components/sections/ContactSection';
 
 const ContactPage = () => {
+  const headingRef = useRef(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!headingRef.current) return;
+      const rect = headingRef.current.getBoundingClientRect();
+      const screenPosition = window.innerHeight / 1.3;
+      if (rect.top < screenPosition) {
+        headingRef.current.classList.add('animate');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <Head>
@@ -12,7 +27,7 @@ const ContactPage = () => {
       
       <div className="contact-page">
         <div className="contact-header">
-          <div className="container">
+          <div className="container contact-heading" ref={headingRef}>
             <h1>Contact Us</h1>
             <p>We'd love to hear from you. Reach out with any questions, feedback, or partnership opportunities.</p>
           </div>
@@ -43,6 +58,15 @@ const ContactPage = () => {
           max-width: 600px;
           margin: 0 auto;
           opacity: 0.9;
+        }
+        .contact-heading {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .contact-heading.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
       `}</style>
     </>

@@ -105,6 +105,7 @@ const HowItWorksPage = () => {
                     width={500} 
                     height={400}
                     className="feature-img"
+                    style={{ width: "auto" }}
                   />
                 </div>
               </div>

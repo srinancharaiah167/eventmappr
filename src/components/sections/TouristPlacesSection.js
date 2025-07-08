@@ -86,17 +86,157 @@ export default function TouristPlacesSection() {
   const [headerVisible, setHeaderVisible] = useState(false);
   const headerRef = useRef(null);
   useEffect(() => {
-    const observer = new window.IntersectionObserver(
-      ([entry]) => setHeaderVisible(entry.isIntersecting),
-      { threshold: 0.5 }
-    );
-    if (headerRef.current) observer.observe(headerRef.current);
-    return () => { if (headerRef.current) observer.unobserve(headerRef.current); };
+    // Animate top heading on scroll
+    const animateHeading = () => {
+      if (!headerRef.current) return;
+      const rect = headerRef.current.getBoundingClientRect();
+      const screenPosition = window.innerHeight / 1.3;
+      if (rect.top < screenPosition) {
+        headerRef.current.classList.add('animate');
+      }
+    };
+    window.addEventListener('scroll', animateHeading);
+    animateHeading(); // Initial check
+
+    // Enhanced scroll-based animations with staggered effects
+    const animateOnScroll = () => {
+      const elementsToAnimate = [
+        { selector: '.tourist-places-container', threshold: 1.3 },
+        { selector: '.tp-sidebar', threshold: 1.3 },
+        { selector: '.tp-list-grid', threshold: 1.3 },
+        { selector: '.tp-list-card', threshold: 1.3 }
+      ];
+
+      elementsToAnimate.forEach(element => {
+        const els = document.querySelectorAll(element.selector);
+        els.forEach((el, index) => {
+          const elementPosition = el.getBoundingClientRect().top;
+          const screenPosition = window.innerHeight / element.threshold;
+          
+          if (elementPosition < screenPosition) {
+            // Add staggered delay for list items
+            const delay = element.selector === '.tp-list-card' ? index * 100 : 0;
+            setTimeout(() => {
+              el.classList.add('animate');
+            }, delay);
+          }
+        });
+      });
+    };
+    
+    // Add a small delay before adding scroll listener to ensure content is visible
+    setTimeout(() => {
+      window.addEventListener('scroll', animateOnScroll, { passive: true });
+      animateOnScroll(); // Run once on load
+    }, 200);
+    
+    return () => {
+      window.removeEventListener('scroll', animateOnScroll);
+    };
   }, []);
 
   return (
     <div className="main-content font-sans bg-white" style={{ position: 'relative' }}>
       {/* Video background for header */}
+      <style jsx>{`
+        .main-content {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .tourist-places-container {
+          display: flex;
+          flex: 1;
+          padding: 2rem;
+          background: #f8fafc;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tourist-places-container.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .tp-sidebar {
+          width: 320px;
+          padding: 1.5rem;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+          margin-right: 2rem;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tp-sidebar.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .tp-list-grid {
+          display: grid;
+          gap: 1rem;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tp-list-grid.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .tp-list-card {
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border-radius: 12px;
+          overflow: hidden;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tp-list-card.animate {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: var(--delay, 0s);
+        }
+
+        .tp-list-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+          transition: all 0.3s ease;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .tp-list-card.animate {
+          animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .tp-heading {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tp-heading.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
       <div style={{ position: 'relative', width: '100%', minHeight: '390px' }}>
         <video
           autoPlay
@@ -119,6 +259,7 @@ export default function TouristPlacesSection() {
         {/* Overlayed header content */}
         <div
           ref={headerRef}
+          className="tp-heading"
           style={{
             maxWidth: '700px',
             margin: '0 auto',
@@ -129,9 +270,6 @@ export default function TouristPlacesSection() {
             justifyContent: 'center',
             padding: '56px 0 40px 0',
             marginTop: '90px',
-            opacity: headerVisible ? 1 : 0,
-            transform: headerVisible ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1)',
             position: 'relative',
             zIndex: 1
           }}
@@ -155,7 +293,7 @@ export default function TouristPlacesSection() {
       </div>
       <div className="tourist-places-container">
         {/* Sidebar */}
-        <aside className="tp-sidebar">
+        <aside className="tp-sidebar"> 
           {error && (
             <div className="p-3 mb-3 bg-red-100 text-red-700 text-sm flex items-center gap-2 rounded">
               <FiAlertCircle />
