@@ -24,19 +24,19 @@ export default function About() {
 
       <div className="about-page">
         {/* Header Section */}
-        <div className="about-header">
+        <section className="about-header">
           <div className="container">
             <h1>About EventMappr</h1>
             <p>
-              EventMappr is a lightweight, open-source community event mapping web app. 
+              EventMappr is a lightweight, open-source community event mapping web app.
               Users can discover, add, and explore local events pinned on an interactive map.
               It’s a user-friendly frontend tool for discovering and cataloging community happenings.
             </p>
           </div>
-        </div>
+        </section>
 
         {/* Features Section */}
-        <div className="features-section">
+        <section className="features-section">
           <h2>✨ Features</h2>
           <div className="features-grid">
             {features.map((item, idx) => (
@@ -45,61 +45,63 @@ export default function About() {
                 <span className="text">{item.label}</span>
               </div>
             ))}
-            
           </div>
-        </div>
-        <div className="badges">
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
-  <img src="https://img.shields.io/github/stars/Bhavya1352/eventmappr?style=social" alt="GitHub stars" />
-  <img src="https://img.shields.io/github/forks/Bhavya1352/eventmappr?style=social" alt="GitHub forks" />
-  <img src="https://img.shields.io/github/issues/Bhavya1352/eventmappr" alt="GitHub issues" />
-  <img src="https://img.shields.io/github/issues-raw/Bhavya1352/eventmappr?label=open%20issues&color=orange" alt="Open issues" />
-  <img src="https://img.shields.io/github/contributors/Bhavya1352/eventmappr?color=green" alt="Contributors" />
-</div>
+        </section>
 
+        {/* Badges Section */}
+        <section className="badges">
+          <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
+          <img src="https://img.shields.io/github/stars/Bhavya1352/eventmappr?style=social" alt="GitHub stars" />
+          <img src="https://img.shields.io/github/forks/Bhavya1352/eventmappr?style=social" alt="GitHub forks" />
+          <img src="https://img.shields.io/github/issues/Bhavya1352/eventmappr" alt="GitHub issues" />
+          <img src="https://img.shields.io/github/issues-raw/Bhavya1352/eventmappr?label=open%20issues&color=orange" alt="Open issues" />
+          <img src="https://img.shields.io/github/contributors/Bhavya1352/eventmappr?color=green" alt="Contributors" />
+        </section>
       </div>
 
       <style jsx>{`
         .about-page {
-          min-height: calc(100vh - 400px);
+          min-height: 100vh;
+          background-color: #0f0f1a;
+          color: white;
+          font-family: 'Segoe UI', sans-serif;
         }
 
         .about-header {
-          background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-          color: white;
+          background-color:rgb(57, 57, 201);
           padding: 6rem 2rem 4rem;
           text-align: center;
         }
 
         .about-header h1 {
-          font-size: 2.8rem;
-          margin-bottom: 1.5rem;
+          font-size: 3rem;
+          margin-bottom: 1rem;
         }
 
         .about-header p {
-          max-width: 800px;
-          margin: auto;
+          max-width: 760px;
+          margin: 0 auto;
           font-size: 1.1rem;
+          line-height: 1.6;
         }
 
         .features-section {
-          padding: 2.85rem 2rem;
+          padding: 4rem 2rem;
           text-align: center;
-          background-color: #0f0f1a;
-          color: white;
         }
 
         .features-section h2 {
-          font-size: 2rem;
-          margin-bottom: 2rem;
-          
+          font-size: 2.2rem;
+          margin-bottom: 2.5rem;
         }
 
         .features-grid {
           display: flex;
           flex-wrap: wrap;
-          gap: 1rem;
           justify-content: center;
+          gap: 1rem;
+          max-width: 900px;
+          margin: auto;
         }
 
         .feature-pill {
@@ -107,51 +109,51 @@ export default function About() {
           align-items: center;
           gap: 0.6rem;
           background-color: #232344;
-          color: white;
-          padding: 0.6rem 1.2rem;
+          padding: 0.7rem 1.3rem;
           border-radius: 9999px;
           font-size: 0.95rem;
           font-weight: 500;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-          transition: background 0.3s ease;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+          transition: transform 0.25s ease, background 0.25s ease;
         }
 
         .feature-pill:hover {
-          background-color: #2f2f5c;
+          background-color:rgb(125, 125, 218);
+          transform: scale(1.04);
         }
 
         .emoji {
-          font-size: 1.2rem;
+          font-size: 1.3rem;
         }
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 2rem 1rem;
-  background-color: #0a0a0a;
-  border-top: 1px solid var(--border, #222);
-}
 
-.badges img {
-  height: 28px;
-  border-radius: 4px;
-}
+        .badges {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.75rem;
+          padding: 2.5rem 1rem;
+          background-color: #0a0a0a;
+          border-top: 1px solid #222;
+        }
 
-        @media (max-width: 500px) {
+        .badges img {
+          height: 28px;
+          border-radius: 5px;
+        }
+
+        @media (max-width: 600px) {
+          .about-header h1 {
+            font-size: 2.2rem;
+          }
+
+          .features-section h2 {
+            font-size: 1.7rem;
+          }
+
           .feature-pill {
             font-size: 0.85rem;
             padding: 0.5rem 1rem;
           }
-
-          .about-header h1 {
-            font-size: 2rem;
-          }
-
-          .features-section h2 {
-            font-size: 1.5rem;
-          }
-            
         }
       `}</style>
     </>
