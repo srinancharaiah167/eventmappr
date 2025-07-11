@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
-import ContactSection from '../components/sections/ContactSection';
+import ContactSection from '../src/components/sections/ContactSection';
 
 const ContactPage = () => {
   const headingRef = useRef(null);
