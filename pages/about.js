@@ -11,6 +11,7 @@ export default function About() {
       offset: 80,
     });
   }, []);
+
   const features = [
     { icon: "🗺️", label: "Add to Map – Drop a pin, add title, date & more" },
     { icon: "🧭", label: "Find Nearby – Use Geolocation API" },
@@ -33,16 +34,16 @@ export default function About() {
 
       <div className="about-page">
         {/* Header Section */}
-        <div className="about-header" data-aos="fade-down">
+        <section className="about-header" data-aos="fade-down">
           <div className="container">
             <h1>About EventMappr</h1>
             <p>
-              EventMappr is a lightweight, open-source community event mapping web app. 
+              EventMappr is a lightweight, open-source community event mapping web app.
               Users can discover, add, and explore local events pinned on an interactive map.
               It’s a user-friendly frontend tool for discovering and cataloging community happenings.
             </p>
           </div>
-        </div>
+        </section>
 
         {/* Features Section */}
         <div className="features-section">
@@ -63,21 +64,50 @@ export default function About() {
             ))}
           </div>
         </div>
-        <div className="badges">
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
-  <img src="https://img.shields.io/github/stars/Bhavya1352/eventmappr?style=social" alt="GitHub stars" />
-  <img src="https://img.shields.io/github/forks/Bhavya1352/eventmappr?style=social" alt="GitHub forks" />
-  <img src="https://img.shields.io/github/issues/Bhavya1352/eventmappr" alt="GitHub issues" />
-  <img src="https://img.shields.io/github/issues-raw/Bhavya1352/eventmappr?label=open%20issues&color=orange" alt="Open issues" />
-  <img src="https://img.shields.io/github/contributors/Bhavya1352/eventmappr?color=green" alt="Contributors" />
-</div>
 
+        {/* Badges Section */}
+        <section className="badges">
+          <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
+          <img src="https://img.shields.io/github/stars/Bhavya1352/eventmappr?style=social" alt="GitHub stars" />
+          <img src="https://img.shields.io/github/forks/Bhavya1352/eventmappr?style=social" alt="GitHub forks" />
+          <img src="https://img.shields.io/github/issues/Bhavya1352/eventmappr" alt="GitHub issues" />
+          <img src="https://img.shields.io/github/issues-raw/Bhavya1352/eventmappr?label=open%20issues&color=orange" alt="Open issues" />
+          <img src="https://img.shields.io/github/contributors/Bhavya1352/eventmappr?color=green" alt="Contributors" />
+        </section>
       </div>
 
       <style jsx>{`
         .about-page {
           min-height: calc(100vh - 400px);
           position: relative;
+          overflow: hidden;
+        }
+        .about-header {
+          position: relative;
+          z-index: 2;
+          background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+          color: white;
+          padding: 6rem 2rem 4rem;
+          text-align: center;
+        }
+        .about-header h1 {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+        }
+        .about-header p {
+          max-width: 760px;
+          margin: 0 auto;
+          font-size: 1.1rem;
+          line-height: 1.6;
+        }
+
+        .features-section {
+          position: relative;
+          z-index: 2;
+          padding: 2.85rem 2rem;
+          text-align: center;
+          background-color: #0f0f1a;
+          color: white;
           overflow: hidden;
         }
         .features-bg-wrap {
@@ -105,43 +135,10 @@ export default function About() {
           height: 100%;
           background: rgba(10, 10, 30, 0.65);
         }
-
-        .about-header {
-          position: relative;
-          z-index: 2;
-          background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-          color: white;
-          padding: 6rem 2rem 4rem;
-          text-align: center;
-        }
-
-        .about-header h1 {
-          font-size: 2.8rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .about-header p {
-          max-width: 800px;
-          margin: auto;
-          font-size: 1.1rem;
-        }
-
-        .features-section {
-          position: relative;
-          z-index: 2;
-          padding: 2.85rem 2rem;
-          text-align: center;
-          background-color: #0f0f1a;
-          color: white;
-          overflow: hidden;
-        }
-
         .features-section h2 {
-          font-size: 2rem;
-          margin-bottom: 2rem;
-          
+          font-size: 2.2rem;
+          margin-bottom: 2.5rem;
         }
-
         .features-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(220px, 1fr));
@@ -154,13 +151,11 @@ export default function About() {
           position: relative;
           z-index: 2;
         }
-
         .feature-card {
           background: rgba(32, 32, 64, 0.94);
           border-radius: 1.3rem;
           box-shadow: 0 8px 32px rgba(24,24,64,0.25), 0 2px 8px rgba(0,0,0,0.10);
           padding: 2.2rem 1.25rem 2rem 1.25rem;
-          min-width: 0;
           min-height: 120px;
           display: flex;
           flex-direction: column;
@@ -171,14 +166,12 @@ export default function About() {
           border: 1.5px solid rgba(255,255,255,0.08);
           z-index: 3;
         }
-
         .feature-card:hover {
           transform: translateY(-8px) scale(1.035);
           box-shadow: 0 16px 48px rgba(24,24,64,0.32), 0 4px 16px rgba(0,0,0,0.15);
           background: rgba(38, 38, 80, 0.99);
           border: 1.5px solid #4e6cf3;
         }
-
         .emoji {
           font-size: 2.1rem;
           margin-bottom: 0.7rem;
@@ -191,7 +184,6 @@ export default function About() {
           text-align: center;
           line-height: 1.5;
         }
-
         .badges {
           display: flex;
           flex-wrap: wrap;
@@ -201,7 +193,6 @@ export default function About() {
           background-color: #0a0a0a;
           border-top: 1px solid var(--border, #222);
         }
-
         .badges img {
           height: 28px;
           border-radius: 4px;
@@ -219,10 +210,10 @@ export default function About() {
             padding: 1rem 0.7rem;
           }
           .about-header h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
           }
           .features-section h2 {
-            font-size: 1.5rem;
+            font-size: 1.7rem;
           }
         }
       `}</style>
