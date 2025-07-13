@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ROUTES } from '../../utils/routes';
@@ -6,47 +6,57 @@ import AOS from 'aos';
 import { initAOS } from '../../utils/aos-config';
 
 const HeroSection = () => {
-  // useEffect hook to initialize AOS and the number counting animation
+  const [typedText, setTypedText] = useState('');
+  const headingText = "Discover Local Events on the Map";
+  const typingSpeed = 70; // Adjust typing speed in milliseconds
+
   useEffect(() => {
     // 1. Initialize the AOS library for fade-in animations
     initAOS();
 
     // 2. Animate the number stats
     const animateNumbers = () => {
-      // Find all elements with the 'stat-value' class
       const statElements = document.querySelectorAll('.stat-value');
 
       statElements.forEach(el => {
-        // Get the target value from the 'data-target' attribute
         const target = parseInt(el.getAttribute('data-target'));
         let currentCount = 0;
-        const duration = 2000; // Animation duration in milliseconds
-        const increment = target / (duration / 10); // Calculate a smooth increment value
+        const duration = 2000;
+        const increment = target / (duration / 10);
 
         const counter = setInterval(() => {
           currentCount += increment;
           if (currentCount >= target) {
-            // Stop the counter when the target is reached
             clearInterval(counter);
-            currentCount = target; // Ensure it stops exactly on the target value
+            currentCount = target;
           }
 
-          // Format the number and add the '+' sign
           const formattedCount = Math.floor(currentCount).toLocaleString() + '+';
           el.textContent = formattedCount;
-
         }, 10);
       });
     };
 
-    // Delay the animation slightly to ensure the component is rendered
-    // and the elements are in the DOM before we try to animate them.
-    const timeout = setTimeout(animateNumbers, 500);
+    // 3. The typing animation for the heading
+    let charIndex = 0;
+    const type = () => {
+      if (charIndex <= headingText.length) {
+        setTypedText(headingText.substring(0, charIndex));
+        charIndex++;
+        setTimeout(type, typingSpeed);
+      }
+    };
+    
+    // Start the typing and number animation after a slight delay
+    const animationTimeout = setTimeout(() => {
+      type();
+      animateNumbers();
+    }, 500);
 
-    // Cleanup function to clear the timeout and any intervals
-    // if the component unmounts before the animation is complete.
+    // Cleanup function to clear timeouts
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(animationTimeout);
+      // You may also want to clear intervals from the number animation if the component unmounts early
     };
 
   }, []); // The empty dependency array ensures this runs only once on mount
@@ -61,7 +71,7 @@ const HeroSection = () => {
       
       <div className="container hero-container">
         <div className="hero-content">
-          <h1 className="hero-title" data-aos="fade-up" data-aos-delay="200">Discover Local Events on the Map</h1>
+          <h1 className="hero-title">{typedText}</h1>
           <p className="hero-subtitle" data-aos="fade-up" data-aos-delay="400">
             Find and share community events happening around you. 
             Connect with people who share your interests and never miss out on what's happening nearby.
@@ -198,17 +208,21 @@ const HeroSection = () => {
           transform: none !important;
         }
         
+        /* The blinking cursor effect */
         .hero-title::after {
-          content: '';
-          position: absolute;
-          bottom: -10px;
-          left: 0;
-          width: 80px;
-          height: 4px;
-          background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-          border-radius: 2px;
+          content: '|';
+          font-family: monospace;
+          animation: blink-caret 0.75s step-end infinite;
+          font-size: 1.2em;
+          margin-left: 5px;
+          color: var(--primary);
         }
         
+        /* This hides the cursor when the text is complete */
+        .hero-title.typing-done::after {
+          content: none;
+        }
+
         .hero-subtitle {
           font-size: 1.2rem;
           line-height: 1.6;
@@ -456,43 +470,27 @@ const HeroSection = () => {
           color: #fff;
         }
         
+        @keyframes blink-caret {
+          from, to { color: transparent; }
+          50% { color: var(--primary); }
+        }
+        
         @keyframes floatEvent {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-15px);
-          }
-          100% {
-            transform: translateY(0);
-          }
+          0% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+          100% { transform: translateY(0); }
         }
         
         @keyframes pulse {
-          0% {
-            opacity: 0.6;
-            transform: translate(-50%, -50%) scale(0.8);
-          }
-          50% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.5);
-          }
-          100% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.8);
-          }
+          0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.8); }
+          50% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
         }
         
         @keyframes float {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-          100% {
-            transform: translateY(0);
-          }
+          0% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0); }
         }
         
         @media (max-width: 992px) {
