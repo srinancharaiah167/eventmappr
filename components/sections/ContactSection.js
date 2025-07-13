@@ -208,29 +208,41 @@ const ContactSection = () => {
   return (
     <section className="contact-section" id="contact">
       <div className="container">
+        {/* HERO SECTION (two columns) */}
+        <div className="contact-hero-row">
+          <div className="contact-hero-content" data-aos="fade-right" data-aos-duration="900">
+            <h2 className="contact-heading" data-aos="fade-right">Contact Us</h2>
+            <p className="contact-hero-intro" data-aos="fade-right" data-aos-delay="100">
+              Have questions, suggestions, or want to collaborate? Our team is here to help you. Reach out to us and we'll respond as soon as possible.
+            </p>
+          </div>
+          <div className="contact-hero-image" data-aos="fade-left" data-aos-delay="150">
+            <img src="https://wanakaanimation.com/wp-content/uploads/2023/02/76817-contact-us.gif" alt="Contact Us" style={{width: '100%', maxWidth: 380, borderRadius: '16px', boxShadow: '0 4px 32px rgba(0,0,0,0.08)'}} />
+          </div>
+        </div>
+        {/* END HERO SECTION */}
         <div className="contact-container">
-          <div className="contact-info" data-aos="fade-right">
-            <div className="info-card" data-aos="fade-up" data-aos-delay="100">
-              <div className="info-icon">✉️</div>
-              <h3>Email Us</h3>
-              <p>Our friendly team is here to help.</p>
-              <a href="mailto:info@eventmappr.com">info@eventmappr.com</a>
-            </div>
-            
-            <div className="info-card" data-aos="fade-up" data-aos-delay="200">
-              <div className="info-icon">📞</div>
-              <h3>Call Us</h3>
-              <p>Mon-Fri from 8am to 5pm.</p>
-              <a href="tel:+15551234567">(555) 123-4567</a>
-            </div>
-            
-            <div className="info-card" data-aos="fade-up" data-aos-delay="300">
-              <div className="info-icon">📍</div>
-              <h3>Visit Us</h3>
-              <p>Come say hello at our office.</p>
-              <address>123 Event St, San Francisco, CA 94101</address>
-            </div>
-            <div className="social-links" data-aos="fade-up" data-aos-delay="400">
+          <div className="contact-info-row" data-aos="fade-right">
+  <div className="info-card" data-aos="fade-up" data-aos-delay="100">
+    <div className="info-icon">✉️</div>
+    <h3>Email Us</h3>
+    <p>Our friendly team is here to help.</p>
+    <a href="mailto:info@eventmappr.com">info@eventmappr.com</a>
+  </div>
+  <div className="info-card" data-aos="fade-up" data-aos-delay="200">
+    <div className="info-icon">📞</div>
+    <h3>Call Us</h3>
+    <p>Mon-Fri from 8am to 5pm.</p>
+    <a href="tel:+15551234567">(555) 123-4567</a>
+  </div>
+  <div className="info-card" data-aos="fade-up" data-aos-delay="300">
+    <div className="info-icon">📍</div>
+    <h3>Visit Us</h3>
+    <p>Come say hello at our office.</p>
+    <address>123 Event St, San Francisco, CA 94101</address>
+  </div>
+</div>
+<div className="social-links" data-aos="fade-up" data-aos-delay="400">
               <a href="https://facebook.com/eventmappr" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-link">
                  <FaFacebookF size={25} />
               </a>
@@ -383,18 +395,49 @@ const ContactSection = () => {
         align-items: flex-start;
       }
 
-      .contact-info {
+      .contact-info-row {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+        justify-content: space-between;
+        margin-bottom: 2.5rem;
+      }
+      @media (max-width: 900px) {
+        .contact-info-row {
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+      }
+      .info-card {
+        background: #fff;
+        padding: 2.5rem 1.5rem;
+        border-radius: 18px;
+        border: 2.5px solid #b3b8c2;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        flex: 1 1 0%;
+        min-width: 240px;
+        max-width: 350px;
+        margin: 0 0.5rem 1.5rem 0.5rem;
         display: flex;
         flex-direction: column;
-        gap: 2rem;
       }
-
-      .info-card {
-        background: var(--card-bg);
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: var(--shadow);
-        transition: transform 0.3s ease;
+      .contact-info-row {
+        background: #f3f6fa;
+        border-radius: 22px;
+        padding: 2rem 0.5rem;
+      }
+        align-items: center;
+        text-align: center;
+        transition: transform 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.22s cubic-bezier(.4,0,.2,1);
+      }
+      .info-card:hover {
+        transform: translateY(-8px) scale(1.035);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+        border-color: #b3b8c2;
+      }
+      .info-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 4px 32px rgba(0,0,0,0.13);
       }
 
       .info-card:hover {
