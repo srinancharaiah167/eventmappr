@@ -6,9 +6,51 @@ import AOS from 'aos';
 import { initAOS } from '../../utils/aos-config';
 
 const HeroSection = () => {
+  // useEffect hook to initialize AOS and the number counting animation
   useEffect(() => {
+    // 1. Initialize the AOS library for fade-in animations
     initAOS();
-  }, []);
+
+    // 2. Animate the number stats
+    const animateNumbers = () => {
+      // Find all elements with the 'stat-value' class
+      const statElements = document.querySelectorAll('.stat-value');
+
+      statElements.forEach(el => {
+        // Get the target value from the 'data-target' attribute
+        const target = parseInt(el.getAttribute('data-target'));
+        let currentCount = 0;
+        const duration = 2000; // Animation duration in milliseconds
+        const increment = target / (duration / 10); // Calculate a smooth increment value
+
+        const counter = setInterval(() => {
+          currentCount += increment;
+          if (currentCount >= target) {
+            // Stop the counter when the target is reached
+            clearInterval(counter);
+            currentCount = target; // Ensure it stops exactly on the target value
+          }
+
+          // Format the number and add the '+' sign
+          const formattedCount = Math.floor(currentCount).toLocaleString() + '+';
+          el.textContent = formattedCount;
+
+        }, 10);
+      });
+    };
+
+    // Delay the animation slightly to ensure the component is rendered
+    // and the elements are in the DOM before we try to animate them.
+    const timeout = setTimeout(animateNumbers, 500);
+
+    // Cleanup function to clear the timeout and any intervals
+    // if the component unmounts before the animation is complete.
+    return () => {
+      clearTimeout(timeout);
+    };
+
+  }, []); // The empty dependency array ensures this runs only once on mount
+
   return (
     <section className="hero-section">
       <div className="hero-background">
@@ -39,15 +81,15 @@ const HeroSection = () => {
           
           <div className="hero-stats" data-aos="fade-up" data-aos-delay="800">
             <div className="stat-item">
-              <span className="stat-value" data-target="500">500+</span>
+              <span className="stat-value" data-target="500">0+</span>
               <span className="stat-label">Events</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value" data-target="10000">10,000+</span>
+              <span className="stat-value" data-target="10000">0+</span>
               <span className="stat-label">Users</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value" data-target="50">50+</span>
+              <span className="stat-value" data-target="50">0+</span>
               <span className="stat-label">Cities</span>
             </div>
           </div>
