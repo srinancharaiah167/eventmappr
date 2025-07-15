@@ -110,7 +110,7 @@ const Navbar = () => {
         <Link href={ROUTES.HOME} legacyBehavior>
           <a href="/" className="logo flex items-center space-x-2">
             {/* <img src="/logg.svg" alt="EventMappr Logo" className="block dark:hidden h-8 w-auto" /> */}
-            <img src="/loggd.svg" alt="EventMappr Logo" className="h-8 w-auto" style={{ width: '200px'}} />
+            <img src="/loggd.svg" alt="EventMappr Logo" className="h-8 w-auto" style={{ width: '400px'}} />
 
           </a>
         </Link>
