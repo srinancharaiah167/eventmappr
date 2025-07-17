@@ -49,8 +49,6 @@ const FAQSection = () => {
               <div 
                 className={`faq-item ${activeIndex === index ? 'active' : ''}`} 
                 key={index}
-                data-aos="fade-up"
-                data-aos-delay={100 + (index * 50)}
               >
                 <div 
                   className="faq-question"
