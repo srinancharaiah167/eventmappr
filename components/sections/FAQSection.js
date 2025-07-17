@@ -38,19 +38,17 @@ const FAQSection = () => {
   return (
     <section className="faq-section" id="faq">
       <div className="container">
-        <h2 className="section-title" data-aos="fade-up">Frequently Asked Questions</h2>
-        <p className="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+        <h2 className="section-title">Frequently Asked Questions</h2>
+        <p className="section-subtitle">
           Find answers to common questions about EventMappr
         </p>
         
-        <div className="faq-container" data-aos="fade-up" data-aos-delay="200">
+        <div className="faq-container">
           <div className="faq-grid">
             {faqs.map((faq, index) => (
               <div 
                 className={`faq-item ${activeIndex === index ? 'active' : ''}`} 
                 key={index}
-                data-aos="fade-up"
-                data-aos-delay={100 + (index * 50)}
               >
                 <div 
                   className="faq-question"
@@ -72,7 +70,7 @@ const FAQSection = () => {
           </div>
         </div>
         
-        <div className="faq-get-in-touch" data-aos="fade-up" data-aos-delay="400">
+        <div className="faq-get-in-touch">
           <div className="faq-get-in-touch-left">
             <img src="https://www.blogsaays.com/wp-content/uploads/2022/11/android-gif-banner-2.gif" alt="Get in Touch" className="get-in-touch-illustration" />
           </div>
