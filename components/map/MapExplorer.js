@@ -231,13 +231,13 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
 
   // Category colors for filter tags
   const categoryColors = {
-    Music: '#FF6B6B',
-    Tech: '#38BDF8',
-    Volunteering: '#4CAF50',
-    Market: '#FACC15',
-    Art: '#9C27B0',
-    Sports: '#FF9800',
-    Education: '#3F51B5'
+    Music: '#48CAE4',
+    Tech: '#26637F',
+    Volunteering: '#22b4a3ff',
+    Market: '#023E8A',
+    Art: '#03045E',
+    Sports: '	#417C9A ',
+    Education: '#124B56'
   };
 
   useEffect(() => {
@@ -650,38 +650,36 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         }
         
         .filter-tag {
-          display: flex;
-          align-items: center;
-          padding: 0.5rem 0.75rem;
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: none;
-          background-color: var(--background-alt);
-          color: var(--text);
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-        
-        .filter-tag.active {
-          background-color: var(--category-color);
-          color: white;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .filter-tag.inactive {
-          opacity: 0.7;
-        }
-        
-        .filter-tag:hover {
-          transform: translateY(-2px);
-        }
-        
-        .filter-icon {
-          margin-right: 0.5rem;
-          font-size: 1rem;
-        }
-        
+  background-color: var(--category-color);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.filter-tag:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.filter-tag.inactive {
+  opacity: 0.6;
+}
+
+.filter-tag.active {
+  opacity: 1;
+}
+
+.filter-icon {
+  font-size: 1.1rem;
+}
+
         .map-view-controls {
           display: flex;
           align-items: center;
