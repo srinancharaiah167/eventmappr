@@ -4,6 +4,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { EVENT_CATEGORIES } from '../../utils/routes';
 import GpsButton from '../ui/GpsButton'
+import NearbyPlaces from './NearbyPlaces';
+import NearbyPlacesPanel from './NearbyPlacesPanel';
 
 const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticated }) => {
   const [newEvent, setNewEvent] = useState({
@@ -17,7 +19,6 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     lat: null,
     lng: null,
   });
-  
   const [filters, setFilters] = useState({
     Music: true,
     Tech: true,
@@ -27,11 +28,48 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Sports: true,
     Education: true,
   });
-  
   const [showForm, setShowForm] = useState(false);
   const [mapView, setMapView] = useState('standard');
   const [searchQuery, setSearchQuery] = useState('');
   const mapRef = useRef(null);
+  // --- Nearby Places Feature ---
+  const [showNearby, setShowNearby] = useState(false);
+  const [showNearbyPanel, setShowNearbyPanel] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [nearbyError, setNearbyError] = useState('');
+
+  const handleShowNearby = () => {
+    if (!showNearby) {
+      if (!navigator.geolocation) {
+        setNearbyError('Geolocation is not supported by your browser.');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+          setShowNearby(true);
+          setShowNearbyPanel(true);
+          setNearbyError('');
+          if (mapRef.current) {
+            mapRef.current.setView([position.coords.latitude, position.coords.longitude], 14);
+          }
+        },
+        () => {
+          setNearbyError('Unable to retrieve your location. Please check your browser permissions.');
+        }
+      );
+    } else {
+      setShowNearby(false);
+      setShowNearbyPanel(false);
+      setNearbyError('');
+    }
+  };
+
+  const handleCloseNearbyPanel = () => {
+    setShowNearbyPanel(false);
+  };
+
+// Duplicate state declarations removed (already declared above)
 
   // Fix Leaflet default icon issue
   useEffect(() => {
@@ -193,14 +231,47 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
 
   // Category colors for filter tags
   const categoryColors = {
-    Music: '#FF6B6B',
-    Tech: '#38BDF8',
-    Volunteering: '#4CAF50',
-    Market: '#FACC15',
-    Art: '#9C27B0',
-    Sports: '#FF9800',
-    Education: '#3F51B5'
+    Music: '#48CAE4',
+    Tech: '#26637F',
+    Volunteering: '#22b4a3ff',
+    Market: '#023E8A',
+    Art: '#03045E',
+    Sports: '	#417C9A ',
+    Education: '#124B56'
   };
+
+  useEffect(() => {
+    // Animation on scroll for filter controls and other elements
+    const animateOnScroll = () => {
+      const elementsToAnimate = [
+        { selector: '.filter-controls', threshold: 1.3 },
+        { selector: '.map-view-controls', threshold: 1.3 },
+        { selector: '.search-bar', threshold: 1.3 },
+        { selector: '.search-input', threshold: 1.3 },
+        { selector: '.btn-nearby', threshold: 1.3 },
+        { selector: '.view-option', threshold: 1.3 }
+      ];
+
+      elementsToAnimate.forEach(element => {
+        const el = document.querySelector(element.selector);
+        if (el) {
+          const elementPosition = el.getBoundingClientRect().top;
+          const screenPosition = window.innerHeight / element.threshold;
+          
+          if (elementPosition < screenPosition) {
+            el.classList.add('animate');
+          }
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll(); // Run once on load
+    
+    return () => {
+      window.removeEventListener('scroll', animateOnScroll);
+    };
+  }, []);
 
   return (
     <div className="map-explorer">
@@ -217,6 +288,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
             <span className="btn-icon">📍</span>
             <span className="btn-text">Find Nearby</span>
           </button>
+          <button className={"btn-nearby" + (showNearby ? ' active' : '')} style={{marginLeft:'0.5rem'}} onClick={handleShowNearby}>
+            <span className="btn-icon">🍽️🏨</span>
+            <span className="btn-text">{showNearby ? 'Hide' : 'Show'} Nearby Restaurants & Hotels</span>
+          </button>
+          {showNearbyPanel && (
+            <NearbyPlacesPanel userLocation={userLocation} onClose={handleCloseNearbyPanel} />
+          )}
+          {nearbyError && <span style={{ color: 'red', marginLeft: '1rem' }}>{nearbyError}</span>}
         </div>
         
         <div className="filter-controls">
@@ -331,6 +410,19 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           ))}
           
           <GpsButton/>
+
+          {/* Nearby Restaurants & Hotels Markers */}
+          {showNearby && userLocation && (
+            <NearbyPlaces userLocation={userLocation} />
+          )}
+
+          {/* Marker Legend */}
+          {showNearby && (
+            <div style={{position:'absolute',bottom:20,right:20,background:'#fff',padding:'8px 14px',borderRadius:8,boxShadow:'0 2px 8px rgba(0,0,0,0.08)',zIndex:1000,fontSize:'0.98rem'}}>
+              <span style={{marginRight:12}}><img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Restaurant" style={{width:22,verticalAlign:'middle',marginRight:4}}/>Restaurant</span>
+              <span><img src="https://cdn-icons-png.flaticon.com/512/139/139899.png" alt="Hotel" style={{width:22,verticalAlign:'middle',marginRight:4}}/>Hotel</span>
+            </div>
+          )}
 
         </MapContainer>
       </div>
@@ -467,6 +559,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           display: flex;
           gap: 1rem;
           margin-bottom: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .search-bar.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .search-input {
@@ -478,6 +578,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           background-color: var(--background-alt);
           color: var(--text);
           transition: all 0.2s ease;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .search-input.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .search-input:focus {
@@ -498,6 +606,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           cursor: pointer;
           transition: all 0.2s ease;
           white-space: nowrap;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+        
+        .btn-nearby.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .btn-nearby:hover {
@@ -511,6 +627,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         
         .filter-controls {
           margin-bottom: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .filter-controls.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .filter-title {
@@ -526,44 +650,50 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         }
         
         .filter-tag {
-          display: flex;
-          align-items: center;
-          padding: 0.5rem 0.75rem;
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: none;
-          background-color: var(--background-alt);
-          color: var(--text);
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-        
-        .filter-tag.active {
-          background-color: var(--category-color);
-          color: white;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .filter-tag.inactive {
-          opacity: 0.7;
-        }
-        
-        .filter-tag:hover {
-          transform: translateY(-2px);
-        }
-        
-        .filter-icon {
-          margin-right: 0.5rem;
-          font-size: 1rem;
-        }
-        
+  background-color: var(--category-color);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.filter-tag:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.filter-tag.inactive {
+  opacity: 0.6;
+}
+
+.filter-tag.active {
+  opacity: 1;
+}
+
+.filter-icon {
+  font-size: 1.1rem;
+}
+
         .map-view-controls {
           display: flex;
           align-items: center;
           gap: 1rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
         }
-        
+
+        .map-view-controls.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
         .view-title {
           font-weight: 600;
           color: var(--text);
@@ -583,6 +713,14 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           background-color: var(--background-alt);
           color: var(--text);
           font-size: 0.9rem;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+        }
+
+        .view-option.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .view-option.active {
@@ -592,6 +730,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         }
         
         .map-container {
+          z-index : 800;
           flex: 1;
           position: relative;
         }

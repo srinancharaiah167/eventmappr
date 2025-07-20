@@ -15,6 +15,8 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
     
+    if(!localStorage.getItem('theme')) localStorage.setItem('theme' , 'dark');
+
     // Check for saved theme preference
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
@@ -108,7 +110,11 @@ const Navbar = () => {
         <Link href={ROUTES.HOME} legacyBehavior>
           <a href="/" className="logo flex items-center space-x-2">
             {/* <img src="/logg.svg" alt="EventMappr Logo" className="block dark:hidden h-8 w-auto" /> */}
+
             <img src={isDarkMode?'/loggd.svg' : '/logg.svg'} alt="EventMappr Logo" className="hidden dark:block h-8 w-auto" style={{ width: '200px' }}/>
+
+            <img src="/loggd.svg" alt="EventMappr Logo" className="h-8 w-auto" style={{ width: '400px'}} />
+
           </a>
         </Link>
 
@@ -129,6 +135,20 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
+          <li>
+            <Link href="/currency-converter" legacyBehavior>
+              <a className={router.pathname === '/currency-converter' ? 'active' : ''}>
+                <i className="fas fa-coins" style={{ marginRight: '6px' }} /> Currency Converter
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/nearby" legacyBehavior>
+              <a className={router.pathname === '/nearby' ? 'active' : ''}>
+                Nearby
+              </a>
+            </Link>
+          </li>
           <li className="theme-toggle">
             <button onClick={toggleTheme} aria-label="Toggle theme" className="theme-btn">
               {isDarkMode ? '☀️' : '🌙'}

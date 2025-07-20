@@ -182,7 +182,7 @@ const ChatBot = () => {
         
         .chatbot-header {
           padding: 1rem;
-    background:  linear-gradient(135deg, #4c5cff, #4c5bffad);
+         background:  linear-gradient(135deg, #4c5cff, #4c5cff);
           color: white;
           display: flex;
           align-items: center;

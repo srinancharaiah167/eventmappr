@@ -1562,11 +1562,11 @@ form .form-select:focus {
 }
 
 [data-theme="dark"] .navbar {
-    background: rgba(19, 19, 26, 0.95) !important;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    background: rgba(19, 19, 26, 0.95);
 }
 
 [data-theme="dark"] .navbar-light .navbar-nav .nav-link {
@@ -1575,6 +1575,11 @@ form .form-select:focus {
 
 [data-theme="dark"] .navbar-light .navbar-nav .nav-link:hover {
     color: #6366f1;
+}
+
+[data-theme="dark"] .navbar .nav-link,
+[data-theme="dark"] .navbar-light .nav-link {
+    color: var(--text-color) !important;
 }
 
 [data-theme="dark"] .feature-card,
