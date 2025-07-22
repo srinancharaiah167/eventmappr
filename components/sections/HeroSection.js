@@ -430,18 +430,19 @@ const HeroSection = () => {
           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
           min-width: 150px;
           transform: translateY(5px);
+          
         }
         
         .event-title {
           font-weight: 600;
           font-size: 0.9rem;
           margin-bottom: 3px;
-          color: var(--text);
+          color: black;
         }
         
         .event-details {
           font-size: 0.75rem;
-          color: var(--text-light);
+          color: red;
         }
         
         .event-card-primary {
