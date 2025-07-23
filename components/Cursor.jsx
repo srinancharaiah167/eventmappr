@@ -51,7 +51,7 @@ const Cursor = () => {
       </div>
 
       <style jsx global>{`
-        body, html {
+        * {
           cursor: none !important; /* Force hide default cursor */
         }
         
