@@ -9,7 +9,9 @@ const ChatBot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to bottom of messages
+  const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -26,47 +28,110 @@ const ChatBot = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const getEventMapprContext = () => {
+    return `You are EventMappr's AI assistant. Answer questions about this event discovery platform briefly and helpfully.
+
+PLATFORM: EventMappr - discover and add local events on interactive maps
+FEATURES: Google Maps with event pins, click-to-add events, Clerk auth, mobile-friendly
+KEY FLOWS: Browse map (no login) → Click pins for details | Add events: Click map → form → save (login required)
+LOGIN: "Sign In" button (top-right) → Email/Google via Clerk
+SUPPORT: support@eventmappr.com
+
+Keep responses under 2-3 sentences, friendly tone, use emojis appropriately.
+
+Question: `;
+  };
+
+  const generateGeminiResponse = async (userMessage) => {
+    if (!GEMINI_API_KEY) {
+      console.error('Gemini API key not found. Set REACT_APP_GEMINI_API_KEY in your .env file');
+      return "⚠️ AI is offline. Please set up Gemini API key.";
+    }
+
+    try {
+      const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: getEventMapprContext() + userMessage
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.3,
+            topP: 0.9,
+            topK: 20,
+            maxOutputTokens: 100
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Gemini API error:', response.status, errorData);
+        return `🤖 AI error (${response.status}). Check your API key and quota.`;
+      }
+
+      const data = await response.json();
+      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (!aiResponse) {
+        console.error('No AI response received:', data);
+        return "🤖 AI didn't respond. Try rephrasing your question.";
+      }
+
+      return aiResponse.trim();
+    } catch (error) {
+      console.error('Gemini API error:', error);
+      return `🔌 Connection error: ${error.message}`;
+    }
+  };
+
+  const getFallbackResponse = (userInput) => {
+    const input = userInput.toLowerCase();
+    
+    if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
+      return "Hello! How can I help you with EventMappr today? 😊";
+    } else if (input.includes('event') && (input.includes('add') || input.includes('create'))) {
+      return "To add an event: Click anywhere on the map where your event will be → fill out the form → save! 📍 You'll need to be logged in first.";
+    } else if (input.includes('map') || input.includes('explore')) {
+      return "Find our interactive map on the Explore page! 🗺️ It shows all events as markers - click any pin to see details.";
+    } else if (input.includes('sign') || input.includes('login') || input.includes('account')) {
+      return "Click 'Sign In' in the top-right corner! 👤 You can use Email, Google, or other options through our secure Clerk authentication.";
+    } else if (input.includes('delete') || input.includes('remove')) {
+      return "Yes! If you're logged in, you can manage your events from the event cards. Look for the options menu! ✏️";
+    } else if (input.includes('contact') || input.includes('support') || input.includes('help')) {
+      return "Need more help? Contact us at support@eventmappr.com or visit our Contact page! 💌";
+    } else if (input.includes('about') || input.includes('what')) {
+      return "EventMappr helps you discover local events on an interactive map! 🎉 Browse without an account, or login to add your own events.";
+    } else if (input.includes('mobile') || input.includes('phone')) {
+      return "EventMappr is fully mobile-friendly! 📱 The map, chat, and all features work great on your phone or tablet.";
+    } else if (input.includes('near') || input.includes('location')) {
+      return "The map automatically centers on your area and shows nearby events! 📍 Allow location access for the best experience.";
+    } else {
+      return "I can help with adding events, using the map, logging in, or general EventMappr questions! What would you like to know? 🤖";
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!inputValue.trim()) return;
     
-    // Add user message
     const userMessage = { text: inputValue, isBot: false };
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
-    
-    // Show bot is typing
     setIsTyping(true);
     
-    // Simulate bot response after a delay
+    const botResponse = await generateGeminiResponse(inputValue);
+    
     setTimeout(() => {
-      const botResponse = getBotResponse(inputValue);
       setMessages(prev => [...prev, { text: botResponse, isBot: true }]);
       setIsTyping(false);
-    }, 1000);
-  };
-
-  const getBotResponse = (userInput) => {
-    const input = userInput.toLowerCase();
-    
-    if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
-      return "Hello! How can I help you with EventMappr today?";
-    } else if (input.includes('event') && (input.includes('add') || input.includes('create'))) {
-      return "To add an event, go to the Explore page and click on the map where your event will be held. Then fill out the event details in the form that appears.";
-    } else if (input.includes('map')) {
-      return "You can find our interactive map on the Explore page. It shows all events in your area!";
-    } else if (input.includes('sign') || input.includes('login') || input.includes('account')) {
-      return "You can sign in or create an account by clicking the 'Sign In' button in the top right corner of the navigation bar.";
-    } else if (input.includes('thank')) {
-      return "You're welcome! Is there anything else I can help you with?";
-    } else if (input.includes('contact') || input.includes('support')) {
-      return "For support, please visit our Contact page or email us at support@eventmappr.com";
-    } else if (input.includes('about')) {
-      return "EventMappr is a platform that helps you discover and share local events on an interactive map. Learn more on our About page!";
-    } else {
-      return "I'm not sure I understand. Could you rephrase your question? You can ask about adding events, using the map, signing in, or contact information.";
-    }
+    }, 300);
   };
 
   return (
@@ -335,4 +400,4 @@ const ChatBot = () => {
   );
 };
 
-export default ChatBot; 
+export default ChatBot;
