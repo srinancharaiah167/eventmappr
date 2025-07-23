@@ -113,7 +113,7 @@ const Navbar = () => {
 
             <img src={isDarkMode?'/loggd.svg' : '/logg.svg'} alt="EventMappr Logo" className="hidden dark:block h-8 w-auto" style={{ width: '200px' }}/>
 
-            <img src="/loggd.svg" alt="EventMappr Logo" className="h-8 w-auto" style={{ width: '400px'}} />
+            
 
           </a>
         </Link>
