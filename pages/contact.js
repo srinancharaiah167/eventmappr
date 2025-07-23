@@ -359,12 +359,15 @@ const ContactPage = () => {
           box-shadow: 0 12px 35px rgba(90, 126, 255, 0.4);
         }
         html.dark-mode .btn-ghost {
+          background: transparent;
           color: #5a7eff;
           border-color: #5a7eff;
         }
+
         html.dark-mode .btn-ghost:hover {
-          background: #5a7eff;
-          color: #0f0f1a;
+          background: #4c66f5;
+          color: #ffffff;
+          border-color : transparent
         }
       `}</style>
 
