@@ -37,6 +37,28 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
   const [showNearbyPanel, setShowNearbyPanel] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [nearbyError, setNearbyError] = useState('');
+  const [mapReady, setMapReady] = useState(false);
+  const [center, setCenter] = useState([40.7128, -74.0060]); // Default center: NYC
+useEffect(() => {
+  if (!navigator.geolocation) {
+    console.warn("Geolocation not supported");
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      const pos = [coords.latitude, coords.longitude];
+      console.log("✔ Got GPS:", pos);
+      setCenter(pos);
+    },
+    (err) => {
+      console.error("Geo error:", err.message);
+      // Fallback to default center if geolocation fails
+      setCenter([40.7128, -74.0060]);
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}, []);
+
 
   const handleShowNearby = () => {
     if (!showNearby) {
@@ -84,7 +106,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
   // Handle map creation and setup click handler
   const handleMapCreated = (map) => {
     mapRef.current = map;
-    
+    setMapReady(true);
     // Add click handler directly to the map
     map.on('click', (e) => {
       if (!isAuthenticated) {
@@ -101,6 +123,21 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
       setShowForm(true);
     });
   };
+  console.log("start");
+  useEffect(() => {
+     console.log("starting soon");
+  if (mapReady && mapRef.current && center && center[0] !== 40.7128) {
+    console.log("it started running");
+    console.log("📍 Flying to user location after both map + GPS ready:", center);
+    mapRef.current.flyTo(center, 13, { duration: 1.2 });
+  }
+  else {
+    console.log("⏳ Waiting - Map or center not ready", {
+      mapReady: !!mapRef.current,
+      center,
+    });
+  }
+}, [mapReady, center]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -273,6 +310,17 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     };
   }, []);
 
+  const MapInitializer = ({ center, onInit }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    console.log(" MapInitializer: map is ready");
+    onInit(map);
+  }, [map]);
+
+  return null;
+};
+
   return (
     <div className="map-explorer">
       <div className="map-controls">
@@ -346,11 +394,15 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
       
       <div className="map-container">
         <MapContainer 
-          center={[40.7128, -74.0060]} 
+           center={center}
           zoom={13} 
           style={{ height: "100%", width: "100%" }}
-          whenCreated={handleMapCreated}
+          //whenCreated={handleMapCreated}
         >
+          <MapInitializer center={center} onInit={(map) => {
+    mapRef.current = map;
+    setMapReady(true);
+  }} />
           <TileLayer
             url={mapView === 'satellite' 
               ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
@@ -361,7 +413,10 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
               : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }
           />
-          
+          <Marker position={center}>
+  <Popup>You are here</Popup>
+</Marker>
+
           {filteredEvents.map(event => (
             <Marker 
               key={event.id} 
