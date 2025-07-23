@@ -49,6 +49,8 @@ const App = () => {
 
         <FooterSection />
       </div>
+      </div>
+
     </Router>
   );
 };
