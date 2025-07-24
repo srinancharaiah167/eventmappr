@@ -27,6 +27,9 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Art: true,
     Sports: true,
     Education: true,
+    // ADDED: New categories for filtering
+    'Comedy & Shows': true,
+    'Wellness': true,
   });
   const [showForm, setShowForm] = useState(false);
   const [mapView, setMapView] = useState('standard');
@@ -201,6 +204,9 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
       Art: { color: '#9C27B0', emoji: '🎨' },
       Sports: { color: '#FF9800', emoji: '🏆' },
       Education: { color: '#3F51B5', emoji: '📚' },
+      // ADDED: Map marker icons for the new categories
+      'Comedy & Shows': { color: '#8e44ad', emoji: '🎭' },
+      'Wellness': { color: '#27ae60', emoji: '🧘' },
     };
     
     const iconInfo = iconMapping[category] || { color: '#333333', emoji: '📌' };
@@ -236,8 +242,11 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Volunteering: '#22b4a3ff',
     Market: '#023E8A',
     Art: '#03045E',
-    Sports: '	#417C9A ',
-    Education: '#124B56'
+    Sports: ' #417C9A ',
+    Education: '#124B56',
+    // ADDED: UI colors for the new filter buttons
+    'Comedy & Shows': '#9b59b6',
+    'Wellness': '#1abc9c',
   };
 
   useEffect(() => {
@@ -318,6 +327,9 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
                   {category === 'Art' && '🎨'}
                   {category === 'Sports' && '🏆'}
                   {category === 'Education' && '📚'}
+                  {/* ADDED: Emojis for the new filter buttons */}
+                  {category === 'Comedy & Shows' && '🎭'}
+                  {category === 'Wellness' && '🧘'}
                 </span>
                 <span className="filter-name">{category}</span>
               </button>
@@ -462,6 +474,9 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
                   <option value="Art">Art</option>
                   <option value="Sports">Sports</option>
                   <option value="Education">Education</option>
+                  {/* ADDED: New categories to the form dropdown */}
+                  <option value="Comedy & Shows">Comedy & Shows</option>
+                  <option value="Wellness">Wellness</option>
                 </select>
               </div>
               
@@ -650,35 +665,35 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         }
         
         .filter-tag {
-  background-color: var(--category-color);
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 30px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: transform 0.2s ease, background-color 0.3s ease;
-}
+      background-color: var(--category-color);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
 
-.filter-tag:hover {
-  transform: scale(1.05);
-  filter: brightness(1.1);
-}
+    .filter-tag:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
 
-.filter-tag.inactive {
-  opacity: 0.6;
-}
+    .filter-tag.inactive {
+      opacity: 0.6;
+    }
 
-.filter-tag.active {
-  opacity: 1;
-}
+    .filter-tag.active {
+      opacity: 1;
+    }
 
-.filter-icon {
-  font-size: 1.1rem;
-}
+    .filter-icon {
+      font-size: 1.1rem;
+    }
 
         .map-view-controls {
           display: flex;
@@ -964,4 +979,4 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
   );
 };
 
-export default MapExplorer; 
+export default MapExplorer;
