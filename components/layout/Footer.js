@@ -1,23 +1,35 @@
 import React from 'react';
 import Link from 'next/link';
 import { FOOTER_NAV_ITEMS, ROUTES } from '../../utils/routes';
+import { useState, useEffect } from 'react';
 
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
+  const [isDarkMode, setIsDarkMode] = useState(false);
+    useEffect(() => {
+     
+      if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        setIsDarkMode(true);
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    }
+    },[]);
+      
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3 className="footer-title"><img src="/loggd.svg" alt="EventMappr Logo" className="hidden dark:block h-8 w-auto" style={{ width: '200px' }}/></h3>
+            <h3 className="footer-title"><img src={isDarkMode?'/loggd.svg' : '/logg.svg'} alt="EventMappr Logo" className=" h-8 w-auto" style={{ width: '200px' }}/></h3>
             <p className="footer-description">
               Discover and share local events happening in your community. EventMappr helps you find and connect with events near you.
             </p>
           </div>
 
-          <div className="footer-section">
+          <div className="footer-section site-map">
             <h3 className="footer-title">Site Map</h3>
             <ul className="footer-links">
               {FOOTER_NAV_ITEMS.map((item, index) => (
@@ -30,7 +42,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="footer-section">
+          <div className="footer-section legal">
             <h3 className="footer-title">Legal</h3>
             <ul className="footer-links">
               <li>
@@ -51,7 +63,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="footer-section">
+          <div className="footer-section connect">
             <h3 className="footer-title">Connect</h3>
             <div className="social-links">
               <a
@@ -105,7 +117,15 @@ const Footer = () => {
           display: flex;
           flex-direction: column;
         }
-        
+          .site-map{
+          margin-left:4.5rem;
+          }
+        .legal{
+        margin-left:4.5rem;
+        }
+.connect{
+margin-left:4.5rem;
+}
         .footer-title {
           font-size: 1.2rem;
           margin-bottom: 1.25rem;
