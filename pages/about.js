@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { MapPin, Navigation, Filter, Save, Smartphone, FileText, Map, Cloud, Camera, RotateCcw } from 'lucide-react';
 
 export default function About() {
   useEffect(() => {
@@ -13,16 +14,16 @@ export default function About() {
   }, []);
 
   const features = [
-    { icon: "🗺️", label: "Add to Map – Drop a pin, add title, date & more" },
-    { icon: "🧭", label: "Find Nearby – Use Geolocation API" },
-    { icon: "🎛️", label: "Filter by Category – Music, Tech, Volunteering..." },
-    { icon: "💾", label: "Persistent Storage – localStorage support" },
-    { icon: "📱", label: "Interactive UI – Popups, animations, responsive" },
-    { icon: "📄", label: "NEW: Detailed Event Pages" },
-    { icon: "🗺️", label: "NEW: Mini Maps on Event Detail" },
-    { icon: "☁️", label: "NEW: Weather Planner (5-day forecast)" },
-    { icon: "📸", label: "NEW: Event Gallery – user shared photos" },
-    { icon: "🔄", label: "NEW: Modular Routing with react-router" },
+    { icon: <MapPin size={32} />, label: "Add to Map – Drop a pin, add title, date & more" },
+    { icon: <Navigation size={32} />, label: "Find Nearby – Use Geolocation API" },
+    { icon: <Filter size={32} />, label: "Filter by Category – Music, Tech, Volunteering..." },
+    { icon: <Save size={32} />, label: "Persistent Storage – localStorage support" },
+    { icon: <Smartphone size={32} />, label: "Interactive UI – Popups, animations, responsive" },
+    { icon: <FileText size={32} />, label: "NEW: Detailed Event Pages" },
+    { icon: <Map size={32} />, label: "NEW: Mini Maps on Event Detail" },
+    { icon: <Cloud size={32} />, label: "NEW: Weather Planner (5-day forecast)" },
+    { icon: <Camera size={32} />, label: "NEW: Event Gallery – user shared photos" },
+    { icon: <RotateCcw size={32} />, label: "NEW: Modular Routing with react-router" },
   ];
 
   return (
@@ -40,7 +41,7 @@ export default function About() {
             <p>
               EventMappr is a lightweight, open-source community event mapping web app.
               Users can discover, add, and explore local events pinned on an interactive map.
-              It’s a user-friendly frontend tool for discovering and cataloging community happenings.
+              It's a user-friendly frontend tool for discovering and cataloging community happenings.
             </p>
           </div>
         </section>
@@ -58,7 +59,7 @@ export default function About() {
           <div className="features-grid">
             {features.map((item, idx) => (
               <div className="feature-card" key={idx} data-aos="fade-up" data-aos-delay={idx * 80}>
-                <span className="emoji">{item.icon}</span>
+                <span className="icon">{item.icon}</span>
                 <span className="text">{item.label}</span>
               </div>
             ))}
@@ -171,9 +172,9 @@ export default function About() {
           background: rgba(38, 38, 80, 0.99);
           border: 1.5px solid #4e6cf3;
         }
-        .emoji {
-          font-size: 2.1rem;
+        .icon {
           margin-bottom: 0.7rem;
+          color: #ffffff;
           filter: drop-shadow(0 2px 6px #0008);
         }
         .feature-card .text {
