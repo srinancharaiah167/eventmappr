@@ -201,7 +201,7 @@ export default function CurrencyConverter() {
       <style jsx>{`
         * {
           margin:0;
-          margin-top:10px;
+          margin-top:0px;
           padding: 0;
           box-sizing: border-box;
           font-family: 'Poppins', sans-serif;
@@ -374,7 +374,11 @@ export default function CurrencyConverter() {
           background: #333;
         }
         .converter-box:hover {
-          transform: translateY(-5px);
+          // transform: translateY(-5px);
+          // background:black;
+          // color:white;
+          color:blue;
+          transform:scale(1.2);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         .converter-box h3 {
@@ -384,6 +388,9 @@ export default function CurrencyConverter() {
         }
         .dark-mode .converter-box h3 {
           color: #f5f5f5;
+        }
+        .converter-box h3:hover{
+          color:white;
         }
         .input-group {
           margin-bottom: 15px;
