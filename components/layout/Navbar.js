@@ -112,14 +112,11 @@ const Navbar = () => {
       <div className="navbar-blur"></div>
       <div className="container navbar-container">
         <Link href={ROUTES.HOME} legacyBehavior>
-          <a href="/" className="logo flex items-center space-x-2">
-            {/* <img src="/logg.svg" alt="EventMappr Logo" className="block dark:hidden h-8 w-auto" /> */}
-
+          <a href="/" className="logo">
             <img
               src={isDarkMode ? "/loggd.svg" : "/logg.svg"}
               alt="EventMappr Logo"
-              className="hidden dark:block h-8 w-auto"
-              style={{ width: "200px" }}
+              className="logo-image"
             />
           </a>
         </Link>
@@ -150,7 +147,7 @@ const Navbar = () => {
                   router.pathname === "/currency-converter" ? "active" : ""
                 }
               >
-                <i className="fas fa-coins" style={{ marginRight: "6px" }} />{" "}
+                <i className="fas fa-coins" /> 
                 Currency Converter
               </a>
             </Link>
@@ -224,14 +221,13 @@ const Navbar = () => {
           left: 0;
           width: 100%;
           height: auto;
-          min-height: 60px;
+          min-height: 70px;
           z-index: 1000;
-          padding: 0.8rem 0;
+          padding: 1rem 0;
           transition: all 0.3s ease;
           will-change: transform;
           opacity: 1;
           visibility: visible;
-          transition-delay: 0.1s;
         }
 
         .navbar-blur {
@@ -240,8 +236,8 @@ const Navbar = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          backdrop-filter: blur(var(--navbar-blur));
-          -webkit-backdrop-filter: blur(var(--navbar-blur));
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           background: ${isDarkMode
             ? "linear-gradient(to bottom, rgba(18, 18, 24, 0.75), rgba(18, 18, 24, 0.65))"
             : "linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.65))"};
@@ -250,27 +246,26 @@ const Navbar = () => {
           z-index: -1;
         }
 
-        .navbar.dark {
-          color: #fff;
-        }
-
         .navbar.scrolled {
-          padding: 0.5rem 0;
+          padding: 0.75rem 0;
+          min-height: 60px;
         }
 
         .navbar.scrolled .navbar-blur {
           box-shadow: 0 4px 30px
             ${isDarkMode ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0.1)"};
           background: ${isDarkMode
-            ? "linear-gradient(to bottom, rgba(18, 18, 24, 0.8), rgba(18, 18, 24, 0.75))"
-            : "linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.75))"};
+            ? "linear-gradient(to bottom, rgba(18, 18, 24, 0.85), rgba(18, 18, 24, 0.8))"
+            : "linear-gradient(to bottom, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.8))"};
         }
 
         .navbar-container {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0 1.5rem;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
           position: relative;
           height: 100%;
         }
@@ -282,39 +277,19 @@ const Navbar = () => {
           position: relative;
           z-index: 2;
           text-decoration: none;
+          padding: 0.5rem 0;
+          margin-left: -1rem;
         }
 
-        .logo-icon {
-          font-size: 1.5rem;
-          margin-right: 0.5rem;
-          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        .logo-image {
+          height: 32px;
+          width: auto;
+          max-width: 200px;
           transition: transform 0.3s ease;
         }
 
-        .logo:hover .logo-icon {
-          transform: scale(1.1) rotate(5deg);
-        }
-
-        .logo-text {
-          font-size: 1.25rem;
-          font-weight: 700;
-          color: var(--text);
-          background: ${isDarkMode
-            ? "linear-gradient(to right, #fff, #ccc)"
-            : "linear-gradient(to right, var(--primary), var(--primary-dark))"};
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          text-fill-color: transparent;
-          transition: all 0.3s ease;
-        }
-
-        .navbar.dark .logo-text {
-          background: linear-gradient(to right, #fff, #ccc);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          text-fill-color: transparent;
+        .logo:hover .logo-image {
+          transform: scale(1.05);
         }
 
         .nav-links {
@@ -325,29 +300,46 @@ const Navbar = () => {
           padding: 0;
           position: relative;
           z-index: 2;
-          gap: 15px;
+          gap: 0;
         }
 
         .nav-links li {
-          margin-left: 2rem;
+          margin: 0;
+          padding: 0 1rem;
           position: relative;
+        }
+
+        .nav-links li:first-child {
+          padding-left: 0;
+        }
+
+        .nav-links li:last-child {
+          padding-right: 0;
         }
 
         .nav-links li a {
           color: var(--text);
           font-weight: 500;
-          transition: color 0.2s ease;
-          padding: 0.5rem 0;
+          transition: all 0.2s ease;
+          padding: 0.75rem 0.5rem;
           position: relative;
           text-decoration: none;
-          display: block;
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
+          border-radius: 6px;
+        }
+
+        .nav-links li a i {
+          margin-right: 0.5rem;
+          font-size: 0.9em;
         }
 
         .nav-links li a::after {
           content: "";
           position: absolute;
-          bottom: -4px;
-          left: 0;
+          bottom: 0;
+          left: 50%;
           width: 0;
           height: 2px;
           background: linear-gradient(
@@ -355,22 +347,26 @@ const Navbar = () => {
             var(--primary),
             var(--primary-light)
           );
-          transition: width 0.3s ease;
+          transition: all 0.3s ease;
           border-radius: 2px;
-        }
-
-        .nav-links li a:hover::after,
-        .nav-links li a.active::after {
-          width: 100%;
-        }
-
-        .navbar.dark .nav-links li a {
-          color: #fff;
+          transform: translateX(-50%);
         }
 
         .nav-links li a:hover,
         .nav-links li a.active {
           color: var(--primary);
+          background-color: ${isDarkMode
+            ? "rgba(255, 255, 255, 0.05)"
+            : "rgba(0, 0, 0, 0.03)"};
+        }
+
+        .nav-links li a:hover::after,
+        .nav-links li a.active::after {
+          width: 80%;
+        }
+
+        .navbar.dark .nav-links li a {
+          color: #fff;
         }
 
         .navbar.dark .nav-links li a:hover,
@@ -381,12 +377,13 @@ const Navbar = () => {
         .theme-toggle {
           display: flex;
           align-items: center;
+          margin: 0 0.5rem;
         }
 
         .theme-btn {
           background: none;
           border: none;
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           cursor: pointer;
           padding: 0.5rem;
           border-radius: 50%;
@@ -397,12 +394,12 @@ const Navbar = () => {
           background-color: ${isDarkMode
             ? "rgba(255, 255, 255, 0.1)"
             : "rgba(0, 0, 0, 0.05)"};
-          backdrop-filter: blur(5px);
-          -webkit-backdrop-filter: blur(5px);
+          width: 40px;
+          height: 40px;
         }
 
         .theme-btn:hover {
-          transform: rotate(15deg);
+          transform: rotate(15deg) scale(1.1);
           background-color: ${isDarkMode
             ? "rgba(255, 255, 255, 0.2)"
             : "rgba(0, 0, 0, 0.1)"};
@@ -418,16 +415,18 @@ const Navbar = () => {
             var(--primary-dark)
           );
           color: white;
-          padding: 0.5rem 1.25rem;
+          padding: 0.6rem 1.5rem;
           border: none;
-          border-radius: 30px;
+          border-radius: 25px;
           font-weight: 600;
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
+          box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
           position: relative;
           overflow: hidden;
+          white-space: nowrap;
+          margin-left: 0.5rem;
         }
 
         .btn-sign-in::before {
@@ -448,12 +447,7 @@ const Navbar = () => {
 
         .btn-sign-in:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 15px rgba(var(--primary-rgb), 0.4);
-        }
-
-        .btn-sign-in:focus {
-          outline: none;
-          box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.3);
+          box-shadow: 0 6px 18px rgba(var(--primary-rgb), 0.4);
         }
 
         .btn-sign-in:hover::before {
@@ -472,7 +466,7 @@ const Navbar = () => {
         }
 
         .btn-sign-in:hover .btn-icon {
-          transform: translateX(3px);
+          transform: translateX(2px);
         }
 
         .btn-sign-out {
@@ -480,11 +474,13 @@ const Navbar = () => {
           border: 1px solid
             ${isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)"};
           color: var(--text);
-          padding: 0.5rem 1.25rem;
-          border-radius: 30px;
+          padding: 0.6rem 1.5rem;
+          border-radius: 25px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
+          white-space: nowrap;
+          margin-left: 0.5rem;
         }
 
         .navbar.dark .btn-sign-out {
@@ -495,17 +491,18 @@ const Navbar = () => {
           background-color: ${isDarkMode
             ? "rgba(255, 255, 255, 0.1)"
             : "rgba(0, 0, 0, 0.05)"};
-          transform: translateY(-2px);
+          transform: translateY(-1px);
         }
 
         .mobile-toggle {
           display: none;
           flex-direction: column;
           justify-content: space-between;
-          width: 30px;
-          height: 21px;
+          width: 28px;
+          height: 20px;
           cursor: pointer;
           z-index: 10;
+          padding: 0.25rem;
         }
 
         .mobile-toggle span {
@@ -521,7 +518,21 @@ const Navbar = () => {
           background-color: #fff;
         }
 
+        @media (max-width: 1024px) {
+          .navbar-container {
+            padding: 0 1.5rem;
+          }
+          
+          .nav-links li {
+            padding: 0 0.75rem;
+          }
+        }
+
         @media (max-width: 768px) {
+          .navbar-container {
+            padding: 0 1rem;
+          }
+
           .mobile-toggle {
             display: flex;
           }
@@ -530,19 +541,21 @@ const Navbar = () => {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 80%;
-            max-width: 300px;
+            width: 85%;
+            max-width: 320px;
             height: 100vh;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
+            align-items: stretch;
             background: ${isDarkMode
               ? "rgba(18, 18, 24, 0.95)"
               : "rgba(255, 255, 255, 0.95)"};
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 2rem;
-            transition: right 0.3s ease;
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 6rem 2rem 2rem 2rem;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+            gap: 0.5rem;
           }
 
           .nav-links.active {
@@ -550,32 +563,78 @@ const Navbar = () => {
           }
 
           .nav-links li {
-            margin: 1.5rem 0;
+            margin: 0;
+            padding: 0;
             width: 100%;
-            text-align: center;
           }
 
           .nav-links li a {
-            display: block;
-            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 1rem 1.5rem;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+          }
+
+          .nav-links li a::after {
+            display: none;
+          }
+
+          .theme-toggle {
+            margin: 1rem 0;
+            justify-content: center;
+          }
+
+          .theme-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 1.3rem;
+          }
+
+          .btn-sign-in,
+          .btn-sign-out {
+            width: 100%;
+            margin: 1rem 0 0 0;
+            justify-content: center;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
           }
 
           .mobile-toggle.active span:nth-child(1) {
-            transform: translateY(9px) rotate(45deg);
+            transform: translateY(8px) rotate(45deg);
           }
 
           .mobile-toggle.active span:nth-child(2) {
             opacity: 0;
+            transform: translateX(20px);
           }
 
           .mobile-toggle.active span:nth-child(3) {
-            transform: translateY(-9px) rotate(-45deg);
+            transform: translateY(-8px) rotate(-45deg);
+          }
+        }
+
+        @media (max-width: 480px) {
+          .navbar-container {
+            padding: 0 1rem;
           }
 
-          .btn-sign-in {
-            width: 100%;
-            margin-top: 1rem;
-            justify-content: center;
+          .logo-image {
+            max-width: 150px;
+            height: 28px;
+          }
+
+          .nav-links {
+            width: 90%;
+            padding: 5rem 1.5rem 2rem 1.5rem;
+          }
+
+          .nav-links li a {
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
           }
         }
       `}</style>

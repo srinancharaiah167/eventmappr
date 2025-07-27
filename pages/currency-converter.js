@@ -271,7 +271,7 @@ export default function CurrencyConverter() {
           border: none;
           border-radius: 10px;
           color: white;
-          font-weight: 600;
+          font-weight: bold;
           cursor: pointer;
         }
         .credit-card-box {
@@ -286,7 +286,6 @@ export default function CurrencyConverter() {
           display: flex;
           align-items: center;
           gap: 10px;
-          margin-bottom: 10px;
         }
         .card-icon {
           height: 30px;
