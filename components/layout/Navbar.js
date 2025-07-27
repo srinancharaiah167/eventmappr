@@ -412,6 +412,7 @@ const Navbar = () => {
           display: flex;
           align-items: center;
           justify-content: center;
+          white-space: nowrap;
           background: linear-gradient(
             135deg,
             var(--primary),
