@@ -103,7 +103,7 @@ export default function CurrencyConverter() {
         
       </header>
       <div className="container">
-        <h1><i className="fas fa-exchange-alt"></i> Currency Converter</h1>
+        <h1><i className="fas fa-exchange-alt"></i><span style={{color:"black"}}>Currency </span> <span style={{color:"#2563eb"}}>Converter</span></h1>
         <div className="converter-container">
           <div className="converter-row">
             <div className="converter-box">
@@ -142,7 +142,7 @@ export default function CurrencyConverter() {
               onMouseLeave={() => setSwapRotated(false)}
               style={{ transition: "transform 0.4s" }}
             >
-              <i className="fas fa-exchange-alt"></i>
+              <i className="fas fa-exchange-alt" style={{color:"#2563eb"}}></i>
             </div>
             <div className="converter-box">
               <h3>To</h3>
@@ -200,7 +200,8 @@ export default function CurrencyConverter() {
       </footer>
       <style jsx>{`
         * {
-          margin: 0;
+          margin:0;
+          margin-top:0px;
           padding: 0;
           box-sizing: border-box;
           font-family: 'Poppins', sans-serif;
@@ -311,8 +312,15 @@ export default function CurrencyConverter() {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.2);
+          
           animation: fadeIn 0.5s ease-out;
+          // color:green;
         }
+
+
+  //       background-image: linear-gradient(#2563eb, white), linear-gradient(white, white); /* border gradient + background fill */
+  // background-origin: border-box;
+  // background-clip: border-box, padding-box;
         .dark-mode .container {
           background: rgba(45, 45, 45, 0.9);
           color: #f5f5f5;
@@ -329,8 +337,11 @@ export default function CurrencyConverter() {
         }
         h1 {
           font-family: 'Playfair Display', serif;
-          font-size: 32px;
-          color: #1d4e42;
+          font-size: 40px;
+          font-weight:bold;
+          // color: #1d4e42;
+          // color:#2563eb;
+          color:black;
           margin-bottom: 20px;
           text-align: center;
         }
@@ -355,12 +366,19 @@ export default function CurrencyConverter() {
           border-radius: 10px;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
+          // transformation:scale(1.2);
+
+          border:1px black solid;
         }
         .dark-mode .converter-box {
           background: #333;
         }
         .converter-box:hover {
-          transform: translateY(-5px);
+          // transform: translateY(-5px);
+          // background:black;
+          // color:white;
+          color:blue;
+          transform:scale(1.2);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         .converter-box h3 {
@@ -370,6 +388,9 @@ export default function CurrencyConverter() {
         }
         .dark-mode .converter-box h3 {
           color: #f5f5f5;
+        }
+        .converter-box h3:hover{
+          color:white;
         }
         .input-group {
           margin-bottom: 15px;
@@ -403,7 +424,9 @@ export default function CurrencyConverter() {
           outline: none;
         }
         .btn {
-          background: linear-gradient(45deg, #1d4e42, #2c7a5d);
+          // background: linear-gradient(45deg, #1d4e42, #2c7a5d);
+          
+          background:#2563eb;
           color: white;
           border: none;
           padding: 12px 20px;
@@ -418,7 +441,11 @@ export default function CurrencyConverter() {
           gap: 10px;
         }
         .btn:hover {
-          background: linear-gradient(45deg, #2c7a5d, #1d4e42);
+          // background: linear-gradient(45deg, #2c7a5d, #1d4e42);
+          background:black;
+
+          color:white;
+
           transform: translateY(-2px);
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
@@ -476,6 +503,8 @@ export default function CurrencyConverter() {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
           gap: 15px;
+          align-items: center;
+
         }
         .currency-card {
           background: #f9f9f9;
@@ -485,13 +514,19 @@ export default function CurrencyConverter() {
           cursor: pointer;
           transition: all 0.3s ease;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+          border:1px black solid;
+          
         }
         .dark-mode .currency-card {
           background: #333;
         }
         .currency-card:hover {
-          transform: translateY(-5px);
+          transform:scale(1.3);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+          background:black;
+          color:#50ABEF;
+          
+
         }
         .currency-card img {
           width: 40px;
