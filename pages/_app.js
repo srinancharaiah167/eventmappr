@@ -6,6 +6,8 @@ import AOS from 'aos'; // Import the AOS library
 import Layout from '../components/layout/Layout';
 
 import Cursor from '../components/Cursor';
+import Head from 'next/head';
+
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false);
 
@@ -45,11 +47,17 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
+  <>
+    <Head>
+      <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    </Head>
     <Layout>
       <Component {...pageProps} />
       <Cursor/>
     </Layout>
-  );
+  </>
+);
+
 }
 
 export default MyApp;
