@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const Cursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [isActive, setIsActive] = useState(false); // For click/active state
+  const [isActive, setIsActive] = useState(false);
+
+  const cursorRef = useRef(null);
+  const trailRef = useRef(null); // for the ghost trail
+  const position = useRef({ x: 0, y: 0 });
+  const target = useRef({ x: 0, y: 0 });
+  const trailPos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      target.current = { x: e.clientX, y: e.clientY };
     };
 
     const handleMouseDown = () => setIsActive(true);
@@ -16,11 +21,10 @@ const Cursor = () => {
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
 
-    // Get all interactive elements (links, buttons, inputs etc.)
     const interactiveElements = document.querySelectorAll(
       'a, button, input, textarea, select, [role="button"], [role="link"], [onClick], .interactive-element'
     );
-    
+
     interactiveElements.forEach(el => {
       el.addEventListener('mouseenter', handleMouseEnter);
       el.addEventListener('mouseleave', handleMouseLeave);
@@ -29,6 +33,26 @@ const Cursor = () => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mouseup', handleMouseUp);
+
+    const smoothFollow = () => {
+      // Main pointer easing (faster)
+      position.current.x += (target.current.x - position.current.x) * 0.2;
+      position.current.y += (target.current.y - position.current.y) * 0.2;
+
+      // Ghost trail easing (slower)
+      trailPos.current.x += (target.current.x - trailPos.current.x) * 0.1;
+      trailPos.current.y += (target.current.y - trailPos.current.y) * 0.1;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${position.current.x}px, ${position.current.y}px)`;
+      }
+      if (trailRef.current) {
+        trailRef.current.style.transform = `translate(${trailPos.current.x}px, ${trailPos.current.y}px)`;
+      }
+
+      requestAnimationFrame(smoothFollow);
+    };
+    smoothFollow();
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
@@ -43,72 +67,71 @@ const Cursor = () => {
 
   return (
     <>
+      {/* Ghost trail */}
+      <div ref={trailRef} className="cursor-trail"></div>
+      {/* Main cursor */}
       <div 
+        ref={cursorRef}
         className={`custom-pointer ${isHovering ? 'is-hovering' : ''} ${isActive ? 'is-active' : ''}`}
-        style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       >
         <div className="triangle-pointer"></div>
       </div>
 
       <style jsx global>{`
         * {
-          cursor: none !important; /* Force hide default cursor */
+          cursor: none !important;
         }
-        
-        .custom-pointer {
-          pointer-events: none; /* Allows clicks to pass through */
+
+        .custom-pointer, .cursor-trail {
+          pointer-events: none;
           position: fixed;
           top: 0;
           left: 0;
-          z-index: 999999; /* Extremely high z-index to stay on top */
+          z-index: 999999;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: transform 0.05s ease-out; /* Smooth tracking */
         }
 
+        /* Main triangle cursor */
         .triangle-pointer {
-          width: 24px; /* Size of the triangle - adjusted for good visibility */
-          height: 24px;
-          background: linear-gradient(
-            90deg, /* Ensures the gradient flows from left (purple) to right (green) */
-            #b16cea 0%,   /* Purple */
-            #ff5e69 50%,  /* Pink/Red */
-            #a1ff4a 100%  /* Green/Yellow */
-          );
-          clip-path: polygon(0% 0%, 100% 50%, 0% 100%); /* Perfect triangle pointing right */
-          transform: rotate(0deg); /* No initial rotation, points right */
-          transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          /* Multi-color glow effect, adjusted for clarity */
-          box-shadow: 
-            0 0 5px rgba(177, 108, 234, 0.8),   /* Purple glow */
-            0 0 10px rgba(255, 94, 105, 0.8),  /* Pink glow */
-            0 0 15px rgba(161, 255, 74, 0.8);  /* Green glow */
+          width: 18px;
+          height: 18px;
+          background: #ffffff;
+          clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+          opacity: 0.9;
+          box-shadow: 0 0 5px rgba(0,0,0,0.3);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Hover states */
+        /* Ghost trail (faded triangle) */
+        .cursor-trail {
+          width: 16px;
+          height: 16px;
+          background: rgba(255,255,255,0.3);
+          clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+          filter: blur(4px);
+          opacity: 0.4;
+          transition: transform 0.4s ease;
+        }
+
+        /* Hover and click interactions */
         .custom-pointer.is-hovering .triangle-pointer {
-          transform: scale(1.2); /* Slightly larger on hover */
-          /* More intense glow on hover */
-          box-shadow: 
-            0 0 8px rgba(177, 108, 234, 1), 
-            0 0 15px rgba(255, 94, 105, 1), 
-            0 0 20px rgba(161, 255, 74, 1);
+          transform: scale(1.1);
+          box-shadow: 0 0 8px rgba(0,0,0,0.4);
         }
 
-        /* Active (click) states */
         .custom-pointer.is-active .triangle-pointer {
-          transform: scale(0.9); /* Shrink on click */
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Dimmed glow on click */
+          transform: scale(0.9);
+          opacity: 0.7;
         }
 
-        /* Hide on mobile for better usability */
         @media (max-width: 768px) {
-          .custom-pointer {
+          .custom-pointer, .cursor-trail {
             display: none;
           }
           body, html {
-            cursor: default !important; /* Show default cursor on mobile */
+            cursor: default !important;
           }
         }
       `}</style>
