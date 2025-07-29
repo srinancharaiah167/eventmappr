@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 const TouristPlacesMap = dynamic(() => import("./TouristPlacesMap"), { ssr: false });
 
 export default function TouristPlacesSection() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [attractions, setAttractions] = useState([]);
   const [error, setError] = useState(null);
@@ -85,6 +86,34 @@ export default function TouristPlacesSection() {
   // Animation state for header
   const [headerVisible, setHeaderVisible] = useState(false);
   const headerRef = useRef(null);
+
+  // Theme detection effect
+  useEffect(() => {
+    // Check initial theme
+    const checkTheme = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      setIsDarkMode(currentTheme === 'dark');
+    };
+    
+    checkTheme();
+    
+    // Watch for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          checkTheme();
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     // Animate top heading on scroll
     const animateHeading = () => {
@@ -136,7 +165,7 @@ export default function TouristPlacesSection() {
   }, []);
 
   return (
-    <div className="main-content font-sans bg-white" style={{ position: 'relative' }}>
+    <div className={`main-content font-sans bg-white ${isDarkMode ? 'dark-theme' : ''}`} style={{ position: 'relative' }}>
       {/* Video background for header */}
       <style jsx>{`
         .main-content {
@@ -520,6 +549,237 @@ export default function TouristPlacesSection() {
     background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
     border: 1px solid #fecaca;
     border-left: 4px solid #ef4444;
+  }
+
+  /* Force dark theme CSS variables */
+  .dark-theme {
+    --bg-color: #0a0a0f;
+    --text-color: #e2e8f0;
+    --text-muted: #94a3b8;
+    --card-bg: #1a1a23;
+    --border-color: rgba(99, 102, 241, 0.2);
+    --hover-bg: #22222c;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Comprehensive Dark Theme for Tourist Places Page */
+  [data-theme="dark"] .main-content,
+  .dark-theme.main-content {
+    background: linear-gradient(to bottom, var(--bg-color, #0a0a0f), #0f0f15) !important;
+    color: var(--text-color, #e2e8f0) !important;
+  }
+
+  [data-theme="dark"] .tourist-places-container,
+  .dark-theme .tourist-places-container {
+    background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(19, 19, 26, 0.98) 50%, rgba(26, 26, 35, 0.95) 100%) !important;
+    border-radius: 20px;
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 4px 16px rgba(99, 102, 241, 0.1) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.1) !important;
+  }
+
+  [data-theme="dark"] .tp-sidebar,
+  .dark-theme .tp-sidebar {
+    background: linear-gradient(135deg, var(--card-bg, #1a1a23) 0%, #16161f 100%) !important;
+    border: 1px solid var(--border-color, rgba(99, 102, 241, 0.2)) !important;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  }
+
+  [data-theme="dark"] .tp-list-card,
+  .dark-theme .tp-list-card {
+    background: linear-gradient(135deg, #1e1e2e 0%, var(--card-bg, #1a1a23) 100%) !important;
+    border: 1px solid var(--border-color, rgba(99, 102, 241, 0.15)) !important;
+    border-left: 4px solid #6366f1 !important;
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      0 2px 8px rgba(99, 102, 241, 0.1) !important;
+    color: var(--text-color, #e2e8f0) !important;
+  }
+
+  [data-theme="dark"] .tp-list-card:hover {
+    background: linear-gradient(135deg, #252538 0%, var(--hover-bg, #22222c) 100%);
+    border-color: rgba(99, 102, 241, 0.4);
+    border-left-color: #4f46e5;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 4px 16px rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+  }
+
+  [data-theme="dark"] .tp-list-card.selected {
+    background: linear-gradient(135deg, #312e81 0%, #3730a3 100%);
+    border-left-color: #4f46e5;
+    border-color: rgba(79, 70, 229, 0.5);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      0 4px 20px rgba(79, 70, 229, 0.4);
+    color: #c7d2fe;
+  }
+
+  [data-theme="dark"] .place-map-container {
+    background: linear-gradient(135deg, #1a1a23 0%, var(--hover-bg, #22222c) 100%);
+    border: 2px solid var(--border-color, rgba(99, 102, 241, 0.2));
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  [data-theme="dark"] .tp-list-card:hover .place-map-container {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.5),
+      0 2px 8px rgba(99, 102, 241, 0.2);
+  }
+
+  [data-theme="dark"] .map-pin-icon {
+    background: rgba(26, 26, 35, 0.95);
+    color: #6366f1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  [data-theme="dark"] .place-title {
+    color: var(--text-color, #e2e8f0);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  [data-theme="dark"] .place-type-badge {
+    color: #a5b4fc;
+    background: linear-gradient(135deg, #1a1a23 0%, var(--hover-bg, #22222c) 100%);
+    border: 1px solid var(--border-color, rgba(99, 102, 241, 0.2));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme="dark"] .tp-list-card:hover .place-type-badge {
+    background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
+    border-color: #6d28d9;
+    color: #c7d2fe;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  }
+
+  [data-theme="dark"] .directions-link {
+    color: #a5b4fc;
+    background: linear-gradient(135deg, #1a1a23 0%, var(--hover-bg, #22222c) 100%);
+    border: 1px solid var(--border-color, rgba(99, 102, 241, 0.2));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme="dark"] .directions-link:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
+    border-color: #6d28d9;
+    color: #c7d2fe;
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+    transform: translateY(-1px);
+  }
+
+  [data-theme="dark"] .tp-map-area {
+    background: linear-gradient(135deg, var(--card-bg, #1a1a23) 0%, #16161f 100%);
+    border: 1px solid var(--border-color, rgba(99, 102, 241, 0.15));
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  [data-theme="dark"] .loading-state,
+  [data-theme="dark"] .empty-state,
+  .dark-theme .loading-state,
+  .dark-theme .empty-state {
+    color: var(--text-muted, #94a3b8) !important;
+    background: linear-gradient(135deg, #1e1e2e 0%, var(--card-bg, #1a1a23) 100%) !important;
+    border: 1px dashed var(--border-color, rgba(99, 102, 241, 0.3)) !important;
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Enhanced empty state styling */
+  [data-theme="dark"] .empty-state,
+  .dark-theme .empty-state {
+    background: linear-gradient(135deg, 
+      rgba(30, 30, 46, 0.8) 0%, 
+      rgba(26, 26, 35, 0.9) 50%, 
+      rgba(22, 22, 31, 0.8) 100%) !important;
+    border: 2px dashed rgba(99, 102, 241, 0.4) !important;
+    color: var(--text-muted, #a1a1aa) !important;
+    font-weight: 500;
+    text-align: center;
+    padding: 32px 24px !important;
+    border-radius: 16px !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  [data-theme="dark"] .empty-state::before,
+  .dark-theme .empty-state::before {
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  [data-theme="dark"] .empty-state::after,
+  .dark-theme .empty-state::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+      transparent 0%, 
+      rgba(99, 102, 241, 0.05) 50%, 
+      transparent 100%);
+    pointer-events: none;
+  }
+
+  [data-theme="dark"] .error-alert {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-left: 4px solid #ef4444;
+    color: #fca5a5;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+  }
+
+  /* Dark theme scrollbar styling */
+  [data-theme="dark"] .list-places {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color, rgba(99, 102, 241, 0.3)) transparent;
+  }
+
+  [data-theme="dark"] .list-places::-webkit-scrollbar-thumb {
+    background: var(--border-color, rgba(99, 102, 241, 0.3));
+    border-radius: 6px;
+  }
+
+  [data-theme="dark"] .list-places::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted, rgba(99, 102, 241, 0.5));
+  }
+
+
+
+
+
+  /* Hero Section keeps original styling in all themes */
+
+  /* Additional dark theme focus states */
+  [data-theme="dark"] .tp-list-card:focus-within,
+  .dark-theme .tp-list-card:focus-within {
+    outline: 2px solid rgba(99, 102, 241, 0.5);
+    outline-offset: 2px;
+  }
+
+  [data-theme="dark"] .directions-link:focus,
+  .dark-theme .directions-link:focus {
+    outline: 2px solid rgba(99, 102, 241, 0.5);
+    outline-offset: 2px;
+  }
       `}</style>
       <div style={{ position: 'relative', width: '100%', minHeight: '390px' }}>
         <video
