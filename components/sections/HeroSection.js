@@ -262,9 +262,9 @@ const HeroSection = () => {
         }
         
         .primary-glass {
-          background: rgba(var(--primary-rgb), 0.7);
+          background: rgba(var(--primary-rgb), 1);
           color: white;
-          box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.3);
+          box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.15);
         }
         
         .secondary-glass {
