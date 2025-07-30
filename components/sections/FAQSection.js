@@ -256,7 +256,7 @@ const FAQSection = () => {
         
         .faq-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+          // grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /*this vreating error */
           gap: 1.5rem;
         }
         
