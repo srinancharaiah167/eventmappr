@@ -16,8 +16,6 @@ export default function NearbyPage() {
 
   const radius = 2000; // meters
 
-  // Map/Restaurant logic integration (from your snippet)
-  // -----------------------------------------------
   const initMap = useCallback(async (lat, lon, label = 'Selected Location') => {
     const L = (await import('leaflet')).default;
 
@@ -26,14 +24,11 @@ export default function NearbyPage() {
       leafletMap.current = null;
 
        if (mapRef.current && mapRef.current.parentNode) {
-    // Clone the container without children (clean DOM node)
     const oldContainer = mapRef.current;
     const newContainer = oldContainer.cloneNode(false); // shallow clone, no children
   
-    // Replace old container with the new container in the DOM
     oldContainer.parentNode.replaceChild(newContainer, oldContainer);
   
-    // Update reference to point to the new container
     mapRef.current = newContainer;
   }
 
@@ -68,7 +63,6 @@ export default function NearbyPage() {
     }).addTo(leafletMap.current);
   }, [radius]);
 
-  // Fetch nearby restaurants and display markers
   const getRestaurants = useCallback(async (lat, lon) => {
     const L = (await import('leaflet')).default;
     setLoading(true);
@@ -105,7 +99,6 @@ export default function NearbyPage() {
       });
       const data = await response.json();
 
-      // Remove existing non-origin markers before adding new ones
       if (leafletMap.current) {
         leafletMap.current.eachLayer(layer => {
           if (layer instanceof L.Marker &&
@@ -132,7 +125,6 @@ export default function NearbyPage() {
 
 
       if (!leafletMap.current) {
-        // Map is not initialized; optionally bail or wait/retry
         console.warn('Map is not initialized; cannot add markers.');
         return;
       }
@@ -154,8 +146,6 @@ export default function NearbyPage() {
       setLoading(false);
 
       if (foundPlaces.length === 0) {
-        // This alert is optional, original UI already shows no results
-        // alert("No places found nearby.");
       }
     } catch (err) {
       setLoading(false);
@@ -173,18 +163,14 @@ export default function NearbyPage() {
       initMap(userLocation.lat, userLocation.lng, userLocation.label || "You are here");
       getRestaurants(userLocation.lat, userLocation.lng);
     }
-    // cleanup map on unmount
     return () => {
       if (leafletMap.current) {
         leafletMap.current.remove();
       }
     };
-    // eslint-disable-next-line
   }, [userLocation, getRestaurants]);
 
-  // Scroll-in animations (unchanged)
   useEffect(() => {
-    // ... Your unchanged animation code ...
     const animateOnScroll = () => {
       const elementsToAnimate = [
         { selector: '.nearby-page', threshold: 1.3 },
@@ -207,7 +193,6 @@ export default function NearbyPage() {
     return () => window.removeEventListener('scroll', animateOnScroll);
   }, []);
 
-  // Location fetch logic on "Find Nearby" click (unchanged, but will now also set label)
   const handleFindNearby = () => {
     if (!navigator.geolocation) {
       setError('Geolocation is not supported by your browser.');
@@ -249,7 +234,6 @@ export default function NearbyPage() {
     );
   };
 
-  // Manual search logic (from your snippet)
   const handleSearchLocation = async (e) => {
     e.preventDefault();
     const location = e.target.locationInput.value;
@@ -279,7 +263,6 @@ export default function NearbyPage() {
     }
   };
 
-  // Retry logic unchanged
   const handleRetry = () => {
     if (userLocation && userLocation.lat && userLocation.lng) {
       setRetryCount(prev => prev + 1);
@@ -287,11 +270,6 @@ export default function NearbyPage() {
     }
   };
 
-  // Place rendering helpers (unchanged from your code)
-  // ...getPlaceName, getPlaceIcon, getPlaceType...
-
-  // Map area (add below header or wherever you'd like)
-  // Don't forget to size your map CSS!
   return (
     <div className="nearby-container">
       <div className="nearby-page">
