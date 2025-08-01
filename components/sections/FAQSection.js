@@ -204,7 +204,7 @@ const FAQSection = () => {
         
         .faq-cta {
           text-align: center;
-          margin-top: 3rem;
+          margin-top: 8rem;
         }
         
         .faq-cta p {
@@ -259,13 +259,13 @@ const FAQSection = () => {
         }
         
         .btn-icon {
-          margin-right: 0.8rem;
+          margin-right: 0.35rem;
           font-size: 1.2rem;
           transition: transform 0.3s ease;
         }
         
         .bubble-btn:hover .btn-icon {
-          transform: scale(1.2);
+          transform: scale(1.05);
         }
         
         .btn-text {
