@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { FiLoader, FiAlertCircle, FiCompass, FiMapPin, FiExternalLink } from "react-icons/fi";
 import dynamic from "next/dynamic";
+import Places from "./places";
 
 const TouristPlacesMap = dynamic(() => import("./TouristPlacesMap"), { ssr: false });
 
@@ -48,7 +49,7 @@ export default function TouristPlacesSection() {
   };
 
   const fetchAttractions = async (lat, lon) => {
-    const query = `[out:json][timeout:25];(node["historic"](around:5000,${lat},${lon}););out body;>;out skel qt;`;
+    const query = `[out:json][timeout:25];(node["historic"](around:30000,${lat},${lon}););out body;>;out skel qt;`;
 
     try {
       const response = await fetch("https://overpass-api.de/api/interpreter", {
@@ -208,13 +209,16 @@ export default function TouristPlacesSection() {
   }
 
   .list-places {
-    flex: 1;
-    overflow-y: auto;
-    width: 500px;
-    padding: 16px;
-    scrollbar-width: thin;
-    scrollbar-color: #e2e8f0 transparent;
-  }
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 16px;
+  height: 50%;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+
 
   .list-places::-webkit-scrollbar {
     width: 0px;
@@ -234,15 +238,23 @@ export default function TouristPlacesSection() {
   }
 
   .tp-list-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+  
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 860px; /* Adjust if needed */
+  margin: auto 150px;
+  list-style: none;
+  padding: 0;
+}
+
+
 
   .tp-list-card {
+    width:100%;
+    
     display: flex;
     align-items: center;
     gap: 14px;
@@ -253,7 +265,9 @@ export default function TouristPlacesSection() {
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.08);
+    // box-shadow: 0 2px 8px rgba(96, 165, 250, 0.08);
+    box-shadow: 0 2px 8px lightblue;
+    
     position: relative;
     overflow: hidden;
   }
@@ -271,7 +285,8 @@ export default function TouristPlacesSection() {
   }
 
   .tp-list-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(10px);
+    
     box-shadow: 0 8px 25px rgba(96, 165, 250, 0.15);
     border-left-color: #3b82f6;
   }
@@ -477,6 +492,7 @@ export default function TouristPlacesSection() {
     
     .tp-list-grid {
       gap: 10px;
+      width:100%;
     }
     
     .tp-list-card {
@@ -851,6 +867,7 @@ export default function TouristPlacesSection() {
             )}
             {!loading && attractions.length === 0 && !error && (
               <div className="empty-state">No places found. Try searching!</div>
+             
             )}
 
             <ul className="tp-list-grid">
