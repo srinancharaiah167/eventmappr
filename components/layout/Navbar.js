@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { NAV_ITEMS, ROUTES } from "../../utils/routes";
+import {useRouter} from "next/router";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {NAV_ITEMS, ROUTES} from "../../utils/routes";
+import {Sun, Moon} from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -147,7 +148,7 @@ const Navbar = () => {
                   router.pathname === "/currency-converter" ? "active" : ""
                 }
               >
-                <i className="fas fa-coins" /> 
+                <i className="fas fa-coins" />
                 Currency Converter
               </a>
             </Link>
@@ -165,7 +166,11 @@ const Navbar = () => {
               aria-label="Toggle theme"
               className="theme-btn"
             >
-              {isDarkMode ? "☀️" : "🌙"}
+              {isDarkMode ? (
+                <Sun size={20} color="#fbbf24" /> // light yellow
+              ) : (
+                <Moon size={20} color="#1e3a8a" /> // dark blue
+              )}
             </button>
           </li>
           {user ? (
@@ -523,7 +528,7 @@ const Navbar = () => {
           .navbar-container {
             padding: 0 1.5rem;
           }
-          
+
           .nav-links li {
             padding: 0 0.75rem;
           }
