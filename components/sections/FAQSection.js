@@ -260,7 +260,7 @@ const FAQSection = () => {
 
         .faq-section {
           padding: 5rem 0;
-          background-color: var(--background);
+          background: linear-gradient(to left, var(--contrast1), var(--contrast2), var(--contrast3));
           position: relative;
           overflow: hidden;
         }

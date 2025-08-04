@@ -69,7 +69,7 @@ const FeaturesSection = () => {
           padding: 8rem 0 5rem;
           position: relative;
           overflow: visible;
-          background-color: var(--background);
+background: linear-gradient(to right, var(--contrast1), var(--contrast2), var(--contrast3));
           z-index: 1;
         }
         
