@@ -23,6 +23,9 @@
   --text: #333333;
   --text-light: #666666;
   --background: #ffffff;
+  --contrast1: #96beeefd;
+  --contrast2: #d5e9ffc1;
+  --contrast3: #e9f3faff;
   --background-alt: #f5f7fa;
   --border: #e0e0e0;
   --shadow: rgba(0, 0, 0, 0.1);
@@ -52,6 +55,9 @@
   --text: #f0f0f0;
   --text-light: #b0b0b0;
   --background: #121212;
+  --contrast1: #121212;
+  --contrast2: #121212;
+  --contrast3: #121212;
   --background-alt: #1e1e2e;
   --border: #2a2a3a;
   --shadow: rgba(0, 0, 0, 0.3);
