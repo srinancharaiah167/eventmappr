@@ -95,14 +95,20 @@ const Cursor = () => {
 
         /* Main triangle cursor */
         .triangle-pointer {
-          width: 18px;
-          height: 18px;
-          background: #ffffff;
-          clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
-          opacity: 0.9;
-          box-shadow: 0 0 5px rgba(0,0,0,0.3);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+  width: 18px;
+  height: 18px;
+  background: black; /* Dark fill for visibility on light backgrounds */
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px white,      /* white border for visibility on dark backgrounds */
+    0 0 6px rgba(255,255,255,0.5); /* soft glow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+
 
         /* Ghost trail (faded triangle) */
         .cursor-trail {
