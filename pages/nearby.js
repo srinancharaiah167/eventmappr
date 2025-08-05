@@ -13,28 +13,21 @@ export default function NearbyPage() {
   const [retryCount, setRetryCount] = useState(0);
   const mapRef = useRef(null);
   const leafletMap = useRef(null);
-
-  const radius = 2000; // meters
-
+  const radius = 2000;
   const initMap = useCallback(async (lat, lon, label = 'Selected Location') => {
     const L = (await import('leaflet')).default;
 
     if (leafletMap.current) {
-      
       leafletMap.current = null;
 
-       if (mapRef.current && mapRef.current.parentNode) {
-    const oldContainer = mapRef.current;
-    const newContainer = oldContainer.cloneNode(false); // shallow clone, no children
-  
-    oldContainer.parentNode.replaceChild(newContainer, oldContainer);
-  
-    mapRef.current = newContainer;
-  }
-
+      if (mapRef.current && mapRef.current.parentNode) {
+        const oldContainer = mapRef.current;
+        const newContainer = oldContainer.cloneNode(false);
+        oldContainer.parentNode.replaceChild(newContainer, oldContainer);
+        mapRef.current = newContainer;
+      }
     }
 
-    // Create map
     leafletMap.current = L.map(mapRef.current).setView([lat, lon], 15);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -42,7 +35,6 @@ export default function NearbyPage() {
     }).addTo(leafletMap.current);
 
     const redIcon = L.icon({
-
       iconUrl: icon.src,
       shadowUrl: shadow.src,
       iconSize: [25, 41],
@@ -58,8 +50,10 @@ export default function NearbyPage() {
 
     L.circle([lat, lon], {
       radius: radius,
-      color: "blue",
-      fillOpacity: 0.1,
+      color: "#3b82f6",
+      fillColor: "#60a5fa",
+      fillOpacity: 0.15,
+      weight: 2,
     }).addTo(leafletMap.current);
   }, [radius]);
 
@@ -121,9 +115,6 @@ export default function NearbyPage() {
 
       setPlaces(foundPlaces);
 
-      // Add new markers to map
-
-
       if (!leafletMap.current) {
         console.warn('Map is not initialized; cannot add markers.');
         return;
@@ -154,12 +145,10 @@ export default function NearbyPage() {
     }
   }, [radius]);
 
-  // On location change: initialize map and fetch places
   useEffect(() => {
     if (userLocation) {
       setError('');
       setLoading(false);
-      // "Selected Location" on manual search, "You are here" on geolocation
       initMap(userLocation.lat, userLocation.lng, userLocation.label || "You are here");
       getRestaurants(userLocation.lat, userLocation.lng);
     }
@@ -270,73 +259,115 @@ export default function NearbyPage() {
     }
   };
 
+  const getPlaceIcon = (type) => {
+    const icons = {
+      restaurant: '🍽️',
+      cafe: '☕',
+      fast_food: '🍔',
+      hotel: '🏨',
+      guest_house: '🏠',
+      bar: '🍻'
+    };
+    return icons[type] || '📍';
+  };
+
+  const getPlaceTypeLabel = (type) => {
+    const labels = {
+      restaurant: 'Restaurant',
+      cafe: 'Café',
+      fast_food: 'Fast Food',
+      hotel: 'Hotel',
+      guest_house: 'Guest House',
+      bar: 'Bar'
+    };
+    return labels[type] || 'Place';
+  };
+
   return (
-    <div className="nearby-container">
+    <>
+   <div className="nearby-container">
       <div className="nearby-page">
         <div className="page-header">
-          <h2>Nearby Restaurants & Hotels</h2>
-          <p className="page-description">
-            Discover restaurants, cafes, hotels and other places near your location
-          </p>
+          <div className="header-content">
+            <div className="header-icon">📍</div>
+            <h1>Discover Nearby</h1>
+            <p className="page-description">
+              Find restaurants, cafés, hotels and more around you
+            </p>
+          </div>
+          <div className="header-bg-pattern"></div>
         </div>
 
         <div className="action-section">
-          <button
-            className="btn-find"
-            onClick={handleFindNearby}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <span className="loading-spinner"></span>
-                {userLocation ? 'Refreshing...' : 'Getting Location...'}
-              </>
-            ) : (
-              userLocation ? 'Refresh Location' : 'Find Nearby Places'
-            )}
-          </button>
-          <form className="location-search-form" onSubmit={handleSearchLocation} style={{ marginTop: 16 }}>
-            <input
-              type="text"
-              name="locationInput"
-              placeholder="Search by city or address"
-              style={{
-                padding: "0.5rem 1rem",
-                borderRadius: "8px",
-                border: "1px solid #cbd5e1",
-                marginRight: "0.5rem"
-                
-              }}
-            />
-            <button type="submit" style={{
-              padding: "0.5rem 1.5rem",
-              borderRadius: "8px",
-              border: "none",
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              color: "white",
-              fontWeight: "500",
-              marginTop: "10px" 
-            }}>
-              Search
+          <div className="search-controls">
+            <button
+              className="btn-find"
+              onClick={handleFindNearby}
+              disabled={loading}
+            >
+              <span className="btn-icon">
+                {loading ? (
+                  <span className="loading-spinner"></span>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="2" fill="none"/>
+                    <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  </svg>
+                )}
+              </span>
+              {loading ? 'Locating...' : (userLocation ? 'Update Location' : 'Use My Location')}
             </button>
-          </form>
-          <div style={{ height: 16 }}></div>
-          <div id="map" ref={mapRef} style={{ height: 340, width: "100%", borderRadius: "16px" }}></div>
-          {userLocation && (
-            <div className="location-info">
-              <span className="location-icon">📍</span>
-              <span>Location found! Showing places within 2km radius</span>
+            
+            <div className="divider">
+              <span>or</span>
             </div>
-          )}
+            
+            <form className="location-search-form" onSubmit={handleSearchLocation}>
+              <div className="search-input-wrapper">
+                <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                  <path d="21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+                <input
+                  type="text"
+                  name="locationInput"
+                  placeholder="Search by city, address, or landmark"
+                  className="search-input"
+                />
+                <button type="submit" className="search-btn" disabled={loading}>
+                  Search
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div className="map-container">
+            <div id="map" ref={mapRef} className="map"></div>
+            {userLocation && (
+              <div className="location-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor"/>
+                  <circle cx="12" cy="9" r="2.5" fill="white"/>
+                </svg>
+                <span>Showing places within 2km radius</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {error && (
           <div className="error-message">
-            <span className="error-icon">⚠️</span>
-            <span>{error}</span>
+            <div className="error-content">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" strokeWidth="2"/>
+                <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              <span>{error}</span>
+            </div>
             {retryCount < 3 && userLocation && (
               <button onClick={handleRetry} className="retry-btn">
-                Retry
+                Try Again
               </button>
             )}
           </div>
@@ -346,506 +377,674 @@ export default function NearbyPage() {
           <div className="results-section">
             {places.length === 0 ? (
               <div className="empty-state">
-                <span className="empty-icon">🔍</span>
-                <h3>No places found</h3>
-                <p>Try expanding your search radius or check your location.</p>
+                <div className="empty-icon">🔍</div>
+                <h3>No places found nearby</h3>
+                <p>Try searching in a different area or check your location settings.</p>
               </div>
             ) : (
               <>
                 <div className="results-header">
-                  <h3>Found {places.length} places nearby</h3>
+                  <h2>Found {places.length} places nearby</h2>
+                  <p>Discover great spots within walking distance</p>
                 </div>
-                <ul className="nearby-places-list">
+                <div className="places-grid">
                   {places.map((place, index) => (
-                    <li
+                    <div
                       key={`${place.id}-${index}`}
-                      className="nearby-place-item"
+                      className="place-card"
                       style={{
                         animationDelay: `${index * 0.1}s`
                       }}
                     >
-                      <div className="place-card">
-                        <div className="place-header">
-                          <span className="place-icon">🍽️</span>
-                          <div className="place-info">
-                            <strong className="place-name">
-                              {place.tags?.name || "Unnamed"}
-                            </strong>
-                            <span className="place-type">
-                              {place.tags?.amenity || place.tags?.tourism || 'Place'}
-                            </span>
-                          </div>
+                      <div className="place-header">
+                        <div className="place-icon">
+                          {getPlaceIcon(place.tags?.amenity || place.tags?.tourism)}
                         </div>
-                        <div className="place-details">
-                          {place.tags?.['cuisine'] && (
-                            <div className="detail-item">
-                              <span className="detail-label">🍴 Cuisine:</span>
-                              <span className="detail-value">{place.tags.cuisine}</span>
-                            </div>
-                          )}
-                          {place.tags?.['addr:street'] && (
-                            <div className="detail-item">
-                              <span className="detail-label">📍 Address:</span>
-                              <span className="detail-value">
-                                {place.tags['addr:street']}
-                                {place.tags['addr:city'] && `, ${place.tags['addr:city']}`}
-                              </span>
-                            </div>
-                          )}
-                          {place.tags?.phone && (
-                            <div className="detail-item">
-                              <span className="detail-label">📞 Phone:</span>
-                              <span className="detail-value">
-                                <a href={`tel:${place.tags.phone}`}>{place.tags.phone}</a>
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="place-actions">
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lon}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="get-location-btn"
-                          >
-                            <span className="btn-icon">🗺️</span>
-                            View on Map
-                          </a>
+                        <div className="place-info">
+                          <h3 className="place-name">
+                            {place.tags?.name || "Unnamed Place"}
+                          </h3>
+                          <span className="place-type">
+                            {getPlaceTypeLabel(place.tags?.amenity || place.tags?.tourism)}
+                          </span>
                         </div>
                       </div>
-                    </li>
+                      
+                      <div className="place-details">
+                        {place.tags?.cuisine && (
+                          <div className="detail-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M3 2v20l18-10L3 2z" fill="currentColor"/>
+                            </svg>
+                            <span>{place.tags.cuisine}</span>
+                          </div>
+                        )}
+                        {place.tags?.['addr:street'] && (
+                          <div className="detail-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" strokeWidth="2" fill="none"/>
+                              <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2" fill="none"/>
+                            </svg>
+                            <span>
+                              {place.tags['addr:street']}
+                              {place.tags['addr:city'] && `, ${place.tags['addr:city']}`}
+                            </span>
+                          </div>
+                        )}
+                        {place.tags?.phone && (
+                          <div className="detail-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="2" fill="none"/>
+                            </svg>
+                            <a href={`tel:${place.tags.phone}`}>{place.tags.phone}</a>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="place-actions">
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lon}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="view-map-btn"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" strokeWidth="2" fill="none"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2" fill="none"/>
+                          </svg>
+                          View on Map
+                        </a>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </>
             )}
           </div>
         )}
-
       </div>
-
-      <style jsx>{`
-        .nearby-container {
-          min-height: calc(100vh - 200px);
-          padding: 2rem 1rem;
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        }
-
-        .nearby-page {
-          max-width: 800px;
-          margin: 0 auto;
-          background: #ffffff;
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: all 0.6s ease;
-        }
-
-        .nearby-page.animate {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .page-header {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 2.5rem 2rem;
-          text-align: center;
-        }
-
-        .page-header h2 {
-          margin: 0 0 0.5rem 0;
-          font-size: 2rem;
-          font-weight: 700;
-        }
-
-        .page-description {
-          margin: 0;
-          font-size: 1.1rem;
-          opacity: 0.9;
-        }
-
-        .action-section {
-          padding: 2rem;
-          text-align: center;
-          background: #f8fafc;
-          border-bottom: 1px solid #e2e8f0;
-        }
-
-        .btn-find {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin: 0 auto;
-          padding: 1rem 2rem;
-          border: none;
-          border-radius: 50px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: #fff;
-          font-size: 1.1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInUp 0.6s ease forwards;
-          animation-delay: 0.2s;
-        }
-
-        .btn-find:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-find:disabled {
-          background: #94a3b8;
-          cursor: not-allowed;
-          transform: none;
-          box-shadow: 0 2px 8px rgba(148, 163, 184, 0.3);
-        }
-
-        .loading-spinner {
-          width: 16px;
-          height: 16px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top: 2px solid white;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .location-info {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-top: 1rem;
-          padding: 0.75rem 1rem;
-          background: #dcfce7;
-          color: #166534;
-          border-radius: 8px;
-          font-weight: 500;
-          animation: fadeInUp 0.6s ease forwards;
-          animation-delay: 0.4s;
-          opacity: 0;
-        }
-
-        .error-message {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin: 1rem 2rem;
-          padding: 1rem;
-          background: #fef2f2;
-          color: #dc2626;
-          border: 1px solid #fecaca;
-          border-radius: 8px;
-          font-weight: 500;
-        }
-
-        .retry-btn {
-          background: #dc2626;
-          color: white;
-          border: none;
-          padding: 0.25rem 0.75rem;
-          border-radius: 4px;
-          font-size: 0.875rem;
-          cursor: pointer;
-          margin-left: auto;
-          transition: background 0.2s ease;
-        }
-
-        .retry-btn:hover {
-          background: #b91c1c;
-        }
-
-        .results-section {
-          padding: 2rem;
-        }
-
-        .results-header {
-          margin-bottom: 1.5rem;
-        }
-
-        .results-header h3 {
-          margin: 0;
-          color: #374151;
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-
-        .empty-state {
-          text-align: center;
-          padding: 3rem 2rem;
-          color: #6b7280;
-        }
-
-        .empty-icon {
-          font-size: 3rem;
-          display: block;
-          margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-          margin: 0 0 0.5rem 0;
-          color: #374151;
-        }
-
-        .empty-state p {
-          margin: 0;
-        }
-
-        .nearby-places-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          display: grid;
-          gap: 1rem;
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInUp 0.6s ease forwards;
-          animation-delay: 0.6s;
-        }
-
-        .nearby-place-item {
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInUp 0.6s ease forwards;
-        }
-
-        .place-card {
-          background: white;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          padding: 1.5rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .place-card:hover {
-          border-color: #d1d5db;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-          transform: translateY(-2px);
-        }
-
-        .place-header {
-          display: flex;
-          align-items: flex-start;
-          gap: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .place-icon {
-          font-size: 1.5rem;
-          flex-shrink: 0;
-        }
-
-        .place-info {
-          flex: 1;
-        }
-
-        .place-name {
-          display: block;
-          font-size: 1.125rem;
-          font-weight: 600;
-          color: #1f2937;
-          margin-bottom: 0.25rem;
-        }
-
-        .place-type {
-          display: inline-block;
-          background: #f3f4f6;
-          color: #6b7280;
-          padding: 0.25rem 0.75rem;
-          border-radius: 20px;
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-
-        .place-details {
-          margin-bottom: 1rem;
-        }
-
-        .detail-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.5rem;
-          margin-bottom: 0.5rem;
-          font-size: 0.9rem;
-        }
-
-        .detail-label {
-          font-weight: 500;
-          color: #6b7280;
-          min-width: 80px;
-          flex-shrink: 0;
-        }
-
-        .detail-value {
-          color: #374151;
-          flex: 1;
-        }
-
-        .detail-value a {
-          color: #3b82f6;
-          text-decoration: none;
-        }
-
-        .detail-value a:hover {
-          text-decoration: underline;
-        }
-
-        .place-actions {
-          display: flex;
-          gap: 0.75rem;
-        }
-
-        .get-location-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.75rem 1.25rem;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: #fff;
-          border-radius: 8px;
-          font-size: 0.9rem;
-          text-decoration: none;
-          font-weight: 500;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-        }
-
-        .get-location-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-icon {
-          font-size: 1rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-          .nearby-container {
-            padding: 1rem;
-          }
-
-          .page-header {
-            padding: 2rem 1.5rem;
-          }
-
-          .page-header h2 {
-            font-size: 1.75rem;
-          }
-
-          .action-section,
-          .results-section {
-            padding: 1.5rem;
-          }
-
-          .place-card {
-            padding: 1.25rem;
-          }
-
-          .place-header {
-            flex-direction: column;
-            gap: 0.75rem;
-          }
-
-          .place-icon {
-            align-self: flex-start;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .page-header {
-            padding: 1.5rem 1rem;
-          }
-
-          .page-header h2 {
-            font-size: 1.5rem;
-          }
-
-          .action-section,
-          .results-section {
-            padding: 1rem;
-          }
-
-          .btn-find {
-            width: 100%;
-            justify-content: center;
-          }
-
-          .place-card {
-            padding: 1rem;
-          }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-          .nearby-container {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-          }
-
-          .nearby-page {
-            background: #1e293b;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-          }
-
-          .action-section {
-            background: #334155;
-            border-bottom-color: #475569;
-          }
-
-          .place-card {
-            background: #334155;
-            border-color: #475569;
-            color: #f1f5f9;
-          }
-
-          .place-name {
-            color: #f1f5f9;
-          }
-
-          .place-type {
-            background: #475569;
-            color: #cbd5e1;
-          }
-
-          .detail-value {
-            color: #cbd5e1;
-          }
-
-          .results-header h3 {
-            color: #f1f5f9;
-          }
-
-          .empty-state {
-            color: #94a3b8;
-          }
-
-          .empty-state h3 {
-            color: #f1f5f9;
-          }
-        }
-      `}</style>
     </div>
+
+     <style jsx>{`
+        /* Nearby Places Component Styles - Subtle Blue Theme */
+
+.nearby-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.nearby-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+.nearby-page.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Header Section */
+.page-header {
+  position: relative;
+  text-align: center;
+  padding: 60px 0 40px;
+  overflow: hidden;
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+}
+
+.header-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: inline-block;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.02em;
+}
+
+.page-description {
+  font-size: 1.1rem;
+  color: #546e7a;
+  margin: 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle at 20% 80%, rgba(25, 118, 210, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(66, 165, 245, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Action Section */
+.action-section {
+  margin-bottom: 40px;
+}
+
+.search-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* Find Button */
+.btn-find {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(25, 118, 210, 0.3);
+  transform: translateY(0);
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+
+.btn-find:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(25, 118, 210, 0.4);
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
+}
+
+.btn-find:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #78909c;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #b0bec5, transparent);
+}
+
+/* Search Form */
+.location-search-form {
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  background: white;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(25, 118, 210, 0.1);
+  border: 2px solid #e3f2fd;
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: #1976d2;
+  box-shadow: 0 4px 25px rgba(25, 118, 210, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #78909c;
+  pointer-events: none;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  padding: 16px 20px 16px 52px;
+  border-radius: 50px 0 0 50px;
+  font-size: 1rem;
+  outline: none;
+  background: transparent;
+  color: #37474f;
+}
+
+.search-input::placeholder {
+  color: #90a4ae;
+}
+
+.search-btn {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: white;
+  border: none;
+  padding: 16px 28px;
+  border-radius: 0 50px 50px 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
+}
+
+.search-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Map Container */
+.map-container {
+  position: relative;
+  margin: 32px 0;
+}
+
+.map {
+  width: 100%;
+  height: 400px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.15);
+  border: 2px solid #e3f2fd;
+  background: #f8fbff;
+}
+
+.location-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #1565c0;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.2);
+  border: 1px solid rgba(25, 118, 210, 0.1);
+}
+
+/* Error Message */
+.error-message {
+  background: linear-gradient(135deg, #ffebee, #fce4ec);
+  border: 1px solid #f8bbd9;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #c62828;
+  flex: 1;
+}
+
+.retry-btn {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: #bbdefb;
+}
+
+/* Results Section */
+.results-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.results-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin: 0 0 8px 0;
+}
+
+.results-header p {
+  color: #546e7a;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #546e7a;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: #37474f;
+  margin: 0 0 8px 0;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Places Grid */
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.place-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(25, 118, 210, 0.08);
+  border: 1px solid #e3f2fd;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+.place-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(25, 118, 210, 0.15);
+  border-color: #bbdefb;
+}
+
+.place-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.place-icon {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.place-info {
+  flex: 1;
+}
+
+.place-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1565c0;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.place-type {
+  display: inline-block;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #1976d2;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Place Details */
+.place-details {
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #546e7a;
+}
+
+.detail-item svg {
+  color: #78909c;
+  flex-shrink: 0;
+}
+
+.detail-item a {
+  color: #1976d2;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.detail-item a:hover {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+/* Place Actions */
+.place-actions {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e3f2fd;
+}
+
+.view-map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #1976d2;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+}
+
+.view-map-btn:hover {
+  background: linear-gradient(135deg, #bbdefb, #90caf9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nearby-container {
+    padding: 0 16px;
+  }
+  
+  .page-header {
+    padding: 40px 0 30px;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .search-controls {
+    gap: 20px;
+  }
+  
+  .btn-find {
+    padding: 14px 24px;
+    font-size: 0.9rem;
+  }
+  
+  .search-input-wrapper {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+  
+  .search-input {
+    border-radius: 12px 12px 0 0;
+    padding: 14px 20px 14px 52px;
+  }
+  
+  .search-btn {
+    border-radius: 0 0 12px 12px;
+    padding: 14px 20px;
+  }
+  
+  .map {
+    height: 300px;
+    border-radius: 12px;
+  }
+  
+  .places-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .place-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .location-badge {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .page-description {
+    font-size: 1rem;
+  }
+  
+  .btn-find {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+  
+  .place-header {
+    gap: 12px;
+  }
+  
+  .place-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+  }
+  
+  .place-name {
+    font-size: 1.1rem;
+  }
+}
+      `}</style>
+    </>
   );
 }
