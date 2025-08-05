@@ -28,7 +28,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Sports: true,
     Education: true,
     'Comedy & Shows': true,
-    'Wellness': true,
+    Wellness: true,
   });
   const [showForm, setShowForm] = useState(false);
   const [mapView, setMapView] = useState('standard');
@@ -36,7 +36,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
   const mapRef = useRef(null);
   const [showNearby, setShowNearby] = useState(false);
   const [showNearbyPanel, setShowNearbyPanel] = useState(false);
-  const [userLocation, setUserLocation] = useState(null); // Fixed variable name
+  const [userLocation, setUser Location] = useState(null);
   const [nearbyError, setNearbyError] = useState('');
   const [mapReady, setMapReady] = useState(false);
   const [center, setCenter] = useState([40.7128, -74.0060]); // Default center: NYC
@@ -69,7 +69,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
       }
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude }); // Fixed variable name
+          setUser Location({ lat: position.coords.latitude, lng: position.coords.longitude });
           setShowNearby(true);
           setShowNearbyPanel(true);
           setNearbyError('');
@@ -102,9 +102,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
   }, []);
 
   // Custom component to handle Leaflet map events
-
-
-  const MapEvents = ({ setIsLoadingMapTiles }) => {
+  const MapEvents = () => {
     const map = useMap();
 
     useEffect(() => {
@@ -138,53 +136,10 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           }
         });
       };
-    }, [map, setIsLoadingMapTiles]);
+    }, [map]);
 
     return null;
   };
-
-  const TileEvents = ({ url, attribution, setIsLoadingMapTiles }) => {
-    const tileLayerRef = useRef();
-    const map = useMap();
-
-    useEffect(() => {
-      const tileLayer = tileLayerRef.current;
-
-      if (!tileLayer) return;
-
-      let tilesLoading = 0;
-
-      const handleTileLoadStart = () => {
-        tilesLoading++;
-        setIsLoadingMapTiles(true);
-      };
-
-      const handleTileLoad = () => {
-        tilesLoading--;
-        if (tilesLoading <= 0) {
-          setIsLoadingMapTiles(false);
-        }
-      };
-
-      tileLayer.on('tileloadstart', handleTileLoadStart);
-      tileLayer.on('tileload', handleTileLoad);
-
-      return () => {
-        tileLayer.off('tileloadstart', handleTileLoadStart);
-        tileLayer.off('tileload', handleTileLoad);
-      };
-    }, [setIsLoadingMapTiles]);
-
-    return (
-      <TileLayer
-        ref={tileLayerRef}
-        url={url}
-        attribution={attribution}
-      />
-    );
-  };
-
-
 
   const handleMapCreated = (map) => {
     mapRef.current = map;
@@ -272,7 +227,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
   };
 
   const handleDeleteEvent = (eventId) => {
-    if (window.confirm('Are you sure you want to delete this event?')) { // Changed to window.confirm
+    if (window.confirm('Are you sure you want to delete this event?')) {
       onEventDeleted(eventId);
     }
   };
@@ -301,7 +256,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
       Sports: { color: '#FF9800', emoji: '🏆' },
       Education: { color: '#3F51B5', emoji: '📚' },
       'Comedy & Shows': { color: '#8e44ad', emoji: '🎭' },
-      'Wellness': { color: '#27ae60', emoji: '🧘' },
+      Wellness: { color: '#27ae60', emoji: '🧘' },
     };
     const iconInfo = iconMapping[category] || { color: '#333333', emoji: '📌' };
     return L.divIcon({
@@ -335,7 +290,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
     Sports: ' #417C9A ',
     Education: '#124B56',
     'Comedy & Shows': '#9b59b6',
-    'Wellness': '#1abc9c',
+    Wellness: '#1abc9c',
   };
 
   useEffect(() => {
@@ -360,10 +315,10 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
         }
       });
     };
-
+    
     window.addEventListener('scroll', animateOnScroll);
     animateOnScroll(); // Run once on load
-
+    
     return () => {
       window.removeEventListener('scroll', animateOnScroll);
     };
@@ -384,7 +339,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
             <span className="btn-icon">📍</span>
             <span className="btn-text">Find Nearby</span>
           </button>
-          <button className={"btn-nearby" + (showNearby ? ' active' : '')} style={{ marginLeft: '0.5rem' }} onClick={handleShowNearby}>
+          <button className={"btn-nearby" + (showNearby ? ' active' : '')} style={{marginLeft:'0.5rem'}} onClick={handleShowNearby}>
             <span className="btn-icon">🍽️🏨</span>
             <span className="btn-text">{showNearby ? 'Hide' : 'Show'} Nearby Restaurants & Hotels</span>
           </button>
@@ -393,7 +348,7 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           )}
           {nearbyError && <span style={{ color: 'red', marginLeft: '1rem' }}>{nearbyError}</span>}
         </div>
-
+        
         <div className="filter-controls">
           <div className="filter-title">Filter by category:</div>
           <div className="filter-options">
@@ -422,17 +377,17 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
             ))}
           </div>
         </div>
-
+        
         <div className="map-view-controls">
           <div className="view-title">Map Style:</div>
           <div className="view-options">
-            <button
+            <button 
               className={`view-option ${mapView === 'standard' ? 'active' : ''}`}
               onClick={() => changeMapView('standard')}
             >
               Standard
             </button>
-            <button
+            <button 
               className={`view-option ${mapView === 'satellite' ? 'active' : ''}`}
               onClick={() => changeMapView('satellite')}
             >
@@ -441,33 +396,32 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
           </div>
         </div>
       </div>
-
+      
       <div className="map-container">
         {isLoadingMapTiles && <LoadingSpinner fullPage={false} />} {/* Render spinner */}
-        <MapContainer
+        <MapContainer 
           center={center}
-          zoom={13}
+          zoom={13} 
           style={{ height: "100%", width: "100%" }}
         >
-          <MapEvents setIsLoadingMapTiles={setIsLoadingMapTiles} />
-          {/* Add MapEvents component */}
-          <TileEvents
-            url={mapView === 'satellite'
+          <MapEvents />
+          <TileLayer
+            url={mapView === 'satellite' 
               ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-              : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
+              : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            }
             attribution={mapView === 'satellite'
-              ? 'Tiles &copy; Esri ...'
-              : '&copy; OpenStreetMap contributors'}
-            setIsLoadingMapTiles={setIsLoadingMapTiles}
+              ? 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+              : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }
           />
-
           <Marker position={center}>
             <Popup>You are here</Popup>
           </Marker>
 
           {filteredEvents.map(event => (
-            <Marker
-              key={event.id}
+            <Marker 
+              key={event.id} 
               position={[event.lat, event.lng]}
               icon={createIcon(event.category)}
             >
@@ -477,30 +431,30 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
                   <span className={`event-category ${event.category.toLowerCase()}`}>
                     {event.category}
                   </span>
-
+                  
                   {event.date && (
                     <div className="event-date">
                       <span className="popup-label">Date:</span> {event.date}
                       {event.time && <span> at {event.time}</span>}
                     </div>
                   )}
-
+                  
                   <p className="event-description">{event.description}</p>
-
+                  
                   {event.organizer && (
                     <div className="event-organizer">
                       <span className="popup-label">Organizer:</span> {event.organizer}
                     </div>
                   )}
-
+                  
                   {event.contact && (
                     <div className="event-contact">
                       <span className="popup-label">Contact:</span> {event.contact}
                     </div>
                   )}
-
+                  
                   <div className="event-actions">
-                    <button
+                    <button 
                       className="btn-delete"
                       onClick={() => handleDeleteEvent(event.id)}
                     >
@@ -511,15 +465,15 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
               </Popup>
             </Marker>
           ))}
-
-          <GpsButton />
+          
+          <GpsButton/>
 
           {showNearby && userLocation && (
             <NearbyPlaces userLocation={userLocation} />
           )}
         </MapContainer>
       </div>
-
+      
       {showForm && (
         <div className="event-form-overlay">
           <div className="event-form-container">
@@ -527,22 +481,22 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
             <form onSubmit={handleFormSubmit} className="event-form">
               <div className="form-group">
                 <label htmlFor="title">Event Title *</label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
+                <input 
+                  type="text" 
+                  id="title" 
+                  name="title" 
                   value={newEvent.title}
                   onChange={handleInputChange}
                   required
                   placeholder="Enter event title"
                 />
               </div>
-
+              
               <div className="form-group">
                 <label htmlFor="category">Category *</label>
-                <select
-                  id="category"
-                  name="category"
+                <select 
+                  id="category" 
+                  name="category" 
                   value={newEvent.category}
                   onChange={handleInputChange}
                   required
@@ -553,432 +507,94 @@ const MapExplorer = ({ events = [], onEventAdded, onEventDeleted, isAuthenticate
                   <option value="Volunteering">Volunteering</option>
                   <option value="Market">Market</option>
                   <option value="Art">Art</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Education">Education</option>
-                  <option value="Comedy & Shows">Comedy & Shows</option>
-                  <option value="Wellness">Wellness</option>
-                </select>
-              </div>
+                              <option value="Sports">Sports</option>
+            <option value="Education">Education</option>
+            <option value="Comedy & Shows">Comedy & Shows</option>
+            <option value="Wellness">Wellness</option>
+          </select>
+        </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="date">Date</label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={newEvent.date}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="time">Time</label>
-                  <input
-                    type="time"
-                    id="time"
-                    name="time"
-                    value={newEvent.time}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={newEvent.description}
-                  onChange={handleInputChange}
-                  placeholder="Describe your event"
-                  rows="3"
-                ></textarea>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="organizer">Organizer</label>
-                  <input
-                    type="text"
-                    id="organizer"
-                    name="organizer"
-                    value={newEvent.organizer}
-                    onChange={handleInputChange}
-                    placeholder="Event organizer"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="contact">Contact</label>
-                  <input
-                    type="text"
-                    id="contact"
-                    name="contact"
-                    value={newEvent.contact}
-                    onChange={handleInputChange}
-                    placeholder="Contact information"
-                  />
-                </div>
-              </div>
-
-              <div className="form-actions">
-                <button type="button" onClick={() => setShowForm(false)} className="btn-cancel">
-                  Cancel
-                </button>
-                <button type="submit" className="btn-submit">
-                  Add Event
-                </button>
-              </div>
-            </form>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="date">Date</label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={newEvent.date}
+              onChange={handleInputChange}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="time">Time</label>
+            <input
+              type="time"
+              id="time"
+              name="time"
+              value={newEvent.time}
+              onChange={handleInputChange}
+            />
           </div>
         </div>
-      )}
-
-      <style jsx>{`
-        .map-explorer {
-          display: flex;
-          flex-direction: column;
-          height: calc(100vh - 60px);
-          position: relative;
-        }
         
-        .map-controls {
-          background-color: var(--background);
-          padding: 1rem;
-          border-bottom: 1px solid var(--border);
-          z-index: 10;
-        }
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={newEvent.description}
+            onChange={handleInputChange}
+            placeholder="Describe your event"
+            rows="3"
+          ></textarea>
+        </div>
         
-        .search-bar {
-          display: flex;
-          gap: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .search-input {
-          flex: 1;
-          padding: 0.75rem 1rem;
-          border: 1px solid var(--border);
-          border-radius: 30px;
-          font-size: 0.95rem;
-          background-color: var(--background-alt);
-          color: var(--text);
-          transition: all 0.2s ease;
-        }
-
-        .search-input:focus {
-          outline: none;
-          border-color: var(--primary);
-          box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
-        }
-        
-        .btn-nearby {
-          display: flex;
-          align-items: center;
-          padding: 0.75rem 1.25rem;
-          background-color: var(--primary);
-          color: white;
-          border: none;
-          border-radius: 30px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .btn-nearby:hover {
-          background-color: var(--primary-dark);
-        }
-        
-        .btn-icon {
-          margin-right: 0.5rem;
-        }
-        
-        .filter-controls {
-          margin-bottom: 1rem;
-        }
-
-        .filter-title {
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-          color: var(--text);
-        }
-        
-        .filter-options {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-        
-        .filter-tag {
-          background-color: var(--category-color);
-          color: white;
-          border: none;
-          padding: 10px 18px;
-          border-radius: 30px;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          transition: transform 0.2s ease, background-color 0.3s ease;
-        }
-
-        .filter-tag:hover {
-          transform: scale(1.05);
-          filter: brightness(1.1);
-        }
-
-        .filter-tag.inactive {
-          opacity: 0.6;
-        }
-
-        .filter-tag.active {
-          opacity: 1;
-        }
-
-        .filter-icon {
-          font-size: 1.1rem;
-        }
-
-        .map-view-controls {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .view-title {
-          font-weight: 600;
-          color: var(--text);
-        }
-        
-        .view-options {
-          display: flex;
-          gap: 0.5rem;
-        }
-        
-        .view-option {
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: 1px solid var(--border);
-          background-color: var(--background-alt);
-          color: var(--text);
-          font-size: 0.9rem;
-        }
-        
-        .view-option.active {
-          background-color: var(--primary);
-          color: white;
-          border-color: var(--primary);
-        }
-        
-        .map-container {
-          z-index: 800;
-          flex: 1;
-          position: relative;
-        }
-        
-        .event-popup {
-          min-width: 200px;
-          max-width: 300px;
-        }
-        
-        .event-title {
-          margin-top: 0;
-          margin-bottom: 0.5rem;
-          font-size: 1.1rem;
-        }
-        
-        .event-category {
-          display: inline-block;
-          padding: 0.25rem 0.5rem;
-          border-radius: 12px;
-          font-size: 0.8rem;
-          font-weight: 600;
-          margin-bottom: 0.75rem;
-          color: white;
-        }
-        
-        .event-description {
-          margin-bottom: 0.75rem;
-          font-size: 0.9rem;
-        }
-        
-        .event-date,
-        .event-organizer,
-        .event-contact {
-          font-size: 0.85rem;
-          margin-bottom: 0.5rem;
-        }
-        
-        .popup-label {
-          font-weight: 600;
-        }
-        
-        .event-actions {
-          margin-top: 1rem;
-          display: flex;
-          justify-content: flex-end;
-        }
-        
-        .btn-delete {
-          padding: 0.35rem 0.75rem;
-          background-color: #ef4444;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          font-size: 0.8rem;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .btn-delete:hover {
-          background-color: #dc2626;
-        }
-        
-        .event-form-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.7);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 1000;
-          padding: 1rem;
-        }
-        
-        .event-form-container {
-          background-color: var(--background);
-          border-radius: 12px;
-          padding: 2rem;
-          width: 100%;
-          max-width: 500px;
-          max-height: 90vh;
-          overflow-y: auto;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .event-form-container h2 {
-          margin-top: 0;
-          margin-bottom: 1.5rem;
-          text-align: center;
-        }
-        
-        .event-form {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-        
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        
-        .form-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
-        
-        .event-form label {
-          font-weight: 600;
-          font-size: 0.9rem;
-        }
-        
-        .event-form input,
-        .event-form select,
-        .event-form textarea {
-          padding: 0.75rem;
-          border: 1px solid var(--border);
-          border-radius: 6px;
-          background-color: var(--background-alt);
-          color: var(--text);
-          font-size: 0.95rem;
-        }
-        
-        .event-form input:focus,
-        .event-form select:focus,
-        .event-form textarea:focus {
-          outline: none;
-          border-color: var(--primary);
-          box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
-        }
-        
-        .form-actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: 1rem;
-          margin-top: 1rem;
-        }
-        
-        .btn-cancel {
-          padding: 0.75rem 1.5rem;
-          background-color: transparent;
-          border: 1px solid var(--border);
-          border-radius: 6px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .btn-cancel:hover {
-          background-color: var(--background-alt);
-        }
-        
-        .btn-submit {
-          padding: 0.75rem 1.5rem;
-          background-color: var(--primary);
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .btn-submit:hover {
-          background-color: var(--primary-dark);
-        }
-        
-        @media (max-width: 768px) {
-          .search-bar {
-            flex-direction: column;
-          }
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="organizer">Organizer</label>
+            <input
+              type="text"
+              id="organizer"
+              name="organizer"
+              value={newEvent.organizer}
+              onChange={handleInputChange}
+              placeholder="Event organizer"
+            />
+          </div>
           
-          .form-row {
-            grid-template-columns: 1fr;
-          }
-          
-          .btn-nearby {
-            width: 100%;
-            justify-content: center;
-          }
-          
-          .map-view-controls {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-          }
-          
-          .view-options {
-            width: 100%;
-          }
-          
-          .view-option {
-            flex: 1;
-            text-align: center;
-          }
-        }
-      `}</style>
+          <div className="form-group">
+            <label htmlFor="contact">Contact</label>
+            <input
+              type="text"
+              id="contact"
+              name="contact"
+              value={newEvent.contact}
+              onChange={handleInputChange}
+              placeholder="Contact information"
+            />
+          </div>
+        </div>
+        
+        <div className="form-actions">
+          <button 
+            type="button" 
+            onClick={() => setShowForm(false)} 
+            className="btn-cancel"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            className="btn-submit"
+          >
+            Add Event
+          </button>
+        </div>
+      </form>
     </div>
-  );
-};
+  </div>
+</div>
+); };
 
 export default MapExplorer;
