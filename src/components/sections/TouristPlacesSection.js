@@ -7,6 +7,8 @@ import {
   FiCompass,
   FiMapPin,
   FiExternalLink,
+  FiNavigation,
+  FiClock,
 } from "react-icons/fi";
 import dynamic from "next/dynamic";
 import Places from "./places";
@@ -87,7 +89,7 @@ export default function TouristPlacesSection() {
           website: e.tags.website || null,
           address: e.tags["addr:street"] || null,
         }))
-        .slice(0, 20); // Increased to 20 results
+        .slice(0, 20);
 
       setAttractions(formatted);
       setStatus(
@@ -111,7 +113,6 @@ export default function TouristPlacesSection() {
 
   // Theme detection effect
   useEffect(() => {
-    // Check initial theme
     const checkTheme = () => {
       const currentTheme = document.documentElement.getAttribute("data-theme");
       setIsDarkMode(currentTheme === "dark");
@@ -119,7 +120,6 @@ export default function TouristPlacesSection() {
 
     checkTheme();
 
-    // Watch for theme changes
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (
@@ -140,7 +140,6 @@ export default function TouristPlacesSection() {
   }, []);
 
   useEffect(() => {
-    // Animate top heading on scroll
     const animateHeading = () => {
       if (!headerRef.current) return;
       const rect = headerRef.current.getBoundingClientRect();
@@ -150,9 +149,8 @@ export default function TouristPlacesSection() {
       }
     };
     window.addEventListener("scroll", animateHeading);
-    animateHeading(); // Initial check
+    animateHeading();
 
-    // Enhanced scroll-based animations with staggered effects
     const animateOnScroll = () => {
       const elementsToAnimate = [
         { selector: ".tourist-places-container", threshold: 1.3 },
@@ -168,7 +166,6 @@ export default function TouristPlacesSection() {
           const screenPosition = window.innerHeight / element.threshold;
 
           if (elementPosition < screenPosition) {
-            // Add staggered delay for list items
             const delay =
               element.selector === ".tp-list-card" ? index * 100 : 0;
             setTimeout(() => {
@@ -179,10 +176,9 @@ export default function TouristPlacesSection() {
       });
     };
 
-    // Add a small delay before adding scroll listener to ensure content is visible
     setTimeout(() => {
       window.addEventListener("scroll", animateOnScroll, { passive: true });
-      animateOnScroll(); // Run once on load
+      animateOnScroll();
     }, 200);
 
     return () => {
@@ -191,350 +187,451 @@ export default function TouristPlacesSection() {
   }, []);
 
   return (
+    <>
     <div
-      className={`main-content font-sans bg-white ${
+      className={`main-content font-sans ${
         isDarkMode ? "dark-theme" : ""
       }`}
       style={{ position: "relative" }}
     >
-      {/* Video background for header */}
       <style jsx>{`
+        /* Clean Modern Variables */
+        :root {
+          --blue-50: #eff6ff;
+          --blue-100: #dbeafe;
+          --blue-500: #3b82f6;
+          --blue-600: #2563eb;
+          --blue-700: #1d4ed8;
+          
+          --gray-50: #f8fafc;
+          --gray-100: #f1f5f9;
+          --gray-200: #e2e8f0;
+          --gray-300: #cbd5e1;
+          --gray-400: #94a3b8;
+          --gray-500: #64748b;
+          --gray-600: #475569;
+          --gray-700: #334155;
+          --gray-800: #1e293b;
+          --gray-900: #0f172a;
+        }
+
         .main-content {
           min-height: 100vh;
-          display: flex;
-          background: #f8fafc;
-          min-weight: 100vh;
-          flex-direction: column;
-          alignitems: center;
-          justifycontent: center;
+          background: var(--gray-50);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .tourist-places-container {
-          display: flex;
-          height: 100%;
-          width: 100%;
-
-          justifycontent: center;
-          alignitems: center;
-          padding: 2rem;
-          background: #f8fafc;
-          opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .tourist-places-container.animate {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .tp-sidebar {
-          height: 100%;
-          background: #ffffff;
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .list-places {
-          display: flex;
-          justify-content: center;
-          overflow-y: auto;
-          padding: 16px;
-          height: 50%;
-          width: 100%;
-          scrollbar-width: thin;
-          scrollbar-color: #e2e8f0 transparent;
-        }
-
-        .list-places::-webkit-scrollbar {
-          width: 0px;
-        }
-
-        .list-places::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        .list-places::-webkit-scrollbar-thumb {
-          background: #e2e8f0;
-          border-radius: 3px;
-        }
-
-        .list-places::-webkit-scrollbar-thumb:hover {
-          background: #cbd5e1;
-        }
-
-        .tp-list-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          justify-content: center;
-          gap: 20px;
-          width: 100%;
-          max-width: 860px; /* Adjust if needed */
-          margin: auto 150px;
-          list-style: none;
-          padding: 0;
-        }
-
-        .tp-list-card {
-          width: 100%;
-
+        /* Hero Section - Clean & Simple */
+        .hero-section {
+          position: relative;
+          height: 60vh;
+          min-height: 400px;
+          background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
           display: flex;
           align-items: center;
-          gap: 14px;
-          padding: 12px;
-          background: linear-gradient(135deg, #f8fafc 0%, #e0ecff 100%);
-          border: 1px solid #e2e8f0;
-          border-left: 4px solid #60a5fa;
-          border-radius: 12px;
-          cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          // box-shadow: 0 2px 8px rgba(96, 165, 250, 0.08);
-          box-shadow: 0 2px 8px lightblue;
-
-          position: relative;
-          overflow: hidden;
+          justify-content: center;
         }
 
-        .tp-list-card::before {
-          content: "";
+        .hero-video {
           position: absolute;
           top: 0;
           left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(
-            135deg,
-            rgba(96, 165, 250, 0.02) 0%,
-            rgba(59, 130, 246, 0.04) 100%
-          );
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .tp-list-card:hover {
-          transform: translateY(10px);
-
-          box-shadow: 0 8px 25px rgba(96, 165, 250, 0.15);
-          border-left-color: #3b82f6;
-        }
-
-        .tp-list-card:hover::before {
-          opacity: 1;
-        }
-
-        .tp-list-card.selected {
-          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-          border-left-color: #2563eb;
-          box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
-          transform: translateY(-1px);
-        }
-
-        .tp-list-card.selected::before {
-          opacity: 1;
-          background: linear-gradient(
-            135deg,
-            rgba(37, 99, 235, 0.05) 0%,
-            rgba(59, 130, 246, 0.08) 100%
-          );
-        }
-
-        .place-map-container {
-          position: relative;
-          flex: 0 0 70px;
-          width: 70px;
-          height: 70px;
-          border-radius: 10px;
-          overflow: hidden;
-          background: #f1f5f9;
-          border: 2px solid #e2e8f0;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
-        }
-
-        .tp-list-card:hover .place-map-container {
-          border-color: #60a5fa;
-          box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
-        }
-
-        .place-map-container iframe {
-          border: 0;
           width: 100%;
           height: 100%;
-          display: block;
-          border-radius: 8px;
+          object-fit: cover;
+          opacity: 0.3;
         }
 
-        .map-pin-icon {
-          position: absolute;
-          bottom: 6px;
-          right: 6px;
-          color: #2563eb;
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          padding: 0 24px;
+          max-width: 600px;
+        }
+
+        .hero-card {
           background: rgba(255, 255, 255, 0.95);
-          border-radius: 50%;
-          padding: 4px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-          backdrop-filter: blur(4px);
-          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          padding: 40px 32px;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
-        .tp-list-card:hover .map-pin-icon {
-          background: rgba(255, 255, 255, 1);
-          transform: scale(1.1);
-        }
-
-        .place-info {
-          flex: 1;
-          min-width: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .place-header {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex-wrap: wrap;
-        }
-        .btn-near-me {
-          padding: 0.5rem 1.2rem;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-        }
-
-        .place-title {
-          margin: 0;
-          font-size: 1.1rem;
+        .hero-title {
+          font-size: 2.5rem;
           font-weight: 700;
-          color: #bf5af2;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          flex: 1;
-          min-width: 0;
+          color: var(black);
+          margin-bottom: 16px;
+          line-height: 1.2;
         }
 
-        .place-type-badge {
-          color: #2563eb;
-          background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          font-size: 0.75rem;
+        .hero-subtitle {
+          color: var(--gray-600);
+          font-size: 1.125rem;
+          margin-bottom: 32px;
+          line-height: 1.6;
+        }
+
+        .hero-button {
+          background: var(black);
+          color: white;
+          border: none;
+          padding: 14px 28px;
+          border-radius: 12px;
+          font-size: 1rem;
           font-weight: 600;
-          padding: 3px 8px;
-          text-transform: capitalize;
-          white-space: nowrap;
-
-          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        .tp-list-card:hover .place-type-badge {
-          background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
-          border-color: #a5b4fc;
+        .hero-button:hover {
+          transform: translateY(-1px);
         }
 
-        .place-actions {
+        .hero-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        /* Main Container */
+        .tourist-places-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px; /* wider for breathing room */
+  margin: -40px auto 0;
+  padding: 0 20px 40px;
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.tourist-places-container.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Sidebar */
+.tp-sidebar {
+  flex: 1;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.status-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.list-places {
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.list-places::-webkit-scrollbar {
+  width: 6px;
+}
+.list-places::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.tp-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Modern Card */
+.tp-list-card {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tp-list-card:hover {
+  background: #f3f4f6;
+}
+
+.tp-list-card.selected {
+  background: #e0f2fe;
+}
+
+.place-header {
+  display: flex;
+  gap: 14px; /* more gap between map & text */
+  align-items: flex-start;
+  margin-bottom: 8px; /* space between header and meta */
+}
+
+.place-map-container {
+  width: 60px; /* slightly bigger map preview */
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.place-map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.place-info {
+  flex: 1;
+}
+
+.place-title {
+  font-size: 1.05rem; /* slightly bigger for readability */
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0; /* bottom space before meta */
+}
+
+.place-meta {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 4px; /* more space from title */
+}
+
+.directions-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* more space between icon & text */
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #2563eb;
+  text-decoration: none;
+  margin-top: 10px; /* space from meta info */
+}
+
+.directions-link:hover {
+  text-decoration: underline;
+}
+
+/* Map Area */
+.tp-map-area {
+  flex: 1;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: white;
+}
+
+        /* States - Clean & Simple */
+        .error-alert {
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          border-left: 4px solid #ef4444;
+          color: #dc2626;
+          padding: 12px 16px;
+          border-radius: 8px;
+          margin: 16px;
           display: flex;
           align-items: center;
           gap: 8px;
-          margin-top: 2px;
-        }
-
-        .directions-link {
-          color: #2563eb;
-          background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          padding: 6px 10px;
           font-size: 0.875rem;
-          display: inline-flex;
-          align-items: center;
-          text-decoration: none;
-          font-weight: 500;
-          gap: 6px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          white-space: nowrap;
         }
 
-        .directions-link:hover {
-          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-          border-color: #93c5fd;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        .loading-state,
+        .empty-state {
+          text-align: center;
+          padding: 32px 16px;
+          color: var(--gray-500);
         }
 
-        .directions-link:active {
-          transform: translateY(0);
+        .empty-state {
+          background: var(--gray-50);
+          border: 1px dashed var(--gray-300);
+          border-radius: 8px;
+          margin: 16px;
         }
 
-        /* Add map area styles */
-        .tp-map-area {
-          flex: 1;
-          min-height: 600px;
-          background: white;
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-          overflow: hidden;
-          opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-          transition-delay: 0.2s;
+        .loading-spinner {
+          color: var(--blue-500);
+          margin-bottom: 8px;
         }
 
-        .tp-map-area.animate {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        /* Responsive - Simplified */
+        @media (max-width: 768px) {
+          .hero-title {
+            font-size: 2rem;
+          }
+          
+          .hero-card {
+            padding: 24px 20px;
+          }
 
-        /* Responsive Design */
-        @media (max-width: 1200px) {
           .tourist-places-container {
             flex-direction: column;
-            align-items: center;
-            padding: 1.5rem;
+            margin-top: -20px;
+            padding: 0 16px 32px;
           }
 
           .tp-sidebar {
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 2rem;
+            flex: none;
+            max-width: none;
           }
-          .list-places {
-            width: 100%;
+
+          .tp-map-area {
+            min-height: 400px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.75rem;
+          }
+
+          .tp-list-card {
+            padding: 12px;
+          }
+
+          .place-map-container {
+            width: 50px;
+            height: 50px;
+          }
+        }
+
+        /* Dark Theme - Simplified */
+        .dark-theme .main-content {
+          background: var(--gray-900);
+        }
+
+        .dark-theme .hero-card {
+          background: rgba(30, 41, 59, 0.95);
+        }
+
+        .dark-theme .hero-title {
+          color: white;
+        }
+
+        .dark-theme .hero-subtitle {
+          color: var(--gray-300);
+        }
+
+        .dark-theme .tp-sidebar {
+          background: var(--gray-800);
+          border-color: var(--gray-700);
+        }
+
+        .dark-theme .sidebar-header {
+          background: var(--gray-700);
+          border-color: var(--gray-600);
+        }
+
+        .dark-theme .sidebar-title {
+          color: white;
+        }
+
+        .dark-theme .status-text {
+          color: var(--gray-400);
+        }
+
+        .dark-theme .tp-list-card {
+          background: var(--gray-700);
+          border-color: var(--gray-600);
+          color: white;
+        }
+
+        .dark-theme .tp-list-card:hover {
+          border-color: var(--blue-400);
+        }
+
+        .dark-theme .tp-list-card.selected {
+          background: var(--gray-600);
+          border-color: var(--blue-500);
+        }
+
+        .dark-theme .place-title {
+          color: white;
+        }
+
+        .dark-theme .place-type-badge {
+          background: var(--blue-900);
+          color: var(--blue-200);
+        }
+
+        .dark-theme .tp-map-area {
+          background: var(--gray-800);
+          border-color: var(--gray-700);
+        }
+
+        .dark-theme .empty-state {
+          background: var(--gray-800);
+          border-color: var(--gray-600);
+          color: var(--gray-400);
+        }
           }
 
           .tp-map-area {
             width: 100%;
-            max-width: 800px;
+            min-height: 500px;
           }
         }
+
         @media (max-width: 768px) {
-          .tp-sidebar {
-            max-width: 100%;
-            border-radius: 12px;
+          .hero-content {
+            padding: 80px 16px 60px;
           }
 
-          .list-places {
-            padding: 12px;
+          .hero-card {
+            padding: 32px 24px;
+            border-radius: 20px;
           }
 
-          .tp-list-grid {
-            gap: 10px;
-            width: 100%;
+          .hero-title {
+            font-size: 2.25rem;
+          }
+
+          .hero-subtitle {
+            font-size: 1.1rem;
+          }
+
+          .tourist-places-container {
+            padding: 0 16px 40px;
+            margin-top: -30px;
           }
 
           .tp-list-card {
-            padding: 10px;
+            padding: 16px;
+          }
+
+          .place-header {
             gap: 12px;
           }
 
           .place-map-container {
-            flex: 0 0 60px;
             width: 60px;
             height: 60px;
           }
@@ -542,507 +639,265 @@ export default function TouristPlacesSection() {
           .place-title {
             font-size: 1rem;
           }
-
-          .place-type-badge {
-            font-size: 0.7rem;
-            padding: 2px 6px;
-          }
-
-          .directions-link {
-            font-size: 0.8rem;
-            padding: 5px 8px;
-          }
         }
 
         @media (max-width: 480px) {
-          .tp-list-card {
+          .hero-title {
+            font-size: 2rem;
+          }
+
+          .hero-button {
+            padding: 14px 24px;
+            font-size: 1rem;
+          }
+
+          .place-header {
             flex-direction: column;
             align-items: flex-start;
-            gap: 10px;
+            gap: 12px;
           }
 
           .place-map-container {
             align-self: center;
+            width: 70px;
+            height: 70px;
           }
 
-          .place-info {
+          .place-actions {
             width: 100%;
           }
+          
 
-          .place-header {
-            justify-content: space-between;
-          }
-
-          .place-title {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
+          .directions-link {
+            flex: 1;
+            justify-content: center;
           }
         }
 
-        /* Loading and Empty States */
-        .loading-state,
-        .empty-state {
-          padding: 24px 16px;
-          text-align: center;
-          color: #64748b;
-          font-size: 0.9rem;
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-          border-radius: 12px;
-          border: 1px dashed #cbd5e1;
-          margin: 12px 0;
-        }
-
-        /* Error State Styles */
-        .error-alert {
-          background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-          border: 1px solid #fecaca;
-          border-left: 4px solid #ef4444;
-        }
-
-        /* Force dark theme CSS variables */
+        /* Dark Theme */
         .dark-theme {
-          --bg-color: #0a0a0f;
-          --text-color: #e2e8f0;
-          --text-muted: #94a3b8;
-          --card-bg: #1a1a23;
-          --border-color: rgba(99, 102, 241, 0.2);
-          --hover-bg: #22222c;
-          --shadow-color: rgba(0, 0, 0, 0.5);
+          --glass-bg: rgba(15, 23, 42, 0.8);
+          --glass-border: rgba(148, 163, 184, 0.2);
         }
 
-        /* Comprehensive Dark Theme for Tourist Places Page */
-        [data-theme="dark"] .main-content,
-        .dark-theme.main-content {
-          background: linear-gradient(
-            to bottom,
-            var(--bg-color, #0a0a0f),
-            #0f0f15
-          ) !important;
-          color: var(--text-color, #e2e8f0) !important;
+        .dark-theme .main-content {
+          background: linear-gradient(135deg, var(--neutral-900) 0%, var(--primary-900) 100%);
         }
 
-        [data-theme="dark"] .tourist-places-container,
-        .dark-theme .tourist-places-container {
-          background: linear-gradient(
-            135deg,
-            rgba(10, 10, 15, 0.95) 0%,
-            rgba(19, 19, 26, 0.98) 50%,
-            rgba(26, 26, 35, 0.95) 100%
-          ) !important;
-          border-radius: 20px;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
-            0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(99, 102, 241, 0.1) !important;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(99, 102, 241, 0.1) !important;
-        }
-
-        [data-theme="dark"] .tp-sidebar,
         .dark-theme .tp-sidebar {
-          background: linear-gradient(
-            135deg,
-            var(--card-bg, #1a1a23) 0%,
-            #16161f 100%
-          ) !important;
-          border: 1px solid var(--border-color, rgba(99, 102, 241, 0.2)) !important;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
-            inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+          background: rgba(30, 41, 59, 0.9);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(148, 163, 184, 0.2);
         }
 
-        [data-theme="dark"] .tp-list-card,
+        .dark-theme .sidebar-header {
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(30, 41, 59, 0.8));
+          border-color: rgba(148, 163, 184, 0.2);
+        }
+
+        .dark-theme .sidebar-title {
+          color: var(--neutral-100);
+        }
+
+        .dark-theme .status-text {
+          color: var(--neutral-300);
+        }
+
         .dark-theme .tp-list-card {
-          background: linear-gradient(
-            135deg,
-            #1e1e2e 0%,
-            var(--card-bg, #1a1a23) 100%
-          ) !important;
-          border: 1px solid var(--border-color, rgba(99, 102, 241, 0.15)) !important;
-          border-left: 4px solid #6366f1 !important;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4),
-            0 2px 8px rgba(99, 102, 241, 0.1) !important;
-          color: var(--text-color, #e2e8f0) !important;
+          background: rgba(30, 41, 59, 0.6);
+          border-color: rgba(148, 163, 184, 0.2);
+          color: var(--neutral-100);
         }
 
-        [data-theme="dark"] .tp-list-card:hover {
-          background: linear-gradient(
-            135deg,
-            #252538 0%,
-            var(--hover-bg, #22222c) 100%
-          );
-          border-color: rgba(99, 102, 241, 0.4);
-          border-left-color: #4f46e5;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
-            0 4px 16px rgba(99, 102, 241, 0.2);
-          transform: translateY(-2px);
+        .dark-theme .tp-list-card:hover {
+          background: rgba(30, 41, 59, 0.8);
+          border-color: var(--primary-400);
         }
 
-        [data-theme="dark"] .tp-list-card.selected {
-          background: linear-gradient(135deg, #312e81 0%, #3730a3 100%);
-          border-left-color: #4f46e5;
-          border-color: rgba(79, 70, 229, 0.5);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
-            0 4px 20px rgba(79, 70, 229, 0.4);
-          color: #c7d2fe;
+        .dark-theme .tp-list-card.selected {
+          background: rgba(59, 130, 246, 0.2);
+          border-color: var(--primary-400);
         }
 
-        [data-theme="dark"] .place-map-container {
-          background: linear-gradient(
-            135deg,
-            #1a1a23 0%,
-            var(--hover-bg, #22222c) 100%
-          );
-          border: 2px solid var(--border-color, rgba(99, 102, 241, 0.2));
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        .dark-theme .place-title {
+          color: var(--neutral-100);
         }
 
-        [data-theme="dark"] .tp-list-card:hover .place-map-container {
-          border-color: rgba(99, 102, 241, 0.4);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5),
-            0 2px 8px rgba(99, 102, 241, 0.2);
+        .dark-theme .place-type-badge {
+          background: rgba(59, 130, 246, 0.2);
+          color: var(--primary-300);
+          border-color: var(--primary-400);
         }
 
-        [data-theme="dark"] .map-pin-icon {
-          background: rgba(26, 26, 35, 0.95);
-          color: #6366f1;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        .dark-theme .place-distance {
+          color: var(--neutral-400);
         }
 
-        [data-theme="dark"] .place-title {
-          color: var(--text-color, #e2e8f0);
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        .dark-theme .tp-map-area {
+          background: rgba(30, 41, 59, 0.9);
+          border-color: rgba(148, 163, 184, 0.2);
         }
 
-        [data-theme="dark"] .place-type-badge {
-          color: #a5b4fc;
-          background: linear-gradient(
-            135deg,
-            #1a1a23 0%,
-            var(--hover-bg, #22222c) 100%
-          );
-          border: 1px solid var(--border-color, rgba(99, 102, 241, 0.2));
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        [data-theme="dark"] .tp-list-card:hover .place-type-badge {
-          background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
-          border-color: #6d28d9;
-          color: #c7d2fe;
-          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-        }
-
-        [data-theme="dark"] .directions-link {
-          color: #a5b4fc;
-          background: linear-gradient(
-            135deg,
-            #1a1a23 0%,
-            var(--hover-bg, #22222c) 100%
-          );
-          border: 1px solid var(--border-color, rgba(99, 102, 241, 0.2));
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        [data-theme="dark"] .directions-link:hover {
-          background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
-          border-color: #6d28d9;
-          color: #c7d2fe;
-          box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
-          transform: translateY(-1px);
-        }
-
-        [data-theme="dark"] .tp-map-area {
-          background: linear-gradient(
-            135deg,
-            var(--card-bg, #1a1a23) 0%,
-            #16161f 100%
-          );
-          border: 1px solid var(--border-color, rgba(99, 102, 241, 0.15));
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
-            inset 0 1px 0 rgba(255, 255, 255, 0.03);
-        }
-
-        [data-theme="dark"] .loading-state,
-        [data-theme="dark"] .empty-state,
-        .dark-theme .loading-state,
-        .dark-theme .empty-state {
-          color: var(--text-muted, #94a3b8) !important;
-          background: linear-gradient(
-            135deg,
-            #1e1e2e 0%,
-            var(--card-bg, #1a1a23) 100%
-          ) !important;
-          border: 1px dashed var(--border-color, rgba(99, 102, 241, 0.3)) !important;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-        }
-
-        /* Enhanced empty state styling */
-        [data-theme="dark"] .empty-state,
-        .dark-theme .empty-state {
-          background: linear-gradient(
-            135deg,
-            rgba(30, 30, 46, 0.8) 0%,
-            rgba(26, 26, 35, 0.9) 50%,
-            rgba(22, 22, 31, 0.8) 100%
-          ) !important;
-          border: 2px dashed rgba(99, 102, 241, 0.4) !important;
-          color: var(--text-muted, #a1a1aa) !important;
-          font-weight: 500;
-          text-align: center;
-          padding: 32px 24px !important;
-          border-radius: 16px !important;
-          position: relative;
-          overflow: hidden;
-        }
-
-        [data-theme="dark"] .empty-state::before,
-        .dark-theme .empty-state::before {
-          display: block;
-          font-size: 2.5rem;
-          margin-bottom: 12px;
-          opacity: 0.6;
-        }
-
-        [data-theme="dark"] .empty-state::after,
-        .dark-theme .empty-state::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(
-            45deg,
-            transparent 0%,
-            rgba(99, 102, 241, 0.05) 50%,
-            transparent 100%
-          );
-          pointer-events: none;
-        }
-
-        [data-theme="dark"] .error-alert {
-          background: linear-gradient(
-            135deg,
-            rgba(239, 68, 68, 0.15) 0%,
-            rgba(239, 68, 68, 0.08) 100%
-          );
-          border: 1px solid rgba(239, 68, 68, 0.4);
-          border-left: 4px solid #ef4444;
+        .dark-theme .error-alert {
+          background: rgba(239, 68, 68, 0.1);
+          border-color: rgba(239, 68, 68, 0.3);
           color: #fca5a5;
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
         }
 
-        /* Dark theme scrollbar styling */
-        [data-theme="dark"] .list-places {
-          scrollbar-width: thin;
-          scrollbar-color: var(--border-color, rgba(99, 102, 241, 0.3))
-            transparent;
-        }
-
-        [data-theme="dark"] .list-places::-webkit-scrollbar-thumb {
-          background: var(--border-color, rgba(99, 102, 241, 0.3));
-          border-radius: 6px;
-        }
-
-        [data-theme="dark"] .list-places::-webkit-scrollbar-thumb:hover {
-          background: var(--text-muted, rgba(99, 102, 241, 0.5));
-        }
-
-        /* Hero Section keeps original styling in all themes */
-
-        /* Additional dark theme focus states */
-        [data-theme="dark"] .tp-list-card:focus-within,
-        .dark-theme .tp-list-card:focus-within {
-          outline: 2px solid rgba(99, 102, 241, 0.5);
-          outline-offset: 2px;
-        }
-
-        [data-theme="dark"] .directions-link:focus,
-        .dark-theme .directions-link:focus {
-          outline: 2px solid rgba(99, 102, 241, 0.5);
-          outline-offset: 2px;
+        .dark-theme .empty-state {
+          background: rgba(30, 41, 59, 0.4);
+          border-color: rgba(148, 163, 184, 0.3);
+          color: var(--neutral-400);
         }
       `}</style>
-      <div style={{ position: "relative", width: "100%", minHeight: "390px" }}>
+      <div className="hero-section">
         <video
+          className="hero-video"
           autoPlay
           loop
           muted
           playsInline
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            zIndex: 0,
-            filter: "brightness(0.6)",
-          }}
         >
           <source
             src="https://videos.pexels.com/video-files/5243307/5243307-hd_1280_720_25fps.mp4"
             type="video/mp4"
           />
         </video>
-        {/* Overlayed header content */}
-        <div
-          ref={headerRef}
-          className="tp-heading"
-          style={{
-            maxWidth: "700px",
-            margin: "0 auto",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "56px 0 40px 0",
-            marginTop: "90px",
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(30, 41, 59, 0.82)",
-              borderRadius: 24,
-              padding: "38px 32px 32px 32px",
-              boxShadow: "0 8px 32px 0 rgba(30,41,59,0.22)",
-              textAlign: "center",
-              width: "100%",
-              maxWidth: 600,
-            }}
-          >
-            <h1
-              style={{
-                fontSize: "2.3rem",
-                fontWeight: 800,
-                color: "#fff",
-                marginBottom: 14,
-                letterSpacing: "-1px",
-                textShadow: "0 2px 12px rgba(0,0,0,0.18)",
-              }}
-            >
-              Historical Places Explorer
-            </h1>
-            <p
-              style={{
-                color: "#e0e7ef",
-                fontSize: "1.18rem",
-                marginBottom: 28,
-                textAlign: "center",
-                maxWidth: 500,
-                textShadow: "0 1px 8px rgba(0,0,0,0.13)",
-              }}
-            >
-              Find and explore historical places near you. Click on a place to
-              see it on the map.
+        <div className="hero-overlay"></div>
+        <div className="hero-content" ref={headerRef}>
+          <div className="hero-card">
+            <h1 className="hero-title">Historical Places Explorer</h1>
+            <p className="hero-subtitle">
+              Discover fascinating historical landmarks and cultural sites near you.
+              Explore centuries of history right in your neighborhood.
             </p>
             <button
               onClick={handleFindAttractions}
               disabled={loading}
-              className="btn-near-me w-full bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-blue-700 disabled:bg-slate-400"
-              style={{
-                marginBottom: 0,
-                maxWidth: 260,
-                boxShadow: "0 2px 12px 0 rgba(56,189,248,0.13)",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
+              className="hero-button"
             >
-              {loading ? <FiLoader className="animate-spin" /> : <FiCompass />}
-              <span>{loading ? "Searching..." : "Find Places Near Me"}</span>
+              {loading ? (
+                <>
+                  <FiLoader className="animate-spin" size={20} />
+                  <span>Searching...</span>
+                </>
+              ) : (
+                <>
+                  <FiCompass size={20} />
+                  <span>Find Places Near Me</span>
+                </>
+              )}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Main Content */}
       <div className="tourist-places-container">
         {/* Sidebar */}
-        <aside className="tp-sidebar">
+        <div className="tp-sidebar">
+          <div className="sidebar-header">
+            <h2 className="sidebar-title">
+              <FiNavigation /> Nearby Places
+            </h2>
+            <p className="status-text">{status}</p>
+          </div>
+
           {error && (
-            <div className="p-3 mb-3 bg-red-100 text-red-700 text-sm flex items-center gap-2 rounded error-alert">
-              <FiAlertCircle />
+            <div className="error-alert">
+              <FiAlertCircle size={20} />
               <span>{error}</span>
             </div>
           )}
 
           <div className="list-places">
             {loading && attractions.length === 0 && (
-              <div className="loading-state">Loading nearby places...</div>
+              <div className="loading-state">
+                <FiLoader className="loading-spinner animate-spin" size={32} />
+                <p>Discovering historical places near you...</p>
+              </div>
             )}
+
             {!loading && attractions.length === 0 && !error && (
-              <div className="empty-state">No places found. Try searching!</div>
+              <div className="empty-state">
+                <FiMapPin
+                  size={48}
+                  style={{
+                    margin: "0 auto 16px",
+                    display: "block",
+                    color: "var(--neutral-400)"
+                  }}
+                />
+                <p><strong>No places found yet</strong></p>
+                <p>Click the search button above to find historical places near your location.</p>
+              </div>
             )}
 
             <ul className="tp-list-grid">
-              {attractions.map((place) => (
+              {attractions.map((place, index) => (
                 <li key={place.id}>
                   <div
                     className={`tp-list-card${
                       selectedPlace?.id === place.id ? " selected" : ""
                     }`}
                     onClick={() => setSelectedPlace(place)}
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="place-map-container">
-                      <iframe
-                        title={place.name}
-                        width="70"
-                        height="70"
-                        frameBorder="0"
-                        src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-                          place.position[1] - 0.005
-                        }%2C${place.position[0] - 0.005}%2C${
-                          place.position[1] + 0.005
-                        }%2C${place.position[0] + 0.005}&layer=mapnik&marker=${
-                          place.position[0]
-                        }%2C${place.position[1]}`}
-                        allowFullScreen=""
-                        loading="lazy"
-                      />
-                      <span className="map-pin-icon">
-                        <FiMapPin size={18} />
-                      </span>
-                    </div>
-                    <div className="place-info">
-                      <div className="place-header">
-                        <h3 className="place-title">{place.name}</h3>
-                        <span className="place-type-badge">
-                          {place.type.replace(/_/g, " ")}
+                    <div className="place-header">
+                      <div className="place-map-container">
+                        <iframe
+                          title={place.name}
+                          width="80"
+                          height="80"
+                          frameBorder="0"
+                          src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+                            place.position[1] - 0.005
+                          }%2C${place.position[0] - 0.005}%2C${
+                            place.position[1] + 0.005
+                          }%2C${place.position[0] + 0.005}&layer=mapnik&marker=${
+                            place.position[0]
+                          }%2C${place.position[1]}`}
+                          allowFullScreen=""
+                          loading="lazy"
+                        />
+                        <span className="map-pin-icon">
+                          <FiMapPin size={16} />
                         </span>
                       </div>
-                      <div className="place-actions">
-                        <a
-                          className="directions-link"
-                          href={`https://www.google.com/maps/search/?api=1&query=${place.position[0]},${place.position[1]}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <FiExternalLink size={15} />
-                          Directions
-                        </a>
+
+                      <div className="place-info">
+                        <h3 className="place-title">{place.name}</h3>
+                        <div className="place-meta">
+                          <span className="place-type-badge">
+                            {place.type.replace(/_/g, " ")}
+                          </span>
+                          <span className="place-distance">
+                             ◦ Historic Site
+                          </span>
+                        </div>
                       </div>
+                    </div>
+
+                    <div className="place-actions">
+                      <a
+                        className="directions-link"
+                        href={`https://www.google.com/maps/search/?api=1&query=${place.position[0]},${place.position[1]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FiExternalLink size={16} />
+                        Get Directions
+                      </a>
                     </div>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
-        </aside>
-
-        <div className="tp-map-area">
-          <TouristPlacesMap
-            attractions={attractions}
-            userLocation={userLocation}
-            selectedPlace={selectedPlace}
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-          />
         </div>
       </div>
     </div>
+    </>
   );
 }
