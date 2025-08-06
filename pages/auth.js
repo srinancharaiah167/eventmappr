@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "firebaseConfig"; 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -43,7 +44,18 @@ export default function AuthPage() {
       [name]: value
     }));
   };
+const handleGoogleSignIn = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log("User Info:", user);
 
+    // Optional: redirect user after sign-in
+    router.push("/dashboard");
+  } catch (error) {
+    console.error("Google Sign-In Error", error);
+  }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -254,13 +266,7 @@ export default function AuthPage() {
               <button 
                 type="button" 
                 className="social-button google"
-                onClick={() => {
-                  if (firebaseLoaded) {
-                    const provider = new window.firebase.auth.GoogleAuthProvider();
-                    window.firebase.auth().signInWithPopup(provider);
-                  }
-                }}
-                disabled={!firebaseLoaded}
+          onClick={handleGoogleSignIn}
               >
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/>
