@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 import HeroSection from '../components/sections/HeroSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
 import FAQSection from '../components/sections/FAQSection';
@@ -24,8 +24,8 @@ export default function Home() {
   if (loading)
     return (
       <div style={{
-        minHeight: '100vh', 
-        width: '100vw', 
+        minHeight: '100vh',
+        width: '100vw',
         background: 'var(--background, #ffffff)',
         position: 'fixed',
         top: 0,
@@ -47,14 +47,14 @@ export default function Home() {
       </Head>
 
       <HeroSection data-aos="fade-up" data-aos-delay="200" />
-      
+
       <FeaturesSection data-aos="fade-up" data-aos-delay="400" />
-      
+
       <section className="how-it-works" data-aos="fade-up" data-aos-delay="600">
         <div className="container">
           <h2 className="section-title" data-aos="fade-up">How It Works</h2>
           <p className="section-subtitle" data-aos="fade-up" data-aos-delay="200">EventMappr makes it easy to discover and share local events in just a few steps</p>
-          
+
           <div className="steps-container" data-aos="fade-up" data-aos-delay="400">
             <div className="step">
               <div className="step-number">
@@ -63,7 +63,7 @@ export default function Home() {
               <h3>Explore the Map</h3>
               <p>Browse our interactive map to discover events happening near you. Filter by category to find exactly what you're looking for.</p>
             </div>
-            
+
             <div className="step">
               <div className="step-number">
                 <span>2</span>
@@ -71,7 +71,7 @@ export default function Home() {
               <h3>Add an Event</h3>
               <p>Hosting something? Simply click on the map to add your event details. Share with the community in seconds.</p>
             </div>
-            
+
             <div className="step">
               <div className="step-number">
                 <span>3</span>
@@ -82,9 +82,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
       <FAQSection />
-      
+
       <style jsx>{`
         .how-it-works {
           padding: 8rem 0 5rem;
