@@ -16,6 +16,29 @@ export default function MapPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Animation on scroll
+    const animateOnScroll = () => {
+      const elements = document.querySelectorAll('.map-header, .map-container, .categories-list');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+        
+        if (elementPosition < screenPosition) {
+          element.classList.add('animate');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll(); // Run once on load
+    
+    return () => {
+      window.removeEventListener('scroll', animateOnScroll);
+    };
+  }, []);
+
+  useEffect(() => {
     // Initialize Firebase first
     const app = initializeFirebase();
     
@@ -100,7 +123,10 @@ export default function MapPage() {
         .map-page {
           display: flex;
           flex-direction: column;
-          min-height: calc(100vh - 60px);
+          min-height: 100vh;
+          position: relative;
+          z-index: 0;
+          padding-top: 60px; /* Add padding for navbar height */
         }
         
         .map-header {
@@ -108,6 +134,16 @@ export default function MapPage() {
           background: linear-gradient(135deg, var(--primary-light), var(--primary));
           text-align: center;
           color: white;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+          position: relative;
+          z-index: 2;
+        }
+        
+        .map-header.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .map-header h1 {
@@ -122,12 +158,67 @@ export default function MapPage() {
           opacity: 0.9;
         }
         
+        .categories-container {
+          position: sticky;
+          top: 60px;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          padding: 0.5rem 0;
+          z-index: 1;
+        }
+
+        .categories-list {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .categories-list.animate {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .category-item {
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          background: var(--slate);
+          color: white;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-item:hover {
+          background: var(--midnight-blue);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
         .map-container {
           flex: 1;
           width: 100%;
-          height: calc(100vh - 180px);
+          height: calc(100vh - 120px);
           min-height: 500px;
           position: relative;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s ease;
+          z-index: 0;
+          margin-top: 1rem;
+        }
+        
+        .map-container.animate {
+          opacity: 1;
+          transform: translateY(0);
         }
         
         .map-loading {
@@ -138,7 +229,7 @@ export default function MapPage() {
           font-size: 1.2rem;
           color: var(--text-light);
         }
-        
+
         @media (max-width: 768px) {
           .map-header {
             padding: 1.5rem 0;
@@ -150,6 +241,10 @@ export default function MapPage() {
           
           .map-container {
             height: calc(100vh - 150px);
+          }
+          
+          .categories-list {
+            padding: 0.5rem;
           }
         }
       `}</style>

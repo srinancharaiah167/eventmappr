@@ -1,15 +1,26 @@
 import '../styles/globals.css';
+import 'aos/dist/aos.css';
 import { useEffect, useState } from 'react';
 import { initializeFirebase } from '../utils/firebase';
+import AOS from 'aos'; // Import the AOS library
 import Layout from '../components/layout/Layout';
+
+import Cursor from '../components/Cursor';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false);
 
-  // Initialize Firebase on app load
   useEffect(() => {
     setMounted(true);
     initializeFirebase();
+
+    // Initialize AOS here
+    AOS.init({
+      once: false, // This is key! Ensures animations re-run every time they enter the viewport
+      duration: 800, // Animation duration
+      offset: 50,    // Offset (in px) from the bottom of the window
+    });
     
     // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
@@ -35,13 +46,18 @@ function MyApp({ Component, pageProps }) {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // Next.js already handles routing, so we'll use our router utilities
-  // instead of wrapping with BrowserRouter
   return (
+  <>
+    <Head>
+      <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    </Head>
     <Layout>
       <Component {...pageProps} />
+      <Cursor/>
     </Layout>
-  );
+  </>
+);
+
 }
 
-export default MyApp; 
+export default MyApp;

@@ -1,4 +1,8 @@
+
 /* Reset and base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 * {
   margin: 0;
   padding: 0;
@@ -20,6 +24,9 @@
   --text: #333333;
   --text-light: #666666;
   --background: #ffffff;
+  --contrast1: #96beeefd;
+  --contrast2: #d5e9ffc1;
+  --contrast3: #e9f3faff;
   --background-alt: #f5f7fa;
   --border: #e0e0e0;
   --shadow: rgba(0, 0, 0, 0.1);
@@ -49,6 +56,9 @@
   --text: #f0f0f0;
   --text-light: #b0b0b0;
   --background: #121212;
+  --contrast1: #121212;
+  --contrast2: #121212;
+  --contrast3: #121212;
   --background-alt: #1e1e2e;
   --border: #2a2a3a;
   --shadow: rgba(0, 0, 0, 0.3);
@@ -263,8 +273,8 @@ img {
 }
 
 /* Form elements */
-input, 
-textarea, 
+input,
+textarea,
 select {
   width: 100%;
   padding: 0.75rem;
@@ -272,6 +282,9 @@ select {
   border-radius: 4px;
   font-family: inherit;
   font-size: 1rem;
+  color: var(--text);
+  background-color: var(--background);
+  caret-color: var(--text);
   transition: border-color 0.2s ease;
 }
 
@@ -521,6 +534,7 @@ label {
   font-size: 1rem;
   background-color: var(--background);
   color: var(--text);
+  caret-color: var(--text);
   transition: border-color 0.2s ease;
 }
 
@@ -568,37 +582,56 @@ label {
   }
 } 
 
-        .gps-button-div{
-            position: absolute;
-            right: 20px;
-            bottom: 35px;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.gps-button-div{
+    position: absolute;
+    right: 20px;
+    bottom: 35px;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        .gps-button{
-            height: 50px;
-            width: 50px;
-            border-radius: 50%;
-            background-color: white;
-            border-color: rgb(204, 204, 204);
-            border-style: solid;
-            color: black;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+.gps-button{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: var(--background);
+    border-color: var(--border);
+    border-style: solid;
+    color: var(--text);
+    cursor: pointer;
+    caret-color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 6px var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-        .gps-button:hover {
-          transform: scale(1.1);
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
+.gps-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px var(--shadow);
+}
 
-        .gps-icon{
-            width: 80%;
-        }
+.gps-icon{
+    width: 80%;
+    color: var(--text);
+    fill: var(--text);
+}
+input, 
+textarea, 
+select {
+  color: var(--text);
+  background-color: var(--background);
+  caret-color: var(--text);
+}
+
+.form-input {
+  background-color: var(--background);
+  color: var(--text);
+  caret-color: var(--text);
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

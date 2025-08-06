@@ -1,9 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ROUTES } from '../../utils/routes';
+import AOS from 'aos';
+import { initAOS } from '../../utils/aos-config';
 
 const HeroSection = () => {
+  const [typedText, setTypedText] = useState('');
+  const headingText = "Discover Local Events on the Map";
+  const typingSpeed = 70; // Adjust typing speed in milliseconds
+
+  useEffect(() => {
+    // 1. Initialize the AOS library for fade-in animations
+    initAOS();
+
+    // 2. Animate the number stats
+    const animateNumbers = () => {
+      const statElements = document.querySelectorAll('.stat-value');
+
+      statElements.forEach(el => {
+        const target = parseInt(el.getAttribute('data-target'));
+        let currentCount = 0;
+        const duration = 2000;
+        const increment = target / (duration / 10);
+
+        const counter = setInterval(() => {
+          currentCount += increment;
+          if (currentCount >= target) {
+            clearInterval(counter);
+            currentCount = target;
+          }
+
+          const formattedCount = Math.floor(currentCount).toLocaleString() + '+';
+          el.textContent = formattedCount;
+        }, 10);
+      });
+    };
+
+    // 3. The typing animation for the heading
+    let charIndex = 0;
+    const type = () => {
+      if (charIndex <= headingText.length) {
+        setTypedText(headingText.substring(0, charIndex));
+        charIndex++;
+        setTimeout(type, typingSpeed);
+      }
+    };
+    
+    // Start the typing and number animation after a slight delay
+    const animationTimeout = setTimeout(() => {
+      type();
+      animateNumbers();
+    }, 500);
+
+    // Cleanup function to clear timeouts
+    return () => {
+      clearTimeout(animationTimeout);
+      // You may also want to clear intervals from the number animation if the component unmounts early
+    };
+
+  }, []); // The empty dependency array ensures this runs only once on mount
+
   return (
     <section className="hero-section">
       <div className="hero-background">
@@ -14,35 +71,35 @@ const HeroSection = () => {
       
       <div className="container hero-container">
         <div className="hero-content">
-          <h1 className="hero-title">Discover Local Events on the Map</h1>
-          <p className="hero-subtitle">
+          <h1 className="hero-title">{typedText}</h1>
+          <p className="hero-subtitle" data-aos="fade-up" data-aos-delay="400">
             Find and share community events happening around you. 
             Connect with people who share your interests and never miss out on what's happening nearby.
           </p>
-          <div className="hero-buttons">
-            <Link href={ROUTES.MAP} legacyBehavior>
-              <a className="glass-btn primary-glass">
+          <div className="hero-buttons" data-aos="fade-up" data-aos-delay="600">
+            <Link href={ROUTES.MAP}>
+              <span className="glass-btn primary-glass">
                 <span className="btn-text">Explore Map</span>
-              </a>
+              </span>
             </Link>
-            <Link href={ROUTES.ABOUT} legacyBehavior>
-              <a className="glass-btn secondary-glass">
+            <Link href={ROUTES.ABOUT}>
+              <span className="glass-btn secondary-glass">
                 <span className="btn-text">Learn More</span>
-              </a>
+              </span>
             </Link>
           </div>
           
-          <div className="hero-stats">
+          <div className="hero-stats" data-aos="fade-up" data-aos-delay="800">
             <div className="stat-item">
-              <span className="stat-value" data-target="500">500+</span>
+              <span className="stat-value" data-target="500">0+</span>
               <span className="stat-label">Events</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value" data-target="10000">10,000+</span>
+              <span className="stat-value" data-target="10000">0+</span>
               <span className="stat-label">Users</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value" data-target="50">50+</span>
+              <span className="stat-value" data-target="50">0+</span>
               <span className="stat-label">Cities</span>
             </div>
           </div>
@@ -60,7 +117,7 @@ const HeroSection = () => {
             />
             <div className="floating-event">
               <div className="event-pin"></div>
-              <div className="event-card">
+              <div className="event-card event-card-primary">
                 <div className="event-title">Community Event</div>
                 <div className="event-details">Today • 6:00 PM</div>
               </div>
@@ -151,17 +208,21 @@ const HeroSection = () => {
           transform: none !important;
         }
         
+        /* The blinking cursor effect */
         .hero-title::after {
-          content: '';
-          position: absolute;
-          bottom: -10px;
-          left: 0;
-          width: 80px;
-          height: 4px;
-          background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-          border-radius: 2px;
+          content: '|';
+          font-family: monospace;
+          animation: blink-caret 0.75s step-end infinite;
+          font-size: 1.2em;
+          margin-left: 5px;
+          color: var(--primary);
         }
         
+        /* This hides the cursor when the text is complete */
+        .hero-title.typing-done::after {
+          content: none;
+        }
+
         .hero-subtitle {
           font-size: 1.2rem;
           line-height: 1.6;
@@ -201,9 +262,9 @@ const HeroSection = () => {
         }
         
         .primary-glass {
-          background: rgba(var(--primary-rgb), 0.7);
+          background: rgba(var(--primary-rgb), 1);
           color: white;
-          box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.3);
+          box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.15);
         }
         
         .secondary-glass {
@@ -369,57 +430,68 @@ const HeroSection = () => {
           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
           min-width: 150px;
           transform: translateY(5px);
+          
         }
         
         .event-title {
           font-weight: 600;
           font-size: 0.9rem;
           margin-bottom: 3px;
-          color: var(--text);
+          color: black;
         }
         
         .event-details {
           font-size: 0.75rem;
-          color: var(--text-light);
+          color: red;
+        }
+        
+        .event-card-primary {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: #fff;
+          border-radius: 1.2rem;
+          font-weight: 700;
+          text-align: center;
+          padding: 1.1rem 1.7rem;
+          box-shadow: 0 4px 16px rgba(44, 62, 80, 0.10);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-width: 180px;
+        }
+        .event-card-primary .event-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #fff;
+          margin-bottom: 0.2rem;
+        }
+        .event-card-primary .event-details {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #fff;
+        }
+        
+        @keyframes blink-caret {
+          from, to { color: transparent; }
+          50% { color: var(--primary); }
         }
         
         @keyframes floatEvent {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-15px);
-          }
-          100% {
-            transform: translateY(0);
-          }
+          0% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+          100% { transform: translateY(0); }
         }
         
         @keyframes pulse {
-          0% {
-            opacity: 0.6;
-            transform: translate(-50%, -50%) scale(0.8);
-          }
-          50% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.5);
-          }
-          100% {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.8);
-          }
+          0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.8); }
+          50% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
         }
         
         @keyframes float {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-          100% {
-            transform: translateY(0);
-          }
+          0% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0); }
         }
         
         @media (max-width: 992px) {

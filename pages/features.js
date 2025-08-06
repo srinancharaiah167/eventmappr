@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import Layout from '../components/layout/Layout';
 import FeaturesSection from '../components/sections/FeaturesSection';
 import Link from 'next/link';
+import AOS from 'aos';
+import { initAOS } from '../utils/aos-config';
 
 const FeaturesPage = () => {
+  useEffect(() => {
+    initAOS();
+  }, []);
+
   return (
     <>
       <Head>
@@ -14,51 +20,51 @@ const FeaturesPage = () => {
       
       <Layout>
         <div className="features-page">
-          <div className="features-header">
+          <div className="features-header" data-aos="fade-up">
             <div className="container">
-              <h1>EventMappr Features</h1>
-              <p>Discover the tools that make finding and sharing local events easier than ever</p>
+              <h1 data-aos="fade-up" data-aos-delay="200">EventMappr Features</h1>
+              <p data-aos="fade-up" data-aos-delay="400">Discover the tools that make finding and sharing local events easier than ever</p>
             </div>
           </div>
           
           <div className="container">
-            <FeaturesSection />
+            <FeaturesSection data-aos="fade-up" data-aos-delay="600" />
             
             <div className="additional-features">
               <h2>More Powerful Features</h2>
               
-              <div className="features-grid">
-                <div className="feature-card">
+              <div className="features-grid" data-aos="fade-up">
+                <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="feature-icon">🔍</div>
                   <h3>Advanced Search</h3>
                   <p>Find events by location, date, category, or keywords to discover exactly what you're looking for.</p>
                 </div>
                 
-                <div className="feature-card">
+                <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="feature-icon">📱</div>
                   <h3>Mobile Optimized</h3>
                   <p>Access EventMappr on any device with our responsive design that works seamlessly on desktop and mobile.</p>
                 </div>
                 
-                <div className="feature-card">
+                <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="feature-icon">🔔</div>
                   <h3>Event Notifications</h3>
                   <p>Get notified about upcoming events that match your interests so you never miss out.</p>
                 </div>
                 
-                <div className="feature-card">
+                <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="feature-icon">👥</div>
                   <h3>Community Building</h3>
                   <p>Connect with like-minded individuals in your area who share your interests and passions.</p>
                 </div>
                 
-                <div className="feature-card">
+                <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="feature-icon">📊</div>
                   <h3>Event Analytics</h3>
                   <p>Track attendance and engagement for events you create to improve future gatherings.</p>
                 </div>
                 
-                <div className="feature-card">
+                <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="feature-icon">🔄</div>
                   <h3>Recurring Events</h3>
                   <p>Easily set up and manage recurring events without having to recreate them each time.</p>

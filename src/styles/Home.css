@@ -58,15 +58,19 @@ section {
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 2.5rem;
-    background-color: rgba(15, 23, 42, 0.95); /* Semi-transparent midnight-blue */
+
+    background-color: rgba(15, 23, 42, 0.4); 
     color: var(--light-bg);
     position: sticky;
     top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1000;
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0 0 12px 12px;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .logo {

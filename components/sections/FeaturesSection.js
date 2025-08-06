@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import { initAOS } from '../../utils/aos-config';
 
 const FeaturesSection = () => {
+  useEffect(() => {
+    initAOS();
+  }, []);
   const features = [
     {
       icon: '🗺️',
@@ -37,15 +42,17 @@ const FeaturesSection = () => {
   return (
     <section id="features" className="features-section">
       <div className="container">
-        <h2 className="section-title">Features</h2>
-        <p className="section-subtitle">
+        <h2 className="section-title" data-aos="fade-up">Features</h2>
+        <p className="section-subtitle" data-aos="fade-up" data-aos-delay="200">
           Discover what makes EventMappr the perfect platform for your local events
         </p>
-        <div className="features-grid">
+        <div className="features-grid" data-aos="fade-up" data-aos-delay="400">
           {features.map((feature, index) => (
             <div 
               className="feature-card" 
               key={index}
+              data-aos="fade-up"
+              data-aos-delay={`${index * 200 + 600}`}
             >
               <div className="feature-icon-wrapper">
                 <div className="feature-icon">{feature.icon}</div>
@@ -62,7 +69,7 @@ const FeaturesSection = () => {
           padding: 8rem 0 5rem;
           position: relative;
           overflow: visible;
-          background-color: var(--background);
+background: linear-gradient(to right, var(--contrast1), var(--contrast2), var(--contrast3));
           z-index: 1;
         }
         
