@@ -1,45 +1,31 @@
-import e,{useState as t}from"react";import a from"next/head";import r from"../components/layout/Layout";import o from"../components/sections/FAQSection";let FAQPage=()=><>
+import React, { useState } from 'react';
+import Head from 'next/head';
+import Layout from '../components/layout/Layout';
+import FAQSection from '../components/sections/FAQSection';
 
-      <a >
-
-        <title >Frequently Asked Questions | EventMappr</title>
-
-        <meta name="description"content="Find answers to common questions about EventMappr - the community event discovery platform."/>
-
-      </a>
-
+const FAQPage = () => {
+  return (
+    <>
+      <Head>
+        <title>Frequently Asked Questions | EventMappr</title>
+        <meta name="description" content="Find answers to common questions about EventMappr - the community event discovery platform." />
+      </Head>
       
-
-      <r >
-
+      <Layout>
         <div className="faq-page">
-
           <div className="faq-header">
-
             <div className="container">
-
-              <h1 >Frequently Asked Questions</h1>
-
-              <p >Find answers to the most common questions about using EventMappr</p>
-
+              <h1>Frequently Asked Questions</h1>
+              <p>Find answers to the most common questions about using EventMappr</p>
             </div>
-
           </div>
-
           
-
           <div className="container">
-
-            <o />
-
+            <FAQSection />
           </div>
-
         </div>
-
-      </r>
-
+      </Layout>
       
-
       <style jsx>{`
         .faq-page {
           min-height: 100vh;
@@ -75,5 +61,8 @@ import e,{useState as t}from"react";import a from"next/head";import r from"../co
           }
         }
       `}</style>
+    </>
+  );
+};
 
-    </>;export default FAQPage;
+export default FAQPage; 

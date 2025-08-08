@@ -1,173 +1,132 @@
-import e from"react";import t from"next/head";import r from"../components/layout/Layout";import a from"next/image";import o from"next/link";let HowItWorksPage=()=>{let e=[{id:1,title:"Discover Events",description:"Browse the interactive map to find events happening in your area. Filter by categories to find events that match your interests.",icon:"\uD83D\uDDFA️"},{id:2,title:"Create an Account",description:"Sign up for a free account to add your own events and save your favorites for later.",icon:"\uD83D\uDC64"},{id:3,title:"Add Your Events",description:"Click on the map to add your own events. Include all the details to help others discover what you're organizing.",icon:"\uD83D\uDCCC"},{id:4,title:"Connect with Others",description:"Attend events, meet new people, and build your community network. Share events with friends to grow attendance.",icon:"\uD83E\uDD1D"}];return<>
+import React from 'react';
+import Head from 'next/head';
+import Layout from '../components/layout/Layout';
+import Image from 'next/image';
+import Link from 'next/link';
 
-      <t >
+const HowItWorksPage = () => {
+  const steps = [
+    {
+      id: 1,
+      title: 'Discover Events',
+      description: 'Browse the interactive map to find events happening in your area. Filter by categories to find events that match your interests.',
+      icon: '🗺️'
+    },
+    {
+      id: 2,
+      title: 'Create an Account',
+      description: 'Sign up for a free account to add your own events and save your favorites for later.',
+      icon: '👤'
+    },
+    {
+      id: 3,
+      title: 'Add Your Events',
+      description: 'Click on the map to add your own events. Include all the details to help others discover what you\'re organizing.',
+      icon: '📌'
+    },
+    {
+      id: 4,
+      title: 'Connect with Others',
+      description: 'Attend events, meet new people, and build your community network. Share events with friends to grow attendance.',
+      icon: '🤝'
+    }
+  ];
 
-        <title >How It Works | EventMappr</title>
-
-        <meta name="description"content="Learn how to use EventMappr to discover and share local events in your community."/>
-
-      </t>
-
+  return (
+    <>
+      <Head>
+        <title>How It Works | EventMappr</title>
+        <meta name="description" content="Learn how to use EventMappr to discover and share local events in your community." />
+      </Head>
       
-
-      <r >
-
+      <Layout>
         <div className="how-it-works-page">
-
           <div className="how-it-works-header">
-
             <div className="container">
-
-              <h1 >How EventMappr Works</h1>
-
-              <p >Your guide to discovering and sharing local events</p>
-
+              <h1>How EventMappr Works</h1>
+              <p>Your guide to discovering and sharing local events</p>
             </div>
-
           </div>
-
           
-
           <div className="container">
-
             <div className="steps-container">
-
-              {e.map(e=><div className="step-card"key={e.id}>
-
-                  <div className="step-icon">{e.icon}</div>
-
-                  <div className="step-number">Step {e.id}</div>
-
-                  <h3 className="step-title">{e.title}</h3>
-
-                  <p className="step-description">{e.description}</p>
-
-                </div>)}
-
-            </div>
-
-            
-
-            <div className="features-overview">
-
-              <div className="features-content">
-
-                <h2 >Powerful Features</h2>
-
-                <p >EventMappr makes it easy to discover and share events in your community with these powerful features:</p>
-
-                
-
-                <ul className="features-list">
-
-                  <li >
-
-                    <span className="feature-icon">🌍</span>
-
-                    <div className="feature-text">
-
-                      <h4 >Interactive Map</h4>
-
-                      <p >Visualize events happening around you with our easy-to-use map interface.</p>
-
-                    </div>
-
-                  </li>
-
-                  <li >
-
-                    <span className="feature-icon">🔍</span>
-
-                    <div className="feature-text">
-
-                      <h4 >Advanced Filtering</h4>
-
-                      <p >Find exactly what you're looking for with category and date filters.</p>
-
-                    </div>
-
-                  </li>
-
-                  <li >
-
-                    <span className="feature-icon">📱</span>
-
-                    <div className="feature-text">
-
-                      <h4 >Mobile Friendly</h4>
-
-                      <p >Access EventMappr on any device, anywhere, anytime.</p>
-
-                    </div>
-
-                  </li>
-
-                  <li >
-
-                    <span className="feature-icon">🔔</span>
-
-                    <div className="feature-text">
-
-                      <h4 >Event Notifications</h4>
-
-                      <p >Get notified about upcoming events that match your interests.</p>
-
-                    </div>
-
-                  </li>
-
-                </ul>
-
-              </div>
-
-              
-
-              <div className="features-image">
-
-                <div className="image-wrapper">
-
-                  <a src="/images/gps.png"alt="EventMappr interface showing map with event pins"width={500}height={400}className="feature-img"style={{width:"auto"}}/>
-
+              {steps.map((step) => (
+                <div className="step-card" key={step.id}>
+                  <div className="step-icon">{step.icon}</div>
+                  <div className="step-number">Step {step.id}</div>
+                  <h3 className="step-title">{step.title}</h3>
+                  <p className="step-description">{step.description}</p>
                 </div>
-
-              </div>
-
+              ))}
             </div>
-
             
-
-            <div className="cta-section">
-
-              <h2 >Ready to Get Started?</h2>
-
-              <p >Join thousands of users who are already discovering and sharing events in their communities.</p>
-
-              <div className="cta-buttons">
-
-                <o href="/explore">
-
-                  <span className="cta-btn primary-btn">Explore the Map</span>
-
-                </o>
-
-                <o href="/auth">
-
-                  <span className="cta-btn secondary-btn">Create Account</span>
-
-                </o>
-
+            <div className="features-overview">
+              <div className="features-content">
+                <h2>Powerful Features</h2>
+                <p>EventMappr makes it easy to discover and share events in your community with these powerful features:</p>
+                
+                <ul className="features-list">
+                  <li>
+                    <span className="feature-icon">🌍</span>
+                    <div className="feature-text">
+                      <h4>Interactive Map</h4>
+                      <p>Visualize events happening around you with our easy-to-use map interface.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="feature-icon">🔍</span>
+                    <div className="feature-text">
+                      <h4>Advanced Filtering</h4>
+                      <p>Find exactly what you're looking for with category and date filters.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="feature-icon">📱</span>
+                    <div className="feature-text">
+                      <h4>Mobile Friendly</h4>
+                      <p>Access EventMappr on any device, anywhere, anytime.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="feature-icon">🔔</span>
+                    <div className="feature-text">
+                      <h4>Event Notifications</h4>
+                      <p>Get notified about upcoming events that match your interests.</p>
+                    </div>
+                  </li>
+                </ul>
               </div>
-
+              
+              <div className="features-image">
+                <div className="image-wrapper">
+                  <Image 
+                    src="/images/gps.png" 
+                    alt="EventMappr interface showing map with event pins" 
+                    width={500} 
+                    height={400}
+                    className="feature-img"
+                    style={{ width: "auto" }}
+                  />
+                </div>
+              </div>
             </div>
-
+            
+            <div className="cta-section">
+              <h2>Ready to Get Started?</h2>
+              <p>Join thousands of users who are already discovering and sharing events in their communities.</p>
+              <div className="cta-buttons">
+                <Link href="/explore">
+                  <span className="cta-btn primary-btn">Explore the Map</span>
+                </Link>
+                <Link href="/auth">
+                  <span className="cta-btn secondary-btn">Create Account</span>
+                </Link>
+              </div>
+            </div>
           </div>
-
         </div>
-
-      </r>
-
+      </Layout>
       
-
       <style jsx>{`
         .how-it-works-page {
           min-height: 100vh;
@@ -409,5 +368,8 @@ import e from"react";import t from"next/head";import r from"../components/layout
           }
         }
       `}</style>
+    </>
+  );
+};
 
-    </>};export default HowItWorksPage;
+export default HowItWorksPage; 

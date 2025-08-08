@@ -1,7 +1,12 @@
-import e,{useEffect as o,useState as t}from"react";import r from"next/head";import a from"aos";import"aos/dist/aos.css";let Button=({children:e,onClick:o,type:t="submit",className:r=""})=><button type={t}onClick={o}className={`btn ${r}`}>
+import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-    {e}
-
+// Reusable Button Component for better modularity
+const Button = ({ children, onClick, type = 'submit', className = '' }) => (
+  <button type={type} onClick={onClick} className={`btn ${className}`}>
+    {children}
     <style jsx>{`
       .btn {
         background: linear-gradient(135deg, #4c66f5 0%, #3a0ca3 100%);
@@ -37,35 +42,41 @@ import e,{useEffect as o,useState as t}from"react";import r from"next/head";impo
         background: #4c66f5;
       }
     `}</style>
+  </button>
+);
 
-  </button>,ContactForm=()=>{let[e,o]=t({name:"",email:"",message:""}),r=e=>{let{name:t,value:r}=e.target;o(e=>({...e,[t]:r}))},a=t=>{t.preventDefault(),console.log("Form Submitted:",e),alert("Thank you for your message! We will get back to you shortly."),o({name:"",email:"",message:""})};return<form className="contact-form"onSubmit={a}>
+// A simple but effective Contact form component
+const ContactForm = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form Submitted:', formData);
+    // Add your form submission logic here (e.g., API call)
+    alert('Thank you for your message! We will get back to you shortly.');
+    setFormData({ name: '', email: '', message: '' });
+  };
+
+  return (
+    <form className="contact-form" onSubmit={handleSubmit}>
       <div className="input-group">
-
         <label htmlFor="name">Name</label>
-
-        <input type="text"id="name"name="name"value={e.name}onChange={r}required/>
-
+        <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
       </div>
-
       <div className="input-group">
-
         <label htmlFor="email">Email</label>
-
-        <input type="email"id="email"name="email"value={e.email}onChange={r}required/>
-
+        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
       </div>
-
       <div className="input-group">
-
         <label htmlFor="message">Message</label>
-
-        <textarea id="message"name="message"rows="5"value={e.message}onChange={r}required></textarea>
-
+        <textarea id="message" name="message" rows="5" value={formData.message} onChange={handleChange} required></textarea>
       </div>
-
-      <Button >Send Message</Button>
-
+      <Button>Send Message</Button>
       <style jsx>{`
         .contact-form {
           display: flex;
@@ -101,166 +112,147 @@ import e,{useEffect as o,useState as t}from"react";import r from"next/head";impo
           box-shadow: 0 0 0 3px rgba(76, 102, 245, 0.15);
         }
       `}</style>
+    </form>
+  );
+};
 
-    </form>},ContactPage=()=>{let[e,r]=t(!1),[n,i]=t(!1);return o(()=>{let e=localStorage.getItem("theme");"dark"===e?i(!0):"light"===e?i(!1):window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&i(!0)},[]),o(()=>{n?(document.documentElement.classList.add("dark-mode"),localStorage.setItem("theme","dark")):(document.documentElement.classList.remove("dark-mode"),localStorage.setItem("theme","light"))},[n]),o(()=>{a.init({once:!0,duration:1e3,easing:"ease-out-quart",delay:50})},[]),<>
+// Main Contact Page Component
+const ContactPage = () => {
+  const [heroGifError, setHeroGifError] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-      <r >
+  useEffect(() => {
+    // Check localStorage for theme first
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      setIsDarkMode(true);
+    } else if (storedTheme === 'light') {
+      setIsDarkMode(false);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setIsDarkMode(true);
+    }
+  }, []);
 
-        <title >Contact Us | EventMappr</title>
+  useEffect(() => {
+    // Apply or remove the dark-mode class on the html element and persist to localStorage
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
 
-        <meta name="description"content="Get in touch with the EventMappr team. We'd love to hear from you!"/>
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      duration: 1000,
+      easing: 'ease-out-quart',
+      delay: 50,
+    });
+  }, []);
 
-      </r>
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
-
+  return (
+    <>
+      <Head>
+        <title>Contact Us | EventMappr</title>
+        <meta name="description" content="Get in touch with the EventMappr team. We'd love to hear from you!" />
+      </Head>
 
       <div className="contact-page">
-
-        {}
-
+        {/* Modern Hero Section with animated elements and a theme toggle */}
         <section className="hero-section">
-
-          {}
-
+          {/*<button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle dark mode">
+            {isDarkMode ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            )}
+          </button>*/}
           <div className="hero-grid container">
-
-            <div className="hero-content"data-aos="fade-up"data-aos-delay="50">
-
+            <div className="hero-content" data-aos="fade-up" data-aos-delay="50">
               <h1 className="hero-heading">
-
                 Let's <span className="highlight">Connect</span>
-
               </h1>
-
               <p className="hero-subtitle">
-
                 We're thrilled to hear from you. Whether you have questions about our platform, partnership opportunities, or just want to say hello, our team is ready to assist.
-
               </p>
-
               <div className="hero-cta-group">
-
                 <Button className="btn-primary">Get Started</Button>
-
                 <Button className="btn-ghost">Learn More</Button>
-
               </div>
-
             </div>
-
-            <div className="hero-visual"data-aos="fade-left"data-aos-delay="250">
-
-              <div className="shape-1"data-aos="zoom-in"data-aos-delay="500"></div>
-
-              <div className="shape-2"data-aos="zoom-in"data-aos-delay="700"></div>
-
-              <div className="shape-3"data-aos="zoom-in"data-aos-delay="900"></div>
-
-              {e?<div className="hero-gif-placeholder">
-
-                  <span >GIF not available</span>
-
-                </div>:<img src="https://cdn.dribbble.com/userupload/25500553/file/original-9498b0fb08338f80b0a9309185407115.gif"alt="Contact Us GIF"className="featured-image hero-gif"onError={()=>r(!0)}/>}
-
+            <div className="hero-visual" data-aos="fade-left" data-aos-delay="250">
+              <div className="shape-1" data-aos="zoom-in" data-aos-delay="500"></div>
+              <div className="shape-2" data-aos="zoom-in" data-aos-delay="700"></div>
+              <div className="shape-3" data-aos="zoom-in" data-aos-delay="900"></div>
+              {!heroGifError ? (
+                <img
+                  src="https://cdn.dribbble.com/userupload/25500553/file/original-9498b0fb08338f80b0a9309185407115.gif"
+                  alt="Contact Us GIF"
+                  className="featured-image hero-gif"
+                  onError={() => setHeroGifError(true)}
+                />
+              ) : (
+                <div className="hero-gif-placeholder">
+                  <span>GIF not available</span>
+                </div>
+              )}
             </div>
-
           </div>
-
         </section>
 
-
-
-        {}
-
+        {/* Main Content Area with two-column layout */}
         <main className="content-wrapper container">
-
           <section className="contact-section">
-
-            <div className="info-column"data-aos="fade-right">
-
-              <h2 >Contact Information</h2>
-
+            <div className="info-column" data-aos="fade-right">
+              <h2>Contact Information</h2>
               <p className="section-subtitle">
-
                 Find the best way to get in touch with us. We're here to help!
-
               </p>
-
               <ul className="info-list">
-
-                <li data-aos="fade-right"data-aos-delay="100">
-
+                <li data-aos="fade-right" data-aos-delay="100">
                   <div className="icon-circle">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"className="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                   </div>
-
-                  <div >
-
-                    <h4 >Email Address</h4>
-
-                    <p >hello@eventmappr.com</p>
-
+                  <div>
+                    <h4>Email Address</h4>
+                    <p>hello@eventmappr.com</p>
                   </div>
-
                 </li>
-
-                <li data-aos="fade-right"data-aos-delay="200">
-
+                <li data-aos="fade-right" data-aos-delay="200">
                   <div className="icon-circle">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"className="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2.06A19.85 19.85 0 0 1 1.84 2.82 2.18 2.18 0 0 1 4 2h3a2 2 0 0 1 2 2v3.18a3 3 0 0 1-1 2.22l-1.6 1.6a15.02 15.02 0 0 0 8.6 8.6l1.6-1.6a3 3 0 0 1 2.22-1H19a2 2 0 0 1 2 2z"></path></svg>
-
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2.06A19.85 19.85 0 0 1 1.84 2.82 2.18 2.18 0 0 1 4 2h3a2 2 0 0 1 2 2v3.18a3 3 0 0 1-1 2.22l-1.6 1.6a15.02 15.02 0 0 0 8.6 8.6l1.6-1.6a3 3 0 0 1 2.22-1H19a2 2 0 0 1 2 2z"></path></svg>
                   </div>
-
-                  <div >
-
-                    <h4 >Phone Number</h4>
-
-                    <p >+1 (555) 123-4567</p>
-
+                  <div>
+                    <h4>Phone Number</h4>
+                    <p>+1 (555) 123-4567</p>
                   </div>
-
                 </li>
-
-                <li data-aos="fade-right"data-aos-delay="300">
-
+                <li data-aos="fade-right" data-aos-delay="300">
                   <div className="icon-circle">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"className="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12"cy="10"r="3"></circle></svg>
-
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                   </div>
-
-                  <div >
-
-                    <h4 >Our Location</h4>
-
-                    <p >123 Event Ave, Suite 456, Mappr City, MC 90210</p>
-
+                  <div>
+                    <h4>Our Location</h4>
+                    <p>123 Event Ave, Suite 456, Mappr City, MC 90210</p>
                   </div>
-
                 </li>
-
               </ul>
-
             </div>
-
-            <div className="form-column"data-aos="fade-left">
-
+            <div className="form-column" data-aos="fade-left">
               <ContactForm />
-
             </div>
-
           </section>
-
         </main>
-
       </div>
 
-
-
-      <style jsxglobal>{`
+      <style jsx global>{`
         /* Global & Reset Styles for both themes */
         html, body {
           padding: 0;
@@ -378,8 +370,6 @@ import e,{useEffect as o,useState as t}from"react";import r from"next/head";impo
           border-color : transparent
         }
       `}</style>
-
-
 
       <style jsx>{`
         .contact-page {
@@ -658,5 +648,8 @@ import e,{useEffect as o,useState as t}from"react";import r from"next/head";impo
           }
         }
       `}</style>
+    </>
+  );
+};
 
-    </>};export default ContactPage;
+export default ContactPage;
