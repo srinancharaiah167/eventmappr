@@ -6,12 +6,11 @@
   "homepage": "https://srinancharaiah167.github.io/eventmappr",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next out",
     "predeploy": "npm run build",
-    "export": "next export",
     "deploy": "gh-pages -d out"
   },
   "keywords": [],
