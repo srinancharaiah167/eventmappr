@@ -560,6 +560,7 @@ export default function NearbyPage() {
   color: white;
   border: none;
   padding: 16px 32px;
+  margin-top: 30px;
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
