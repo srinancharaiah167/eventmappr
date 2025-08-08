@@ -37,6 +37,8 @@ export default function CurrencyConverter() {
   const [popular, setPopular] = useState([]);
   const [fromDropdownOpen, setFromDropdownOpen] = useState(false);
   const [toDropdownOpen, setToDropdownOpen] = useState(false);
+  const [alerts, setAlerts] = useState([]);
+
 
   function convertCurrency() {
     const amt = parseFloat(amount);
@@ -56,6 +58,16 @@ export default function CurrencyConverter() {
   }, [from, to]);
 
   useEffect(() => {
+    const stored = localStorage.getItem("rateAlerts");
+    if (stored) setAlerts(JSON.parse(stored));
+  }, []);
+
+  // Save alerts to localStorage whenever alerts change
+  useEffect(() => {
+    localStorage.setItem("rateAlerts", JSON.stringify(alerts));
+  }, [alerts]);
+
+  useEffect(() => {
     const rate = RATES[from][to];
     const newData = Array.from({ length: 7 }, (_, i) => ({
       day: `Day ${i + 1}`,
@@ -72,10 +84,30 @@ export default function CurrencyConverter() {
     setPopular(data);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      alerts.forEach(async (a, idx) => {
+        const rate = RATES[a.base][a.target];
+        if (
+          (a.condition === ">" && rate > a.value) ||
+          (a.condition === "<" && rate < a.value)
+        ) {
+          alert(`Alert: ${a.base} → ${a.target} is now ${rate} (${a.condition} ${a.value})`);
+          // remove triggered alert
+          setAlerts((prev) => prev.filter((_, i) => i !== idx));
+        }
+      });
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [alerts]);
+
   const swapCurrencies = () => {
     const temp = from;
     setFrom(to);
     setTo(temp);
+  };
+  const addAlert = (base, target, condition, value) => {
+    setAlerts((prev) => [...prev, { base, target, condition, value }]);
   };
 
   const CustomDropdown = ({ value, onChange, isOpen, setIsOpen, label }) => (
@@ -241,13 +273,55 @@ export default function CurrencyConverter() {
           </div>
         </div>
       </div>
+                        <div style={{ ...styles.card, marginTop: "2rem" }}>
+        <h2 style={styles.cardTitle}>Set a Rate Alert</h2>
+        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <select value={from} onChange={(e) => setFrom(e.target.value)}>
+            {Object.keys(CURRENCIES).map((c) => (
+              <option key={`a-base-${c}`} value={c}>{c}</option>
+            ))}
+          </select>
+          <select value={to} onChange={(e) => setTo(e.target.value)}>
+            {Object.keys(CURRENCIES).map((c) => (
+              <option key={`a-target-${c}`} value={c}>{c}</option>
+            ))}
+          </select>
+          <select id="cond">
+            <option value=">">Above</option>
+            <option value="<">Below</option>
+          </select>
+          <input id="val" type="number" placeholder="Rate" style={{ width: "100px" }} />
+          <button onClick={() => {
+            const cond = document.getElementById("cond").value;
+            const val = parseFloat(document.getElementById("val").value);
+            if (!isNaN(val)) addAlert(from, to, cond, val);
+          }}>
+            Add Alert
+          </button>
+        </div>
 
-      <style jsx>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-      `}</style>
+        {alerts.length > 0 && (
+          <div style={{ marginTop: "1rem" }}>
+            <h4>Active Alerts</h4>
+            <ul>
+              {alerts.map((a, i) => (
+                <li key={`alert-${i}`}>
+                  {a.base} → {a.target} {a.condition} {a.value.toFixed(4)}{" "}
+                  <button onClick={() => setAlerts((prev) => prev.filter((_, j) => j !== i))}>
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </>
   );
 }
+      <style jsx>{`
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+      `}</style>
 
 const styles = {
   container: {
