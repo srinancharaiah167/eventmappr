@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { TrendingUp, ArrowRightLeft, DollarSign, ChevronDown } from "lucide-react";
+import { Bell } from "lucide-react"; // New icon for alert feature
 
 const CURRENCIES = {
   USD: { name: "US Dollar", symbol: "$" }, EUR: { name: "Euro", symbol: "€" },
@@ -37,6 +38,14 @@ export default function CurrencyConverter() {
   const [popular, setPopular] = useState([]);
   const [fromDropdownOpen, setFromDropdownOpen] = useState(false);
   const [toDropdownOpen, setToDropdownOpen] = useState(false);
+
+  const [alertFrom, setAlertFrom] = useState("USD");
+  const [alertTo, setAlertTo] = useState("EUR");
+  const [alertCondition, setAlertCondition] = useState(">");
+  const [alertThreshold, setAlertThreshold] = useState("");
+  const [alertEmail, setAlertEmail] = useState("");
+  const [alertActive, setAlertActive] = useState(false);
+
 
   function convertCurrency() {
     const amt = parseFloat(amount);
@@ -77,6 +86,20 @@ export default function CurrencyConverter() {
     setFrom(to);
     setTo(temp);
   };
+  useEffect(() => {
+    if (!alertActive) return;
+    const checkInterval = setInterval(() => {
+      const currentRate = RATES[alertFrom][alertTo];
+      if (
+        (alertCondition === ">" && currentRate > parseFloat(alertThreshold)) ||
+        (alertCondition === "<" && currentRate < parseFloat(alertThreshold))
+      ) {
+        alert(`📢 Rate Alert: 1 ${alertFrom} is now ${currentRate} ${alertTo}`);
+        setAlertActive(false); // stop after triggering once
+      }
+    }, 5000); // check every 5 seconds
+    return () => clearInterval(checkInterval);
+  }, [alertActive, alertFrom, alertTo, alertCondition, alertThreshold]);
 
   const CustomDropdown = ({ value, onChange, isOpen, setIsOpen, label }) => (
     <div style={styles.selectGroup}>
