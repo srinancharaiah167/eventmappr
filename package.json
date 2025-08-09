@@ -11,7 +11,8 @@
     "lint": "next lint",
     "clean": "rm -rf .next out",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "deploy": "gh-pages -d out",
+    "export": "next export"
   },
   "keywords": [],
   "author": "",
